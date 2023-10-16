@@ -1,0 +1,28 @@
+# Tomcat
+server:
+  port: 8080
+  servlet:
+    context-path: /app
+
+spring:
+  profiles:
+    active: dev
+
+#mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  #????
+  typeAliasesPackage: com.activiti.modules.*.entity
+  global-config:
+    db-config:
+      #????  AUTO:"???ID??",ASSIGN_UUID:"????ID UUID";
+      id-type: ASSIGN_UUID
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+    banner: false
+  #????
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
