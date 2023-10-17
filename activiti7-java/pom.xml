@@ -18,6 +18,9 @@
         <mybatisplus.version>3.5.3.2</mybatisplus.version>
         <mysql.version>8.0.28</mysql.version>
         <druid.version>1.1.13</druid.version>
+        <activiti.version>7.0.0.SR1</activiti.version>
+        <commons.lang.version>2.6</commons.lang.version>
+        <commons.io.version>2.5</commons.io.version>
     </properties>
     <dependencies>
         <dependency>
@@ -57,6 +60,25 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
+        </dependency>
+
+        <!--activiti-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter</artifactId>
+            <version>${activiti.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis</artifactId>
+                    <groupId>org.mybatis</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--activiti可以绘制流程的的依赖-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-image-generator</artifactId>
+            <version>${activiti.version}</version>
         </dependency>
     </dependencies>
 

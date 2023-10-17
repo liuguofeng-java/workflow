@@ -7,20 +7,29 @@ server:
 spring:
   profiles:
     active: dev
+  activiti:
+    #4.drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）
+    database-schema-update: true
+    #检测历史表是否存在 activiti7默认没有开启数据库历史记录 启动数据库历史记录
+    db-history-used: true
+    #记录历史等级 可配置的历史级别有none, activity, audit, full
+    #full：保存历史数据的最高级别，除了会保存audit级别的数据外，还会保存其他全部流程相关的细节数据，包括一些流程参数等。
+    history-level: full
+    #校验流程文件，默认校验resources下的processes文件夹里的流程文件
+    check-process-definitions: false
 
 #mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
-  #????
+  #扫包
   typeAliasesPackage: com.activiti.modules.*.entity
   global-config:
     db-config:
-      #????  AUTO:"???ID??",ASSIGN_UUID:"????ID UUID";
+      #全局id类型
       id-type: ASSIGN_UUID
       logic-delete-value: -1
       logic-not-delete-value: 0
     banner: false
-  #????
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
