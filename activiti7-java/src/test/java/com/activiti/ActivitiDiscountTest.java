@@ -16,13 +16,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 /**
- * 测试Activiti
+ * 测试折扣Activiti
  *
  * @author liuguofeng
  * @date 2023/10/16 16:03
  **/
 @SpringBootTest
-public class ActivitiTest {
+public class ActivitiDiscountTest {
 
     @Autowired
     private RepositoryService repositoryService;
@@ -35,16 +35,17 @@ public class ActivitiTest {
 
     @Autowired
     private HistoryService historyService;
+
     /**
      * 部署流程测试
      */
     @Test
-    public void deployTest() {
+    public void testDeploy() {
         //进行部署
         Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource("bpmn/leave_demo.bpmn")
                 .addClasspathResource("bpmn/leave_demo.png")
-                .name("请假流程测试")
+                .name("折扣流程申请")
                 .deploy();
         //输出部署的一些信息
         System.out.println("流程部署ID:" + deployment.getId());
@@ -108,8 +109,11 @@ public class ActivitiTest {
         }
     }
 
+    /**
+     * 查询审批记录
+     */
     @Test
-    public void testSelectHistoryTask(){
+    public void testSelectHistoryTask() {
         //流程实例ID
         String processInstanceId = "f8c05d75-6c94-11ee-87d0-30c9aba6c580";
         //任务审核人
@@ -118,18 +122,20 @@ public class ActivitiTest {
         List<HistoricActivityInstance> list = historyService
                 .createHistoricActivityInstanceQuery()
                 .activityType("userTask")//只获取用户任务
-                .processInstanceId(processInstanceId)
+//                .processInstanceId(processInstanceId)
 //                .taskAssignee(taskAssignee)
                 .finished()
                 .list();
-        for(HistoricActivityInstance instance:list){
-            System.out.println("任务名称:"+instance.getActivityName());
-            System.out.println("任务开始时间:"+instance.getStartTime());
-            System.out.println("任务结束时间:"+instance.getEndTime());
+        for (HistoricActivityInstance instance : list) {
+            System.out.println("任务名称:" + instance.getActivityName());
+            System.out.println("任务开始时间:" + instance.getStartTime());
+            System.out.println("任务结束时间:" + instance.getEndTime());
+            System.out.println("审批人:" + instance.getAssignee());
+            System.out.println("processInstanceId:" + instance.getProcessInstanceId());
             //获取审核批注信息
             List<Comment> taskComments = taskService.getTaskComments(instance.getTaskId());
-            if(taskComments.size()>0){
-                System.out.println("审批批注:"+taskComments.get(0).getFullMessage());
+            if (taskComments.size() > 0) {
+                System.out.println("审批批注:" + taskComments.get(0).getFullMessage());
             }
         }
     }

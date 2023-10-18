@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+    <process id="rejectProcess" name="驳回流程测试" isExecutable="true">
+        <startEvent id="startevent1" name="Start"></startEvent>
+        <endEvent id="endevent1" name="End"></endEvent>
+        <userTask id="applySubmit" name="申请人提交" activiti:assignee="${applySubmit}"></userTask>
+        <userTask id="check" name="审批" activiti:assignee="${check}"></userTask>
+        <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="applySubmit"></sequenceFlow>
+        <sequenceFlow id="flow2" sourceRef="applySubmit" targetRef="check">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${applySubmitPass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow3" sourceRef="check" targetRef="endevent1">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkPass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow4" name="驳回" sourceRef="check" targetRef="applySubmit">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${checkReject}]]></conditionExpression>
+        </sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_rejectProcess">
+        <bpmndi:BPMNPlane bpmnElement="rejectProcess" id="BPMNPlane_rejectProcess">
+            <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+                <omgdc:Bounds height="35.0" width="35.0" x="70.0" y="200.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+                <omgdc:Bounds height="35.0" width="35.0" x="550.0" y="200.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="applySubmit" id="BPMNShape_applySubmit">
+                <omgdc:Bounds height="55.0" width="105.0" x="180.0" y="190.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="check" id="BPMNShape_check">
+                <omgdc:Bounds height="55.0" width="105.0" x="360.0" y="190.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+                <omgdi:waypoint x="105.0" y="217.0"></omgdi:waypoint>
+                <omgdi:waypoint x="180.0" y="217.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+                <omgdi:waypoint x="285.0" y="217.0"></omgdi:waypoint>
+                <omgdi:waypoint x="360.0" y="217.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+                <omgdi:waypoint x="465.0" y="217.0"></omgdi:waypoint>
+                <omgdi:waypoint x="550.0" y="217.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+                <omgdi:waypoint x="412.0" y="190.0"></omgdi:waypoint>
+                <omgdi:waypoint x="412.0" y="144.0"></omgdi:waypoint>
+                <omgdi:waypoint x="232.0" y="144.0"></omgdi:waypoint>
+                <omgdi:waypoint x="232.0" y="190.0"></omgdi:waypoint>
+                <bpmndi:BPMNLabel>
+                    <omgdc:Bounds height="14.0" width="100.0" x="420.0" y="171.0"></omgdc:Bounds>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>
