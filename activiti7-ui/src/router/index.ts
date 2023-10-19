@@ -11,7 +11,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: Home,
-    meta: { title: "主页" }
+    meta: { title: "主页" },
+    children: [
+      {
+        path: "/",
+        name: "userInfo",// 用户信息
+        component: () => import('@/views/activiti/userInfo/index.vue'),
+      },
+      {
+        path: "/userTask",
+        name: "userTask",// 我的任务
+        component: () => import('@/views/activiti/userTask/index.vue'),
+      }
+    ]
   },
   {
     path: "/login",
