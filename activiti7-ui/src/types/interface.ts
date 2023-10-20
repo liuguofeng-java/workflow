@@ -10,6 +10,8 @@ export interface IHttpResponse {
   code: number;
   msg: string;
   data: any;
+  rows: any;
+  total: number;
 }
 
 /**

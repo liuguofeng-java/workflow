@@ -8,9 +8,11 @@ import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,5 +37,31 @@ public class UserInfoController {
         PageUtils.startPage();
         List<SysUserEntity> list = userService.queryPage(dto);
         return PageUtils.getDataTable(list);
+    }
+
+    /**
+     * 详情
+     *
+     * @param userId 用户id
+     * @return 用户详情
+     */
+    @GetMapping("info/{userId}")
+    public R<SysUserEntity> info(@PathVariable String userId) {
+        SysUserEntity model = userService.getById(userId);
+        return R.ok(model);
+    }
+
+    /**
+     * 保存
+     */
+    @PostMapping("save")
+    public R<String> info(@RequestBody SysUserEntity model) {
+        Date date = new Date();
+        if (StringUtils.isEmpty(model.getUserId())) {
+            model.setCreateTime(date);
+        }
+        model.setUpdateTime(date);
+        userService.saveOrUpdate(model);
+        return R.ok();
     }
 }

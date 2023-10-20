@@ -86,8 +86,9 @@ onInit();
 }
 
 .left-container {
-  width: 230px;
+  width: 350px;
   background: #343844;
+  min-width: 200px;
 }
 
 .rigth-container {

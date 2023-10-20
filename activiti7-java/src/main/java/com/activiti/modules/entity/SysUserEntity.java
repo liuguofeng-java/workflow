@@ -50,10 +50,6 @@ public class SysUserEntity implements Serializable {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
 	private Date createTime;
-	/**
-	 * 修改者ID
-	 */
-	private String updateUser;
 
 	/**
 	 * 修改时间
