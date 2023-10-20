@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick, toRef } from "vue";
 import baseService from "@/service/baseService";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
 const queryForm = reactive({
@@ -170,9 +170,9 @@ function reset() {
 
 // 新增按钮操作
 function handleAdd() {
-    reset();
-    open.value = true;
-    title.value = '添加';
+  reset();
+  open.value = true;
+  title.value = '添加';
 }
 
 // 修改按钮操作
@@ -208,8 +208,20 @@ function submitForm() {
 }
 
 // 删除按钮操作
-function handleDelete(row: any) {
-
+function handleDelete(id: any) {
+  ElMessageBox.confirm('确认要删除当前项吗?', '提示')
+    .then(() => {
+      baseService
+        .delete(`/userInfo/delete`, id)
+        .then((res) => {
+          if (res.code === 200) {
+            ElMessage.success(res.msg);
+            getList()
+          } else {
+            ElMessage.error(res.msg);
+          }
+        })
+    })
 }
 
 getList()

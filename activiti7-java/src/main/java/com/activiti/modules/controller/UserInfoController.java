@@ -53,6 +53,8 @@ public class UserInfoController {
 
     /**
      * 保存
+     *
+     * @param model 数据
      */
     @PostMapping("save")
     public R<String> info(@RequestBody SysUserEntity model) {
@@ -62,6 +64,17 @@ public class UserInfoController {
         }
         model.setUpdateTime(date);
         userService.saveOrUpdate(model);
+        return R.ok();
+    }
+
+    /**
+     * 删除
+     *
+     * @param id 主键
+     */
+    @DeleteMapping("delete")
+    public R<String> delete(@RequestBody String id) {
+        userService.removeById(id);
         return R.ok();
     }
 }
