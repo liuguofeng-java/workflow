@@ -2,6 +2,7 @@ package com.activiti.modules.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -45,13 +46,9 @@ public class SysUserEntity implements Serializable {
 	private String mobile;
 
 	/**
-	 * 状态  0：禁用   1：正常
-	 */
-	private Integer status;
-
-	/**
 	 * 创建时间
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
 	private Date createTime;
 	/**
 	 * 修改者ID

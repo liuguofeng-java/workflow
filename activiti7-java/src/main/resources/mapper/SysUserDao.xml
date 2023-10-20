@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.activiti.modules.dao.SysUserDao">
+
+
+    <select id="queryPage" resultType="com.activiti.modules.entity.SysUserEntity">
+        select * from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                and (account like concat('%', #{userName}, '%') or username like concat('%', #{userName}, '%'))
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile like concat('%', #{mobile}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('%', #{email}, '%')
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and create_time between concat(#{startTime},' 00:00:00') and concat(#{endTime},' 23:59:59')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+</mapper>

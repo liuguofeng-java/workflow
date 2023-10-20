@@ -21,6 +21,7 @@
         <activiti.version>7.0.0.SR1</activiti.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.io.version>2.5</commons.io.version>
+        <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
     </properties>
     <dependencies>
         <dependency>
@@ -60,6 +61,13 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
+        </dependency>
+
+        <!-- pagehelper 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.boot.version}</version>
         </dependency>
 
         <!--activiti-->

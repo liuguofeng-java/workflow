@@ -20,7 +20,7 @@ spring:
 
 #mybatis-plus
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
+  mapper-locations: classpath*:/mapper/*.xml
   #扫包
   typeAliasesPackage: com.activiti.modules.*.entity
   global-config:

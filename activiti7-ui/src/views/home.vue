@@ -5,7 +5,7 @@
         <img src="@/assets/images/icon.png" width="40" height="40">
         <span class="title-text">工作流引擎</span>
       </div>
-      <el-menu active-text-color="#ffd04b" background-color="#343844" class="el-menu-container" default-active="/"
+      <el-menu background-color="#343844" class="el-menu-container" default-active="/"
         text-color="#fff" @open="handleOpen" @select="handleSelect">
         <el-menu-item index="/">
           <el-icon>
@@ -166,6 +166,6 @@ onInit();
 
 .router-container {
   background-color: white;
-  padding: 10px;
+  padding: 20px;
 }
 </style>
