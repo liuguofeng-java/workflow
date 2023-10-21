@@ -55,4 +55,14 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         }
         return PageUtils.getDataTable(resultList, query.count());
     }
+
+    /**
+     * 删除流程
+     *
+     * @param id 部署id
+     */
+    @Override
+    public void delete(String id) {
+        repositoryService.deleteDeployment(id, true);
+    }
 }

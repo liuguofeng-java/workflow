@@ -21,4 +21,10 @@ public interface ProcessDefinitionService {
      * @return 列表
      */
     TableDataInfo queryPage(ProcessDefinitionListDto dto);
+
+    /**
+     * 删除流程
+     * @param id 部署id
+     */
+    void delete(String id);
 }

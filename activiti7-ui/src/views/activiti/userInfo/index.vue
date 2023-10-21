@@ -208,7 +208,7 @@ function submitForm() {
 }
 
 // 删除按钮操作
-function handleDelete(id: any) {
+function handleDelete(id: String) {
   ElMessageBox.confirm('确认要删除当前项吗?', '提示')
     .then(() => {
       baseService

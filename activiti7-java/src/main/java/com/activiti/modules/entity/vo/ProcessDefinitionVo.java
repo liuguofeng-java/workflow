@@ -13,6 +13,9 @@ public class ProcessDefinitionVo {
     // 流程id
     private String id;
 
+    // 部署id
+    private String deploymentId;
+
     // 流程名称
     private String name;
 

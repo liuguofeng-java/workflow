@@ -26,7 +26,7 @@
       <el-table-column>
         <template #default="scope">
           <!-- <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.userId)">修改</el-button> -->
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.userId)">删除</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deploymentId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,11 +83,11 @@ function handleQuery() {
 
 
 // 删除按钮操作
-function handleDelete(id: any) {
-  ElMessageBox.confirm('确认要删除当前项吗?', '提示')
+function handleDelete(id: String) {
+  ElMessageBox.confirm('确认要删除当前项吗? 流程实例启动的也将被删除,谨慎删除', '提示')
     .then(() => {
       baseService
-        .delete(`/userInfo/delete`, id)
+        .delete(`/processDefinition/delete`, id)
         .then((res) => {
           if (res.code === 200) {
             ElMessage.success(res.msg);
