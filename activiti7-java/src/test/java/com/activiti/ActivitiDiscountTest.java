@@ -1,11 +1,15 @@
 package com.activiti;
 
+import com.github.pagehelper.Page;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
@@ -14,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 测试折扣Activiti
@@ -50,6 +56,21 @@ public class ActivitiDiscountTest {
         //输出部署的一些信息
         System.out.println("流程部署ID:" + deployment.getId());
         System.out.println("流程部署名称:" + deployment.getName());
+    }
+
+    /**
+     * 查询部署流程
+     */
+    @Test
+    public void testProcessDefinition() {
+        ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
+                .orderByProcessDefinitionId()
+                .orderByProcessDefinitionVersion()
+                .desc();
+//            query.processDefinitionNameLike("%折扣流程申请%");
+//            query.processDefinitionKeyLike("%leave_demo%");
+        List<ProcessDefinition> list = query.listPage(0, 10);
+        System.out.println(list);
     }
 
     /**

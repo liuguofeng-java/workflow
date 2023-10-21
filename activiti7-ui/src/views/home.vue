@@ -13,6 +13,12 @@
           </el-icon>
           <span>账号信息</span>
         </el-menu-item>
+        <el-menu-item index="/processDefinition">
+          <el-icon>
+            <Tickets />
+          </el-icon>
+          <span>流程管理</span>
+        </el-menu-item>
         <el-menu-item index="/userTask">
           <el-icon>
             <Tickets />

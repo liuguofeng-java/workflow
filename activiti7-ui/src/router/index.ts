@@ -19,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/activiti/userInfo/index.vue'),
       },
       {
+        path: "/processDefinition",
+        name: "processDefinition",// 流程管理
+        component: () => import('@/views/activiti/processDefinition/index.vue'),
+      },
+      {
         path: "/userTask",
         name: "userTask",// 我的任务
         component: () => import('@/views/activiti/userTask/index.vue'),
