@@ -19,9 +19,9 @@ import java.util.List;
  * @author liuguofeng
  * @date 2023/10/18 11:03
  **/
-@RequestMapping("userInfo")
+@RequestMapping("sysUser")
 @RestController
-public class UserInfoController {
+public class SysUserController {
     @Autowired
     private SysUserService userService;
 

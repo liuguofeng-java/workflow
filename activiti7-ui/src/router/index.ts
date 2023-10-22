@@ -15,8 +15,13 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "/",
-        name: "userInfo",// 用户信息
-        component: () => import('@/views/activiti/userInfo/index.vue'),
+        name: "sysUser",// 用户信息
+        component: () => import('@/views/activiti/system/user/index.vue'),
+      },
+      {
+        path: "/dept",
+        name: "sysDept",// 部门信息
+        component: () => import('@/views/activiti/system/dept/index.vue'),
       },
       {
         path: "/processDefinition",

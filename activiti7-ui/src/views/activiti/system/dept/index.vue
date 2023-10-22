@@ -1,18 +1,8 @@
 <template>
   <div>
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
-      <el-form-item label="用户名称">
-        <el-input v-model="queryForm.userName" placeholder="用户名称" clearable />
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input v-model="queryForm.mobile" placeholder="手机号" clearable />
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="queryForm.email" placeholder="邮箱" clearable />
-      </el-form-item>
-      <el-form-item label="注册时间">
-        <el-date-picker v-model="daterange" type="daterange" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
-          range-separator="到" start-placeholder="开始时间" end-placeholder="开始时间" clearable />
+      <el-form-item label="部门名称">
+        <el-input v-model="queryForm.deptName" placeholder="用户名称" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
@@ -27,15 +17,15 @@
 
     <el-table v-loading="loading" :data="list">
       <el-table-column label="序号" type="index" width="100" />
-      <el-table-column label="账号名称" align="center" prop="account" />
-      <el-table-column label="密码" align="center" prop="password" :show-overflow-tooltip="true" />
-      <el-table-column label="手机号" align="center" prop="mobile" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
+      <el-table-column label="负责人" align="center" prop="leader" />
+      <el-table-column label="手机号" align="center" prop="phone" />
       <el-table-column label="邮箱" align="center" prop="email" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column>
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.userId)">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.userId)">删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.deptId)">修改</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deptId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,17 +36,14 @@
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog v-model="open" :title="title" width="500px" append-to-body>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="账号名称" prop="account">
-          <el-input v-model="form.account" placeholder="请输入账号名称" />
+        <el-form-item label="部门名称" prop="deptName">
+          <el-input v-model="form.deptName" placeholder="请输入部门名称" />
         </el-form-item>
-        <el-form-item label="登录名称" prop="username">
-          <el-input v-model="form.username" placeholder="请输入登录名称" />
+        <el-form-item label="负责人" prop="leader">
+          <el-input v-model="form.leader" placeholder="请输入负责人" />
         </el-form-item>
-        <el-form-item label="登录密码" prop="password">
-          <el-input v-model="form.password" placeholder="请输入登录密码" />
-        </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="form.mobile" placeholder="请输入手机号" />
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入邮箱" />
@@ -78,11 +65,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
 const queryForm = reactive({
-  userName: '',
-  mobile: '',
-  email: '',
-  startTime: '',
-  endTime: '',
+  deptName: '',
   pageNo: 1,
   pageSize: 10
 })
@@ -102,36 +85,25 @@ const open = ref(false);
 const title = ref('');
 // 提交表单数据
 let form = toRef(reactive({
-  userId: '',
-  account: '',
-  username: '',
-  password: '',
-  mobile: '',
+  deptId: '',
+  deptName: '',
+  leader: '',
+  phone: '',
   email: ''
 }))
 // 表单验证
 const rules = ref({
-  account: [{ required: true, message: '账号名称不能为空', trigger: 'blur' }],
-  username: [{ required: true, message: '登录名称不能为空', trigger: 'blur' }],
-  password: [{ required: true, message: '登录密码不能为空', trigger: 'blur' }],
-  mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
+  deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
+  leader: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
+  phone: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
   email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
 });
 
 // 查询列表
 const getList = () => {
   loading.value = true;
-  // 处理时间
-  if (daterange.value != null && daterange.value.length > 0) {
-    queryForm.startTime = daterange.value[0]
-    queryForm.endTime = daterange.value[1]
-  } else {
-    queryForm.startTime = ''
-    queryForm.endTime = ''
-  }
-
   baseService
-    .get("/userInfo/list", queryForm)
+    .get("/sysDept/list", queryForm)
     .then((res) => {
       loading.value = false;
       if (res.code === 200) {
@@ -155,11 +127,10 @@ function handleQuery() {
 // 表单重置
 function reset() {
   form.value = {
-    userId: '',
-    account: '',
-    username: '',
-    password: '',
-    mobile: '',
+    deptId: '',
+    deptName: '',
+    leader: '',
+    phone: '',
     email: ''
   };
 
@@ -181,7 +152,7 @@ function handleUpdate(id: String) {
   title.value = '修改'
   reset();
   baseService
-    .get(`/userInfo/info/${id}`)
+    .get(`/sysDept/info/${id}`)
     .then((res) => {
       if (res.code === 200) {
         form.value = res.data
@@ -194,7 +165,7 @@ function submitForm() {
   formRef.value.validate((valid: boolean) => {
     if (!valid) return
     baseService
-      .post(`/userInfo/save`, form.value)
+      .post(`/sysDept/save`, form.value)
       .then((res) => {
         if (res.code === 200) {
           ElMessage.success(res.msg);
@@ -212,7 +183,7 @@ function handleDelete(id: String) {
   ElMessageBox.confirm('确认要删除当前项吗?', '提示')
     .then(() => {
       baseService
-        .delete(`/userInfo/delete`, id)
+        .delete(`/sysDept/delete`, id)
         .then((res) => {
           if (res.code === 200) {
             ElMessage.success(res.msg);
