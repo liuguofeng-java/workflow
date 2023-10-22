@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/10/20 09:48
  **/
 @Data
-public class UserInfoListDto {
+public class SysUserListDto {
     // 用户名称
     private String userName;
 

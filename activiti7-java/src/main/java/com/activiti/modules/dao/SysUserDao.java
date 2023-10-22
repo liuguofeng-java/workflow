@@ -1,7 +1,7 @@
 package com.activiti.modules.dao;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.UserInfoListDto;
+import com.activiti.modules.entity.dto.SysUserListDto;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,5 +21,5 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
      * @param dto 分页参数
      * @return 列表
      */
-    List<SysUserEntity> queryPage(UserInfoListDto dto);
+    List<SysUserEntity> queryPage(SysUserListDto dto);
 }

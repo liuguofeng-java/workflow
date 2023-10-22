@@ -1,7 +1,9 @@
 package com.activiti.modules.controller;
 
+import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.UserInfoListDto;
+import com.activiti.modules.entity.dto.SysUserListDto;
+import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.R;
 import com.activiti.utils.page.PageUtils;
@@ -25,13 +27,25 @@ public class SysUserController {
     @Autowired
     private SysUserService userService;
 
+    @Autowired
+    private SysDeptService deptService;
+
+    /**
+     * 部门列表
+     */
+    @GetMapping("deptList")
+    public R<List<SysDeptEntity>> list() {
+        List<SysDeptEntity> list = deptService.list();
+        return R.ok(list);
+    }
+
     /**
      * 列表
      *
      * @param dto 参数
      */
     @GetMapping("list")
-    public TableDataInfo list(UserInfoListDto dto) {
+    public TableDataInfo list(SysUserListDto dto) {
         PageUtils.startPage();
         List<SysUserEntity> list = userService.queryPage(dto);
         return PageUtils.getDataTable(list);

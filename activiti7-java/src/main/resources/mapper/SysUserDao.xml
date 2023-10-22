@@ -5,19 +5,20 @@
 
 
     <select id="queryPage" resultType="com.activiti.modules.entity.SysUserEntity">
-        select * from sys_user
+        select a1.*,a2.dept_name from sys_user a1
+        left join sys_dept a2 on a1.dept_id = a2.dept_id
         <where>
             <if test="userName != null and userName != ''">
-                and (account like concat('%', #{userName}, '%') or username like concat('%', #{userName}, '%'))
+                and (a1.account like concat('%', #{userName}, '%') or a1.username like concat('%', #{userName}, '%'))
             </if>
             <if test="mobile != null and mobile != ''">
-                and mobile like concat('%', #{mobile}, '%')
+                and a1.mobile like concat('%', #{mobile}, '%')
             </if>
             <if test="email != null and email != ''">
-                and email like concat('%', #{email}, '%')
+                and a1.email like concat('%', #{email}, '%')
             </if>
             <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
-                and create_time between concat(#{startTime},' 00:00:00') and concat(#{endTime},' 23:59:59')
+                and a1.create_time between concat(#{startTime},' 00:00:00') and concat(#{endTime},' 23:59:59')
             </if>
         </where>
         order by create_time desc

@@ -29,6 +29,7 @@
       <el-table-column label="序号" type="index" width="100" />
       <el-table-column label="账号名称" align="center" prop="account" />
       <el-table-column label="密码" align="center" prop="password" :show-overflow-tooltip="true" />
+      <el-table-column label="部门" align="center" prop="deptName" />
       <el-table-column label="手机号" align="center" prop="mobile" />
       <el-table-column label="邮箱" align="center" prop="email" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
@@ -44,23 +45,43 @@
       v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog v-model="open" :title="title" width="500px" append-to-body>
+    <el-dialog v-model="open" :title="title" width="700px" append-to-body>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="账号名称" prop="account">
-          <el-input v-model="form.account" placeholder="请输入账号名称" />
-        </el-form-item>
-        <el-form-item label="登录名称" prop="username">
-          <el-input v-model="form.username" placeholder="请输入登录名称" />
-        </el-form-item>
-        <el-form-item label="登录密码" prop="password">
-          <el-input v-model="form.password" placeholder="请输入登录密码" />
-        </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="form.mobile" placeholder="请输入手机号" />
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
-        </el-form-item>
+
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="账号名称" prop="account">
+              <el-input v-model="form.account" placeholder="请输入账号名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="登录名称" prop="username">
+              <el-input v-model="form.username" placeholder="请输入登录名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="登录密码" prop="password">
+              <el-input v-model="form.password" placeholder="请输入登录密码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="mobile">
+              <el-input v-model="form.mobile" placeholder="请输入手机号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入邮箱" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="部门" prop="deptId">
+              <el-select v-model="form.deptId" filterable placeholder="部门">
+                <el-option v-for="item in deptList" :key="item.deptId" :label="item.deptName" :value="item.deptId" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -103,6 +124,7 @@ const title = ref('');
 // 提交表单数据
 let form = toRef(reactive({
   userId: '',
+  deptId: '',
   account: '',
   username: '',
   password: '',
@@ -116,7 +138,11 @@ const rules = ref({
   password: [{ required: true, message: '登录密码不能为空', trigger: 'blur' }],
   mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
   email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+  deptId: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
 });
+
+// 部门列表
+const deptList = ref<any[]>()
 
 // 查询列表
 const getList = () => {
@@ -156,6 +182,7 @@ function handleQuery() {
 function reset() {
   form.value = {
     userId: '',
+    deptId: '',
     account: '',
     username: '',
     password: '',
@@ -224,7 +251,20 @@ function handleDelete(id: String) {
     })
 }
 
+// 查询部门列表
+const getDeptList = () => {
+  baseService
+    .get("/sysUser/deptList")
+    .then((res) => {
+      if (res.code === 200) {
+        deptList.value = res.data
+      }
+    })
+}
+
+
 getList()
+getDeptList()
 </script>
 
 <style scoped></style>

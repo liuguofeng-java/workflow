@@ -1,7 +1,7 @@
 package com.activiti.modules.service;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.UserInfoListDto;
+import com.activiti.modules.entity.dto.SysUserListDto;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -19,5 +19,5 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param dto 分页参数
      * @return 列表
      */
-    List<SysUserEntity> queryPage(UserInfoListDto dto);
+    List<SysUserEntity> queryPage(SysUserListDto dto);
 }

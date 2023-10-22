@@ -2,7 +2,7 @@ package com.activiti.modules.service.impl;
 
 import com.activiti.modules.dao.SysUserDao;
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.UserInfoListDto;
+import com.activiti.modules.entity.dto.SysUserListDto;
 import com.activiti.modules.service.SysUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
      * @return 列表
      */
     @Override
-    public List<SysUserEntity> queryPage(UserInfoListDto dto) {
+    public List<SysUserEntity> queryPage(SysUserListDto dto) {
         return this.baseMapper.queryPage(dto);
     }
 }

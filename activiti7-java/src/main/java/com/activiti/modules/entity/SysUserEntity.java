@@ -1,5 +1,6 @@
 package com.activiti.modules.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,6 +22,11 @@ public class SysUserEntity implements Serializable {
 	 */
 	@TableId
 	private String userId;
+
+	/**
+	 * 部门id
+	 */
+	private String deptId;
 
 	/**
 	 * 账号
@@ -55,4 +61,10 @@ public class SysUserEntity implements Serializable {
 	 * 修改时间
 	 */
 	private Date updateTime;
+
+	/**
+	 * 部门名称
+	 */
+	@TableField(exist = false)
+	private String deptName;
 }
