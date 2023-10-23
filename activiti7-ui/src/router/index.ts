@@ -14,24 +14,19 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: "主页" },
     children: [
       {
-        path: "/",
+        path: "/sys/user",
         name: "sysUser",// 用户信息
         component: () => import('@/views/activiti/system/user/index.vue'),
       },
       {
-        path: "/dept",
+        path: "/sys/dept",
         name: "sysDept",// 部门信息
         component: () => import('@/views/activiti/system/dept/index.vue'),
       },
       {
-        path: "/processDefinition",
-        name: "processDefinition",// 流程管理
-        component: () => import('@/views/activiti/processDefinition/index.vue'),
-      },
-      {
-        path: "/userTask",
-        name: "userTask",// 我的任务
-        component: () => import('@/views/activiti/userTask/index.vue'),
+        path: "/workflow/definition",
+        name: "definition",// 流程定义
+        component: () => import('@/views/activiti/definition/index.vue'),
       }
     ]
   },

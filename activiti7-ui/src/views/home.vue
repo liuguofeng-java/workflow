@@ -5,23 +5,23 @@
         <img src="@/assets/images/icon.png" width="40" height="40">
         <span class="title-text">工作流引擎</span>
       </div>
-      <el-menu background-color="#343844" class="el-menu-container" default-active="/" text-color="#fff"
-        @open="handleOpen" @select="handleSelect">
+      <el-menu background-color="#343844" class="el-menu-container" :default-active="defaultActive" text-color="#fff"
+         @select="handleSelect" unique-opened>
 
-        <el-sub-menu index="/">
+        <el-sub-menu index="/sys">
           <template #title>
             <el-icon>
               <SetUp />
             </el-icon>
             <span>基本设置</span>
           </template>
-          <el-menu-item index="/">
+          <el-menu-item index="/sys/user">
             <el-icon>
               <User />
             </el-icon>
             <span>账号信息</span>
           </el-menu-item>
-          <el-menu-item index="/dept">
+          <el-menu-item index="/sys/dept">
             <el-icon>
               <Operation />
             </el-icon>
@@ -29,24 +29,28 @@
           </el-menu-item>
         </el-sub-menu>
 
-        <el-menu-item index="/processDefinition">
-          <el-icon>
-            <Tickets />
-          </el-icon>
-          <span>流程管理</span>
-        </el-menu-item>
-        <el-menu-item index="/userTask">
-          <el-icon>
-            <Tickets />
-          </el-icon>
-          <span>我的任务</span>
-        </el-menu-item>
+        <el-sub-menu index="/workflow">
+          <template #title>
+            <el-icon>
+              <Connection />
+            </el-icon>
+            <span>流程管理</span>
+          </template>
+          <el-menu-item index="/workflow/definition">
+            <el-icon>
+              <Tickets />
+            </el-icon>
+            <span>流程定义</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+
       </el-menu>
     </div>
 
     <dir class="rigth-container">
       <div class="head-container">
-        <span class="menu-name">账号信息</span>
+        <!-- <span class="menu-name">账号信息</span> -->
         <div class="head-user-container">
           <div>{{ user.account }}</div>
           <img class="head-user-close" src="../assets/images/close.png" @click="logout">
@@ -69,7 +73,7 @@ import { getCache, removeCache } from "@/utils/cache";
 import { CacheToken } from "@/constants/cacheKey";
 
 const router = useRouter();
-
+let defaultActive = ref('/sys/user')
 const user = ref({
   account: String
 });
@@ -78,17 +82,13 @@ const user = ref({
 const onInit = () => {
   const userInfo = getCache(CacheToken);
   user.value = userInfo;
+  router.push(defaultActive.value)
 };
 
 // 退出登录
 const logout = () => {
   removeCache(CacheToken)
   router.replace("/login")
-}
-
-// 菜单打开
-const handleOpen = (key: string, keyPath: string[]) => {
-  router.push(key)
 }
 
 // 菜单选择
@@ -144,8 +144,11 @@ onInit();
 .el-menu-container>>>.is-active {
   background: #fcbc02;
   border-radius: 0 80px 80px 0;
-  margin-right: 40px;
   color: #532f00;
+}
+
+.el-menu-container>>>.is-active > ul > .is-active{
+  margin-right: 40px;
 }
 
 .head-container {

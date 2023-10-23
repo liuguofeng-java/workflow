@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
       <el-form-item label="部门名称">
-        <el-input v-model="queryForm.deptName" placeholder="用户名称" clearable />
+        <el-input v-model="queryForm.deptName" placeholder="部门名称" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
