@@ -56,18 +56,23 @@ const router = createRouter({
   history: createWebHistory(),
   routes: routes,
   scrollBehavior(to, from, savedPosition) {
-    const token = getToken();
-    if (to.path === "/login") {
-      if (token) router.push("/");
-    } else {
-      if (!token) router.push("/login");
-    }
     if (savedPosition) {
       return savedPosition;
     } else {
       return { top: 0 };
     }
-  }
+  },
 });
+
+// 设置路由守卫
+router.beforeEach((to, from, next) => {
+  const token = getToken();
+  if (to.path === "/login") {
+    if (token) next({ path: '/' })
+  } else {
+    if (!token) next({ path: '/login' })
+  }
+  next()
+})
 
 export default router;

@@ -83,7 +83,7 @@ const onInit = () => {
 // 退出登录
 const logout = () => {
   removeCache(CacheToken)
-  router.push("/")
+  router.replace("/login")
 }
 
 // 菜单打开
