@@ -30,8 +30,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize"
-      v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+    <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog v-model="open" :title="title" width="500px" append-to-body>
@@ -65,38 +64,39 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
 const queryForm = reactive({
-  deptName: '',
+  deptName: "",
   pageNo: 1,
   pageSize: 10
-})
+});
 // 列表内容数量
 const total = ref(0);
-const daterange = ref([])
 // 列表是否加载
 const loading = ref(true);
 // 列表返回值
 const list = ref<any[]>([]);
 
 // 表单实例
-const formRef = ref()
+const formRef = ref();
 // 是否打开弹出框
 const open = ref(false);
 // 弹出框标题
-const title = ref('');
+const title = ref("");
 // 提交表单数据
-let form = toRef(reactive({
-  deptId: '',
-  deptName: '',
-  leader: '',
-  phone: '',
-  email: ''
-}))
+let form = toRef(
+  reactive({
+    deptId: "",
+    deptName: "",
+    leader: "",
+    phone: "",
+    email: ""
+  })
+);
 // 表单验证
 const rules = ref({
-  deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
-  leader: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
-  phone: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
-  email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
+  deptName: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
+  leader: [{ required: true, message: "负责人不能为空", trigger: "blur" }],
+  phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }],
+  email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }]
 });
 
 // 查询列表
@@ -107,95 +107,88 @@ const getList = () => {
     .then((res) => {
       loading.value = false;
       if (res.code === 200) {
-        list.value = res.rows
+        list.value = res.rows;
         total.value = res.total;
       } else {
-        list.value = []
+        list.value = [];
       }
     })
     .catch(() => {
       loading.value = false;
     });
-}
+};
 
 // 搜索按钮操作
 function handleQuery() {
-  queryForm.pageNo = 1
+  queryForm.pageNo = 1;
   getList();
 }
 
 // 表单重置
 function reset() {
   form.value = {
-    deptId: '',
-    deptName: '',
-    leader: '',
-    phone: '',
-    email: ''
+    deptId: "",
+    deptName: "",
+    leader: "",
+    phone: "",
+    email: ""
   };
 
   nextTick(() => {
-    formRef.value.resetFields()
-  })
+    formRef.value.resetFields();
+  });
 }
 
 // 新增按钮操作
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = '添加';
+  title.value = "添加";
 }
 
 // 修改按钮操作
-function handleUpdate(id: String) {
-  open.value = true
-  title.value = '修改'
+function handleUpdate(id: string) {
+  open.value = true;
+  title.value = "修改";
   reset();
-  baseService
-    .get(`/sysDept/info/${id}`)
-    .then((res) => {
-      if (res.code === 200) {
-        form.value = res.data
-      }
-    })
+  baseService.get(`/sysDept/info/${id}`).then((res) => {
+    if (res.code === 200) {
+      form.value = res.data;
+    }
+  });
 }
 
 // 提交按钮
 function submitForm() {
   formRef.value.validate((valid: boolean) => {
-    if (!valid) return
-    baseService
-      .post(`/sysDept/save`, form.value)
-      .then((res) => {
-        if (res.code === 200) {
-          ElMessage.success(res.msg);
-          open.value = false
-          getList()
-        } else {
-          ElMessage.error(res.msg);
-        }
-      })
-  })
+    if (!valid) return;
+    baseService.post(`/sysDept/save`, form.value).then((res) => {
+      if (res.code === 200) {
+        ElMessage.success(res.msg);
+        open.value = false;
+        getList();
+      } else {
+        ElMessage.error(res.msg);
+      }
+    });
+  });
 }
 
 // 删除按钮操作
-function handleDelete(id: String) {
-  ElMessageBox.confirm('确认要删除当前项吗?', '提示')
-    .then(() => {
-      baseService
-        .delete(`/sysDept/delete`, id)
-        .then((res) => {
-          if (res.code === 200) {
-            ElMessage.success(res.msg);
-            getList()
-          } else {
-            ElMessage.error(res.msg);
-          }
-        })
-    })
+function handleDelete(id: any) {
+  ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
+    baseService.delete(`/sysDept/delete`, id).then((res) => {
+      if (res.code === 200) {
+        ElMessage.success(res.msg);
+        getList();
+      } else {
+        ElMessage.error(res.msg);
+      }
+    });
+  });
 }
 
-getList()
+getList();
 </script>
 
 <style scoped></style>

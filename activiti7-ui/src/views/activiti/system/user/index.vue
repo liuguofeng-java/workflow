@@ -11,8 +11,7 @@
         <el-input v-model="queryForm.email" placeholder="邮箱" clearable />
       </el-form-item>
       <el-form-item label="注册时间">
-        <el-date-picker v-model="daterange" type="daterange" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
-          range-separator="到" start-placeholder="开始时间" end-placeholder="开始时间" clearable />
+        <el-date-picker v-model="daterange" type="daterange" format="YYYY-MM-DD" value-format="YYYY-MM-DD" range-separator="到" start-placeholder="开始时间" end-placeholder="开始时间" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
@@ -41,13 +40,11 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize"
-      v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+    <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog v-model="open" :title="title" width="700px" append-to-body>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
-
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="账号名称" prop="account">
@@ -99,61 +96,63 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
 const queryForm = reactive({
-  userName: '',
-  mobile: '',
-  email: '',
-  startTime: '',
-  endTime: '',
+  userName: "",
+  mobile: "",
+  email: "",
+  startTime: "",
+  endTime: "",
   pageNo: 1,
   pageSize: 10
-})
+});
 // 列表内容数量
 const total = ref(0);
-const daterange = ref([])
+const daterange = ref([]);
 // 列表是否加载
 const loading = ref(true);
 // 列表返回值
 const list = ref<any[]>([]);
 
 // 表单实例
-const formRef = ref()
+const formRef = ref();
 // 是否打开弹出框
 const open = ref(false);
 // 弹出框标题
-const title = ref('');
+const title = ref("");
 // 提交表单数据
-let form = toRef(reactive({
-  userId: '',
-  deptId: '',
-  account: '',
-  username: '',
-  password: '',
-  mobile: '',
-  email: ''
-}))
+let form = toRef(
+  reactive({
+    userId: "",
+    deptId: "",
+    account: "",
+    username: "",
+    password: "",
+    mobile: "",
+    email: ""
+  })
+);
 // 表单验证
 const rules = ref({
-  account: [{ required: true, message: '账号名称不能为空', trigger: 'blur' }],
-  username: [{ required: true, message: '登录名称不能为空', trigger: 'blur' }],
-  password: [{ required: true, message: '登录密码不能为空', trigger: 'blur' }],
-  mobile: [{ required: true, message: '手机号不能为空', trigger: 'blur' }],
-  email: [{ required: true, message: '邮箱不能为空', trigger: 'blur' }],
-  deptId: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
+  account: [{ required: true, message: "账号名称不能为空", trigger: "blur" }],
+  username: [{ required: true, message: "登录名称不能为空", trigger: "blur" }],
+  password: [{ required: true, message: "登录密码不能为空", trigger: "blur" }],
+  mobile: [{ required: true, message: "手机号不能为空", trigger: "blur" }],
+  email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }],
+  deptId: [{ required: true, message: "部门不能为空", trigger: "blur" }]
 });
 
 // 部门列表
-const deptList = ref<any[]>()
+const deptList = ref<any[]>();
 
 // 查询列表
 const getList = () => {
   loading.value = true;
   // 处理时间
   if (daterange.value != null && daterange.value.length > 0) {
-    queryForm.startTime = daterange.value[0]
-    queryForm.endTime = daterange.value[1]
+    queryForm.startTime = daterange.value[0];
+    queryForm.endTime = daterange.value[1];
   } else {
-    queryForm.startTime = ''
-    queryForm.endTime = ''
+    queryForm.startTime = "";
+    queryForm.endTime = "";
   }
 
   baseService
@@ -161,110 +160,100 @@ const getList = () => {
     .then((res) => {
       loading.value = false;
       if (res.code === 200) {
-        list.value = res.rows
+        list.value = res.rows;
         total.value = res.total;
       } else {
-        list.value = []
+        list.value = [];
       }
     })
     .catch(() => {
       loading.value = false;
     });
-}
+};
 
 // 搜索按钮操作
 function handleQuery() {
-  queryForm.pageNo = 1
+  queryForm.pageNo = 1;
   getList();
 }
 
 // 表单重置
 function reset() {
   form.value = {
-    userId: '',
-    deptId: '',
-    account: '',
-    username: '',
-    password: '',
-    mobile: '',
-    email: ''
+    userId: "",
+    deptId: "",
+    account: "",
+    username: "",
+    password: "",
+    mobile: "",
+    email: ""
   };
 
   nextTick(() => {
-    formRef.value.resetFields()
-  })
+    formRef.value.resetFields();
+  });
 }
 
 // 新增按钮操作
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = '添加';
+  title.value = "添加";
 }
 
 // 修改按钮操作
-function handleUpdate(id: String) {
-  open.value = true
-  title.value = '修改'
+function handleUpdate(id: string) {
+  open.value = true;
+  title.value = "修改";
   reset();
-  baseService
-    .get(`/sysUser/info/${id}`)
-    .then((res) => {
-      if (res.code === 200) {
-        form.value = res.data
-      }
-    })
+  baseService.get(`/sysUser/info/${id}`).then((res) => {
+    if (res.code === 200) {
+      form.value = res.data;
+    }
+  });
 }
 
 // 提交按钮
 function submitForm() {
   formRef.value.validate((valid: boolean) => {
-    if (!valid) return
-    baseService
-      .post(`/sysUser/save`, form.value)
-      .then((res) => {
-        if (res.code === 200) {
-          ElMessage.success(res.msg);
-          open.value = false
-          getList()
-        } else {
-          ElMessage.error(res.msg);
-        }
-      })
-  })
+    if (!valid) return;
+    baseService.post(`/sysUser/save`, form.value).then((res) => {
+      if (res.code === 200) {
+        ElMessage.success(res.msg);
+        open.value = false;
+        getList();
+      } else {
+        ElMessage.error(res.msg);
+      }
+    });
+  });
 }
 
 // 删除按钮操作
-function handleDelete(id: String) {
-  ElMessageBox.confirm('确认要删除当前项吗?', '提示')
-    .then(() => {
-      baseService
-        .delete(`/sysUser/delete`, id)
-        .then((res) => {
-          if (res.code === 200) {
-            ElMessage.success(res.msg);
-            getList()
-          } else {
-            ElMessage.error(res.msg);
-          }
-        })
-    })
+function handleDelete(id: any) {
+  ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
+    baseService.delete(`/sysUser/delete`, id).then((res) => {
+      if (res.code === 200) {
+        ElMessage.success(res.msg);
+        getList();
+      } else {
+        ElMessage.error(res.msg);
+      }
+    });
+  });
 }
 
 // 查询部门列表
 const getDeptList = () => {
-  baseService
-    .get("/sysUser/deptList")
-    .then((res) => {
-      if (res.code === 200) {
-        deptList.value = res.data
-      }
-    })
-}
+  baseService.get("/sysUser/deptList").then((res) => {
+    if (res.code === 200) {
+      deptList.value = res.data;
+    }
+  });
+};
 
-
-getList()
-getDeptList()
+getList();
+getDeptList();
 </script>
 
 <style scoped></style>

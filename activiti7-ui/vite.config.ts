@@ -22,10 +22,21 @@ export default (config: UserConfig): UserConfigExport => {
       }),
       tsconfigPaths(),
       createSvgIconsPlugin({
-        iconDirs: [resolve(__dirname, "src/assets/icons/svg")],
+        iconDirs: [
+          resolve(__dirname, "src/assets/icons/svg"),
+          resolve(process.cwd(), "src/components/form-designer/svg")
+        ],
         symbolId: "icon-[dir]-[name]"
       })
     ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          /* 自动引入全局scss文件 */
+          additionalData: '@import "./src/components/form-designer/styles/global.scss";'
+        }
+      }
+    },
     build: {
       chunkSizeWarningLimit: 1024,
       commonjsOptions: {
@@ -41,11 +52,15 @@ export default (config: UserConfig): UserConfigExport => {
         }
       }
     },
+    optimizeDeps: {
+      include: ["@/../lib/vuedraggable/dist/vuedraggable.umd.js", "quill"]
+    },
     resolve: {
       alias: {
         // 配置别名
         "@": resolve(__dirname, "./src")
-      }
+      },
+      extensions: [".js", ".vue", ".json", ".ts"] // 使用路径别名时想要省略的后缀名，可以自己 增减
     },
     server: {
       open: false, // 自动启动浏览器

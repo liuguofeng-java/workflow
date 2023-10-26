@@ -2,12 +2,10 @@
   <div class="root">
     <div class="left-container">
       <div class="title-container">
-        <img src="@/assets/images/icon.png" width="40" height="40">
+        <img src="@/assets/images/icon.png" width="40" height="40" />
         <span class="title-text">工作流引擎</span>
       </div>
-      <el-menu background-color="#343844" class="el-menu-container" :default-active="defaultActive" text-color="#fff"
-        @select="handleSelect" unique-opened>
-
+      <el-menu background-color="#343844" class="el-menu-container" :default-active="defaultActive" text-color="#fff" @select="handleSelect" unique-opened>
         <el-sub-menu index="/sys">
           <template #title>
             <el-icon>
@@ -42,9 +40,13 @@
             </el-icon>
             <span>流程定义</span>
           </el-menu-item>
+          <el-menu-item index="/workflow/vform">
+            <el-icon>
+              <Tickets />
+            </el-icon>
+            <span>表单配置</span>
+          </el-menu-item>
         </el-sub-menu>
-
-
       </el-menu>
     </div>
 
@@ -53,7 +55,7 @@
         <span class="menu-name">欢迎登录！今天是{{ dateVal }}</span>
         <div class="head-user-container">
           <div>{{ user.account }}</div>
-          <img class="head-user-close" src="../assets/images/close.png" @click="logout">
+          <img class="head-user-close" src="../assets/images/close.png" @click="logout" />
         </div>
       </div>
 
@@ -73,46 +75,46 @@ import { getCache, removeCache } from "@/utils/cache";
 import { CacheToken } from "@/constants/cacheKey";
 
 const router = useRouter();
-let defaultActive = ref('/sys/user')
+let defaultActive = ref("/sys/user");
 const user = ref({
   account: String
 });
 
-let dateVal = ref<String>()
+let dateVal = ref<string>();
 
 // 初始化
 const onInit = () => {
   const userInfo = getCache(CacheToken);
   user.value = userInfo;
-  router.push(defaultActive.value)
+  router.push(defaultActive.value);
 };
 
 // 退出登录
 const logout = () => {
-  removeCache(CacheToken)
-  router.replace("/login")
-}
+  removeCache(CacheToken);
+  router.replace("/login");
+};
 
 // 菜单选择
-const handleSelect = (key: string, keyPath: string[]) => {
-  router.push(key)
-}
+const handleSelect = (key: string) => {
+  router.push(key);
+};
 
 // 获取时间
-const getDate = (() => {
-  var date = new Date() // 获取时间
-  var year = date.getFullYear() // 获取年
-  var month = date.getMonth() + 1 // 获取月
-  var day = date.getDate() // 获取日
+const getDate = () => {
+  var date = new Date(); // 获取时间
+  var year = date.getFullYear(); // 获取年
+  var month = date.getMonth() + 1; // 获取月
+  var day = date.getDate(); // 获取日
   // 周一返回的是1，周六是6，但是周日是0
-  var week = '日一二三四五六'.charAt(new Date().getDay())
-  dateVal.value = year + '年' + getNum(month) + '月' + getNum(day) + '日' + ' 星期' + week
-})
+  var week = "日一二三四五六".charAt(new Date().getDay());
+  dateVal.value = year + "年" + getNum(month) + "月" + getNum(day) + "日" + " 星期" + week;
+};
 
 // 如果一个数字则在前面添加0
-const getNum = ((num: number) => {
-  return num < 10 ? '0' + num : num
-})
+const getNum = (num: number) => {
+  return num < 10 ? "0" + num : num;
+};
 
 getDate();
 onInit();
@@ -159,13 +161,13 @@ onInit();
   height: calc(100vh - 150px);
 }
 
-.el-menu-container>>>.is-active {
+.el-menu-container >>> .is-active {
   background: #fcbc02;
   border-radius: 0 80px 80px 0;
   color: #532f00;
 }
 
-.el-menu-container>>>.is-active>ul>.is-active {
+.el-menu-container >>> .is-active > ul > .is-active {
   margin-right: 40px;
 }
 
@@ -206,6 +208,9 @@ onInit();
 
 .page {
   padding: 10px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  background: #f0f2f5;
 }
 
 .router-container {
