@@ -6,7 +6,7 @@
         <span class="title-text">工作流引擎</span>
       </div>
       <el-menu background-color="#343844" class="el-menu-container" :default-active="defaultActive" text-color="#fff"
-         @select="handleSelect" unique-opened>
+        @select="handleSelect" unique-opened>
 
         <el-sub-menu index="/sys">
           <template #title>
@@ -50,7 +50,7 @@
 
     <dir class="rigth-container">
       <div class="head-container">
-        <!-- <span class="menu-name">账号信息</span> -->
+        <span class="menu-name">欢迎登录！今天是{{ dateVal }}</span>
         <div class="head-user-container">
           <div>{{ user.account }}</div>
           <img class="head-user-close" src="../assets/images/close.png" @click="logout">
@@ -78,6 +78,8 @@ const user = ref({
   account: String
 });
 
+let dateVal = ref<String>()
+
 // 初始化
 const onInit = () => {
   const userInfo = getCache(CacheToken);
@@ -96,7 +98,23 @@ const handleSelect = (key: string, keyPath: string[]) => {
   router.push(key)
 }
 
+// 获取时间
+const getDate = (() => {
+  var date = new Date() // 获取时间
+  var year = date.getFullYear() // 获取年
+  var month = date.getMonth() + 1 // 获取月
+  var day = date.getDate() // 获取日
+  // 周一返回的是1，周六是6，但是周日是0
+  var week = '日一二三四五六'.charAt(new Date().getDay())
+  dateVal.value = year + '年' + getNum(month) + '月' + getNum(day) + '日' + ' 星期' + week
+})
 
+// 如果一个数字则在前面添加0
+const getNum = ((num: number) => {
+  return num < 10 ? '0' + num : num
+})
+
+getDate();
 onInit();
 </script>
 
@@ -147,7 +165,7 @@ onInit();
   color: #532f00;
 }
 
-.el-menu-container>>>.is-active > ul > .is-active{
+.el-menu-container>>>.is-active>ul>.is-active {
   margin-right: 40px;
 }
 
@@ -162,7 +180,7 @@ onInit();
 
 .menu-name {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #000000;
   margin-left: 20px;
 }
