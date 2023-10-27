@@ -34,7 +34,7 @@ public class SysFormEntity implements Serializable {
     /**
      * 表单数据
      */
-    private String fromData;
+    private String formData;
     /**
      * 创建时间
      */

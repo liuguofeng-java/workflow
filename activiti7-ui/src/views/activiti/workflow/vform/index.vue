@@ -31,7 +31,7 @@
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <!-- 表单弹出框 -->
-    <Form ref="formRef" />
+    <Form ref="formRef" @ok="getList" />
   </div>
 </template>
 <script setup lang="ts">
@@ -83,12 +83,12 @@ function handleQuery() {
 
 // 新增按钮操作
 function handleAdd() {
-  formRef.value.open("新增表单");
+  formRef.value.open();
 }
 
 // 修改按钮操作
 function handleUpdate(id: string) {
-  formRef.value.open("新增表单");
+  formRef.value.open(id);
 }
 
 // 删除按钮操作

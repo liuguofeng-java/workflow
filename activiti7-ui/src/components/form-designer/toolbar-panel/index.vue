@@ -3,7 +3,7 @@
     <div class="left-toolbar">
       <el-button link type="primary" :disabled="undoDisabled" :title="i18nt('designer.toolbar.undoHint')" @click="undoHistory"> <svg-icon icon-class="undo" /></el-button>
       <el-button link type="primary" :disabled="redoDisabled" :title="i18nt('designer.toolbar.redoHint')" @click="redoHistory"> <svg-icon icon-class="redo" /></el-button>
-      <el-button-group style="margin-left: 20px">
+      <el-button-group style="margin-left: 20px" v-show="false">
         <el-button :type="layoutType === 'PC' ? 'info' : ''" @click="changeLayoutType('PC')"> {{ i18nt("designer.toolbar.pcLayout") }}</el-button>
         <el-button :type="layoutType === 'Pad' ? 'info' : ''" @click="changeLayoutType('Pad')"> {{ i18nt("designer.toolbar.padLayout") }}</el-button>
         <el-button :type="layoutType === 'H5' ? 'info' : ''" @click="changeLayoutType('H5')"> {{ i18nt("designer.toolbar.mobileLayout") }}</el-button>

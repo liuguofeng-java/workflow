@@ -7,7 +7,7 @@ import {
 import * as PERegister from "@/components/form-designer/setting-panel/propertyRegister";
 import * as PEFactory from "@/components/form-designer/setting-panel/property-editor-factory.jsx";
 
-import { cardSchema } from "@/components/form-designer/extension/samples/extension-schema";
+// import { cardSchema } from "@/components/form-designer/extension/samples/extension-schema";
 import CardWidget from "@/components/form-designer/extension/samples/card/card-widget";
 import CardItem from "@/components/form-designer/extension/samples/card/card-item";
 import { registerCWGenerator } from "@/components/form-designer/utils/sfc-generator";
@@ -27,7 +27,7 @@ export const loadExtension = function (app) {
    * 4. 注册容器组件的代码生成器；
    * 5. 加载完毕。
    */
-  addContainerWidgetSchema(cardSchema); //加载组件Json Schema
+  // addContainerWidgetSchema(cardSchema); //加载组件Json Schema
   /* -------------------------------------------------- */
   app.component(CardWidget.name, CardWidget); //注册设计期的容器组件
   app.component(CardItem.name, CardItem); //注册运行期的容器组件

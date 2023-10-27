@@ -38,7 +38,7 @@
               </draggable>
             </el-collapse-item>
 
-            <el-collapse-item name="4" :title="i18nt('designer.customFieldTitle')">
+            <!-- <el-collapse-item name="4" :title="i18nt('designer.customFieldTitle')">
               <draggable tag="ul" :list="customFields" item-key="key" :group="{ name: 'dragGroup', pull: 'clone', put: false }" :move="checkFieldMove" :clone="handleFieldWidgetClone" ghost-class="ghost" :sort="false">
                 <template #item="{ element: fld }">
                   <li class="field-widget-item" :title="fld.displayName" @dblclick="addFieldByDbClick(fld)">
@@ -46,7 +46,7 @@
                   </li>
                 </template>
               </draggable>
-            </el-collapse-item>
+            </el-collapse-item> -->
           </el-collapse>
         </el-tab-pane>
 

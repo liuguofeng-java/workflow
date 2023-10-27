@@ -190,7 +190,7 @@ function reset() {
   };
 
   nextTick(() => {
-    formRef.value.resetFields();
+    formRef.value?.resetFields();
   });
 }
 

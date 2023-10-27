@@ -29,6 +29,10 @@
           </el-scrollbar>
         </el-main>
       </el-container>
+
+      <el-aside>
+        <setting-panel :designer="designer" :selected-widget="designer.selectedWidget" :form-config="designer.formConfig" :global-dsv="globalDsv" @edit-event-handler="testEEH" />
+      </el-aside>
     </el-container>
   </el-container>
 </template>
@@ -91,7 +95,7 @@ export default {
 
           presetCssCode: "", //设计器预设CSS样式代码
 
-          resetFormJson: false //是否在设计器初始化时将表单内容重置为空
+          resetFormJson: true //是否在设计器初始化时将表单内容重置为空
         };
       }
     },
@@ -148,6 +152,11 @@ export default {
     this.loadFieldListFromServer();
   },
   methods: {
+    testEEH(eventName, eventParams) {
+      console.log("test", eventName);
+      console.log("test222222", eventParams);
+    },
+
     showLink(configName) {
       if (this.designerConfig[configName] === undefined) {
         return true;
