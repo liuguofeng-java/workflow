@@ -29,12 +29,16 @@
     </el-table>
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+
+    <!-- 表单弹出框 -->
+    <Form ref="formRef" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
+import Form from "./form.vue";
 
 // 查询参数
 const queryForm = reactive({
@@ -48,6 +52,9 @@ const total = ref(0);
 const loading = ref(true);
 // 列表返回值
 const list = ref<any[]>([]);
+
+// 表单实例
+const formRef = ref<any>(null);
 
 // 查询列表
 const getList = () => {
@@ -75,10 +82,14 @@ function handleQuery() {
 }
 
 // 新增按钮操作
-function handleAdd() {}
+function handleAdd() {
+  formRef.value.open("新增表单");
+}
 
 // 修改按钮操作
-function handleUpdate(id: string) {}
+function handleUpdate(id: string) {
+  formRef.value.open("新增表单");
+}
 
 // 删除按钮操作
 function handleDelete(id: any) {
