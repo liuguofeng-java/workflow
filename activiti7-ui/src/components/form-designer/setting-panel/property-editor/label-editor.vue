@@ -5,26 +5,23 @@
 </template>
 
 <script>
-  import i18n from "@/components/form-designer/utils/i18n"
+import i18n from "@/components/form-designer/utils/i18n";
 
-  export default {
-    name: "label-editor",
-    mixins: [i18n],
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
-    computed: {
-      noLabelSetting() {
-        return (this.selectedWidget.type === 'static-text') || (this.selectedWidget.type === 'html-text')
-        //|| (this.selectedWidget.type === 'divider')
-      },
-
+export default {
+  name: "label-editor",
+  mixins: [i18n],
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
+  },
+  computed: {
+    noLabelSetting() {
+      return this.selectedWidget.type === "static-text" || this.selectedWidget.type === "html-text";
+      //|| (this.selectedWidget.type === 'divider')
     }
   }
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

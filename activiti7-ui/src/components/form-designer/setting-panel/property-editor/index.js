@@ -1,9 +1,9 @@
-let comps = {}
+let comps = {};
 
-const modules = import.meta.globEager('./**/*.vue')
+const modules = import.meta.globEager("./**/*.vue");
 for (const path in modules) {
-  let cname = modules[path].default.name
-  comps[cname] = modules[path].default
+  let cname = modules[path].default.name;
+  comps[cname] = modules[path].default;
 }
 
-export default comps
+export default comps;

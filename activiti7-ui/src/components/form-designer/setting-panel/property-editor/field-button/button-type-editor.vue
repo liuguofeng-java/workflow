@@ -13,20 +13,18 @@
 </template>
 
 <script>
-  import i18n from "@/components/form-designer/utils/i18n"
-  import propertyMixin from "@/components/form-designer/setting-panel/property-editor/propertyMixin"
+import i18n from "@/components/form-designer/utils/i18n";
+import propertyMixin from "@/components/form-designer/setting-panel/property-editor/propertyMixin";
 
-  export default {
-    name: "button-type-editor",
-    mixins: [i18n, propertyMixin],
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
+export default {
+  name: "button-type-editor",
+  mixins: [i18n, propertyMixin],
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
   }
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

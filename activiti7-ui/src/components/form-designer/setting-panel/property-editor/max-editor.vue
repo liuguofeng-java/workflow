@@ -5,35 +5,32 @@
 </template>
 
 <script>
-  import i18n from "@/components/form-designer/utils/i18n"
+import i18n from "@/components/form-designer/utils/i18n";
 
-  export default {
-    name: "max-editor",
-    mixins: [i18n],
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
-    computed: {
-      maxValue: {
-        get() {
-          return this.optionModel['max']
-        },
-
-        set(newValue) {
-          if (!newValue || isNaN(newValue)) {
-            this.optionModel.max = null
-          } else {
-            this.optionModel.max = Number(newValue)
-          }
-        }
+export default {
+  name: "max-editor",
+  mixins: [i18n],
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
+  },
+  computed: {
+    maxValue: {
+      get() {
+        return this.optionModel["max"];
       },
 
+      set(newValue) {
+        if (!newValue || isNaN(newValue)) {
+          this.optionModel.max = null;
+        } else {
+          this.optionModel.max = Number(newValue);
+        }
+      }
     }
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

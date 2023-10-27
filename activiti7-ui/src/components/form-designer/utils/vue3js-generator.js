@@ -2,26 +2,26 @@ import {
   buildActiveTabs,
   buildDefaultValueListFn,
   buildFieldOptionsFn,
-  buildRulesListFn, buildUploadDataFn
+  buildRulesListFn,
+  buildUploadDataFn
 } from "@/components/form-designer/utils/vue2js-generator";
-import {traverseFieldWidgets} from "@/components/form-designer/utils/util";
+import { traverseFieldWidgets } from "@/components/form-designer/utils/util";
 
 export const genVue3JS = function (formConfig, widgetList) {
-  let defaultValueList = []
-  let rulesList = []
-  let fieldOptions = []
-  let uploadData = []
+  let defaultValueList = [];
+  let rulesList = [];
+  let fieldOptions = [];
+  let uploadData = [];
   traverseFieldWidgets(widgetList, (widget) => {
-    buildDefaultValueListFn(formConfig, widgetList, defaultValueList)(widget)
-    buildRulesListFn(formConfig, widgetList, rulesList)(widget)
-    buildFieldOptionsFn(formConfig, widgetList, fieldOptions)(widget)
-    buildUploadDataFn(formConfig, widgetList, uploadData)(widget)
-  })
+    buildDefaultValueListFn(formConfig, widgetList, defaultValueList)(widget);
+    buildRulesListFn(formConfig, widgetList, rulesList)(widget);
+    buildFieldOptionsFn(formConfig, widgetList, fieldOptions)(widget);
+    buildUploadDataFn(formConfig, widgetList, uploadData)(widget);
+  });
 
-  const activeTabs = buildActiveTabs(formConfig, widgetList)
+  const activeTabs = buildActiveTabs(formConfig, widgetList);
 
-  const v3JSTemplate =
-`  import { defineComponent, toRefs, reactive, getCurrentInstance } from 'vue'
+  const v3JSTemplate = `  import { defineComponent, toRefs, reactive, getCurrentInstance } from 'vue'
   
   export default defineComponent({
     components: {},
@@ -29,18 +29,18 @@ export const genVue3JS = function (formConfig, widgetList) {
     setup() {
       const state = reactive({
         ${formConfig.modelName}: {
-          ${defaultValueList.join('\n')}
+          ${defaultValueList.join("\n")}
         },
         
         ${formConfig.rulesName}: {
-          ${rulesList.join('\n')}
+          ${rulesList.join("\n")}
         },
         
-        ${activeTabs.join('\n')}
+        ${activeTabs.join("\n")}
         
-        ${fieldOptions.join('\n')}
+        ${fieldOptions.join("\n")}
         
-        ${uploadData.join('\n')}
+        ${uploadData.join("\n")}
       })
     
       const instance = getCurrentInstance()
@@ -63,8 +63,7 @@ export const genVue3JS = function (formConfig, widgetList) {
         resetForm
       }
     }
-  })`
+  })`;
 
-  return v3JSTemplate
-}
-
+  return v3JSTemplate;
+};

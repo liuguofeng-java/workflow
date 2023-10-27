@@ -11,20 +11,17 @@
 </template>
 
 <script>
-  import i18n from "@/components/form-designer/utils/i18n"
+import i18n from "@/components/form-designer/utils/i18n";
 
-  export default {
-    name: "date-format-editor",
-    mixins: [i18n],
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
-
+export default {
+  name: "date-format-editor",
+  mixins: [i18n],
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -5,36 +5,33 @@
 </template>
 
 <script>
-  import i18n from "@/components/form-designer/utils/i18n"
+import i18n from "@/components/form-designer/utils/i18n";
 
-  export default {
-    name: "min-editor",
-    mixins: [i18n],
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
-    computed: {
-      minValue: {
-        get() {
-          return this.optionModel['min']
-        },
-
-        set(newValue) {
-          //if ((!newValue && (newValue !== 0)) || isNaN(newValue)) {
-          if ((newValue === undefined) || (newValue === null) || isNaN(newValue)) {
-            this.optionModel.min = null
-          } else {
-            this.optionModel.min = Number(newValue)
-          }
-        }
+export default {
+  name: "min-editor",
+  mixins: [i18n],
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
+  },
+  computed: {
+    minValue: {
+      get() {
+        return this.optionModel["min"];
       },
 
-    },
+      set(newValue) {
+        //if ((!newValue && (newValue !== 0)) || isNaN(newValue)) {
+        if (newValue === undefined || newValue === null || isNaN(newValue)) {
+          this.optionModel.min = null;
+        } else {
+          this.optionModel.min = Number(newValue);
+        }
+      }
+    }
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

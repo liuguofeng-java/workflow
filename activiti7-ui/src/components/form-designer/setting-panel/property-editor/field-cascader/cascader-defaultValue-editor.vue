@@ -3,16 +3,14 @@
 </template>
 
 <script>
-  export default {
-    name: "cascader-defaultValue-editor",
-    props: {
-      designer: Object,
-      selectedWidget: Object,
-      optionModel: Object,
-    },
+export default {
+  name: "cascader-defaultValue-editor",
+  props: {
+    designer: Object,
+    selectedWidget: Object,
+    optionModel: Object
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

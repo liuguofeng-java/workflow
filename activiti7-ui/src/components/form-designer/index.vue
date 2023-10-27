@@ -29,10 +29,6 @@
           </el-scrollbar>
         </el-main>
       </el-container>
-
-      <el-aside>
-        <setting-panel :designer="designer" :selected-widget="designer.selectedWidget" :form-config="designer.formConfig" :global-dsv="globalDsv" @edit-event-handler="testEEH" />
-      </el-aside>
     </el-container>
   </el-container>
 </template>
@@ -152,11 +148,6 @@ export default {
     this.loadFieldListFromServer();
   },
   methods: {
-    testEEH(eventName, eventParams) {
-      console.log("test", eventName);
-      console.log("test222222", eventParams);
-    },
-
     showLink(configName) {
       if (this.designerConfig[configName] === undefined) {
         return true;
