@@ -12,6 +12,7 @@ import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import axios from "axios";
 import "virtual:svg-icons-register";
 
+// vfrom相关依赖引入
 import "@/components/form-designer/styles/index.scss";
 import Draggable from "@/../lib/vuedraggable/dist/vuedraggable.umd.js";
 import "virtual:svg-icons-register";
@@ -35,10 +36,11 @@ app.use(ElementPlus, {
 
 app.use(ElementPlus);
 registerIcon(app);
+
+// vform 相关
 app.component("draggable", Draggable);
 addDirective(app);
 installI18n(app);
-
 app.use(ContainerWidgets);
 app.use(ContainerItems);
 loadExtension(app);

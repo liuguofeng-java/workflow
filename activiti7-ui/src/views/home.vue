@@ -161,13 +161,13 @@ onInit();
   height: calc(100vh - 150px);
 }
 
-.el-menu-container >>> .is-active {
+.el-menu-container /deep/ .is-active {
   background: #fcbc02;
   border-radius: 0 80px 80px 0;
   color: #532f00;
 }
 
-.el-menu-container >>> .is-active > ul > .is-active {
+.el-menu-container /deep/ .is-active > ul > .is-active {
   margin-right: 40px;
 }
 

@@ -14,7 +14,7 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <!-- <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button> -->
+        <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
       </el-col>
     </el-row>
 
@@ -32,12 +32,16 @@
     </el-table>
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+
+    <!-- bpmn弹出框 -->
+    <Bpmn ref="bpmn" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
+import Bpmn from "./bpmn.vue";
 
 // 查询参数
 const queryForm = reactive({
@@ -52,6 +56,9 @@ const total = ref(0);
 const loading = ref(true);
 // 列表返回值
 const list = ref<any[]>([]);
+
+// bpmn
+const bpmn = ref();
 
 // 查询列表
 const getList = () => {
@@ -76,6 +83,11 @@ const getList = () => {
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
+}
+
+// 新增
+function handleAdd() {
+  bpmn.value.open();
 }
 
 // 删除按钮操作
