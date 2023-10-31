@@ -51,6 +51,81 @@ app.use(ContainerWidgets);
 app.use(ContainerItems);
 loadExtension(app);
 
+// bpmn.js
+import "@/components/bpmnJs/styles/index.scss";
+
+import {
+  createDiscreteApi,
+  create,
+  NColorPicker,
+  NConfigProvider,
+  NMessageProvider,
+  NDialogProvider,
+  NButton,
+  NButtonGroup,
+  NTag,
+  NCollapse,
+  NCollapseItem,
+  NDataTable,
+  NPopover,
+  NDrawer,
+  NDrawerContent,
+  NModal,
+  NCode,
+  NForm,
+  NFormItem,
+  NInput,
+  NInputNumber,
+  NRadio,
+  NRadioGroup,
+  NCheckbox,
+  NCheckboxGroup,
+  NSelect,
+  NSwitch
+} from "naive-ui";
+
+const naive = create({
+  components: [
+    NColorPicker,
+    NConfigProvider,
+    NMessageProvider,
+    NDialogProvider,
+    NButton,
+    NButtonGroup,
+    NTag,
+    NCollapse,
+    NCollapseItem,
+    NDataTable,
+    NPopover,
+    NDrawer,
+    NDrawerContent,
+    NModal,
+    NCode,
+    NForm,
+    NFormItem,
+    NInput,
+    NInputNumber,
+    NRadio,
+    NRadioGroup,
+    NCheckbox,
+    NCheckboxGroup,
+    NSelect,
+    NSwitch
+  ]
+});
+const { message } = createDiscreteApi(["message", "dialog", "notification", "loadingBar"]);
+window.__messageBox = message;
+import LucideIcon from "@/components/bpmnJs/common/LucideIcon.vue";
+import EditItem from "@/components/bpmnJs/common/EditItem.vue";
+import CollapseTitle from "@/components/bpmnJs/common/CollapseTitle.vue";
+import "virtual:svg-icons-register";
+import i18n from "@/components/bpmnJs/i18n";
+app.use(i18n);
+app.use(naive);
+app.component("LucideIcon", LucideIcon);
+app.component("EditItem", EditItem);
+app.component("CollapseTitle", CollapseTitle);
+
 app.use(createPinia()).use(router).use(ElementPlus, { size: "default" }).mount("#app");
 
 window.axios = axios;

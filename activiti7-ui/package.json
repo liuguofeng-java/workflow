@@ -7,7 +7,7 @@
     "build": "npm run build:prod",
     "build:prod": "vue-tsc --noEmit && vite build --mode production",
     "serve": "npm run build && vite preview",
-    "lint": "eslint \"src/**/*.{vue,js,ts}\" --fix"
+    "lint": "eslint \"src/**/*.{vue,js,ts,tsx}\" --fix"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -34,11 +34,39 @@
     "pinia": "2.0.27",
     "qs": "^6.10.1",
     "sortablejs": "^1.15.0",
-    "vue": "^3.2.37",
-    "vue-router": "4.0.11",
     "quill": "^1.3.7",
-    "vue3-quill": "^0.2.6"
+    "vue3-quill": "^0.2.6",
 
+
+    "@bpmn-io/add-exporter": "^0.2.0",
+    "@bpmn-io/element-template-chooser": "^1.0.0",
+    "@bpmn-io/properties-panel": "2.2.1",
+    "bpmn-js": "13.2.0",
+    "bpmn-js-bpmnlint": "0.21.0",
+    "bpmn-js-color-picker": "0.6.0",
+    "bpmn-js-connectors-extension": "^0.4.6",
+    "bpmn-js-external-label-modeling": "^1.0.3",
+    "bpmn-js-properties-panel": "2.1.0",
+    "bpmn-js-token-simulation": "^0.31.0",
+    "bpmn-moddle": "^8.0.1",
+    "bpmnlint": "8.3.2",
+    "camunda-bpmn-moddle": "^7.0.1",
+    "diagram-js": "12.2.0",
+    "diagram-js-grid-bg": "^1.0.1",
+    "diagram-js-minimap": "^4.1.0",
+    "didi": "^9.0.2",
+    "highlight.js": "11.8.0",
+    "ids": "^1.0.0",
+    "lodash.debounce": "^4.0.8",
+    "lucide-vue-next": "0.256.0",
+    "min-dash": "4.1.1",
+    "min-dom": "^4.1.0",
+    "naive-ui": "^2.34.4",
+    "tiny-svg": "^3.0.1",
+
+    "vue-i18n": "^9.2.2",
+    "vue": "^3.2.37",
+    "vue-router": "4.0.11"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.172",
@@ -46,6 +74,7 @@
     "@types/qs": "^6.9.6",
     "@types/quill": "^2.0.8",
     "@vitejs/plugin-vue": "4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.37",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",

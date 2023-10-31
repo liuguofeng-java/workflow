@@ -4,6 +4,7 @@ import { defineConfig, loadEnv, UserConfig, UserConfigExport } from "vite";
 import html from "vite-plugin-html";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default (config: UserConfig): UserConfigExport => {
   const mode = config.mode as string;
@@ -11,6 +12,7 @@ export default (config: UserConfig): UserConfigExport => {
     base: "./",
     plugins: [
       vue(),
+      vueJsx({}),
       html({
         inject: {
           injectData: {
@@ -24,7 +26,8 @@ export default (config: UserConfig): UserConfigExport => {
       createSvgIconsPlugin({
         iconDirs: [
           resolve(__dirname, "src/assets/icons/svg"),
-          resolve(process.cwd(), "src/components/form-designer/svg")
+          resolve(process.cwd(), "src/components/form-designer/svg"),
+          resolve(process.cwd(), "src/bpmn-icons")
         ],
         symbolId: "icon-[dir]-[name]"
       })
@@ -58,9 +61,10 @@ export default (config: UserConfig): UserConfigExport => {
     resolve: {
       alias: {
         // 配置别名
-        "@": resolve(__dirname, "./src")
+        "@": resolve(__dirname, "./src"),
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       },
-      extensions: [".js", ".vue", ".json", ".ts"] // 使用路径别名时想要省略的后缀名，可以自己 增减
+      extensions: [".js", ".vue", ".json", ".ts", ".tsx"] // 使用路径别名时想要省略的后缀名，可以自己 增减
     },
     server: {
       open: false, // 自动启动浏览器
