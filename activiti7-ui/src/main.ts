@@ -7,6 +7,8 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import * as ElementPlusIcons from "@element-plus/icons-vue";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 
 import axios from "axios";
@@ -14,6 +16,8 @@ import "virtual:svg-icons-register";
 
 // vfrom相关依赖引入
 import "@/components/form-designer/styles/index.scss";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Draggable from "@/../lib/vuedraggable/dist/vuedraggable.umd.js";
 import "virtual:svg-icons-register";
 import { registerIcon } from "@/components/form-designer/utils/el-icons";
@@ -38,6 +42,8 @@ app.use(ElementPlus);
 registerIcon(app);
 
 // vform 相关
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 app.component("draggable", Draggable);
 addDirective(app);
 installI18n(app);
