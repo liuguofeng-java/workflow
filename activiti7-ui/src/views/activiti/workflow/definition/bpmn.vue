@@ -1,7 +1,6 @@
 <template>
   <el-drawer v-model="drawer" size="100%" :with-header="false">
     <el-button @click="drawer = false">关闭</el-button>
-
     <NConfigProvider abstract :componentOptions="{ DynamicInput: { buttonSize: 'small' } }" :hljs="hljs">
       <NDialogProvider>
         <div :class="{ computedClasses }" id="designer-container">
@@ -22,10 +21,10 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
-import Toolbar from "@/components/bpmnJs/Toolbar/index.tsx";
-import Designer from "@/components/bpmnJs/Designer/index.tsx";
-import Panel from "@/components/bpmnJs/Panel/index.tsx";
-import Setting from "@/components/bpmnJs/Setting/index.tsx";
+import Toolbar from "@/components/bpmnJs/Toolbar";
+import Designer from "@/components/bpmnJs/Designer";
+import Panel from "@/components/bpmnJs/Panel";
+import Setting from "@/components/bpmnJs/Setting";
 import ContextMenu from "@/components/bpmnJs/ContextMenu/index.vue";
 import { EditorSettings } from "@/components/bpmnJs/types/editor/settings";
 import { defaultSettings } from "@/components/bpmnJs/config";

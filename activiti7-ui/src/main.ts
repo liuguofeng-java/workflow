@@ -51,7 +51,7 @@ app.use(ContainerWidgets);
 app.use(ContainerItems);
 loadExtension(app);
 
-// bpmn.js
+// bpmn.js 相关
 import "@/components/bpmnJs/styles/index.scss";
 
 import {
