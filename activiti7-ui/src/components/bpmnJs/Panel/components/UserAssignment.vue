@@ -1,5 +1,36 @@
+<template>
+  <el-card shadow="hover">
+    <template #header> 用户分配 </template>
+    <el-form label-width="100px">
+      <el-form-item label="代理人">
+        <el-input v-model="UAForm.assignee" @change="updateUserAssignProp('assignee', $event)" />
+      </el-form-item>
+
+      <el-form-item label="任务执行人">
+        <el-input v-model="UAForm.candidateUsers" @change="updateUserAssignProp('candidateUsers', $event)" />
+      </el-form-item>
+
+      <el-form-item label="候选组">
+        <el-input v-model="UAForm.candidateGroups" @change="updateUserAssignProp('candidateGroups', $event)" />
+      </el-form-item>
+
+      <el-form-item label="到期日">
+        <el-input v-model="UAForm.dueDate" @change="updateUserAssignProp('dueDate', $event)" />
+      </el-form-item>
+
+      <el-form-item label="跟进日期">
+        <el-input v-model="UAForm.followUpDate" @change="updateUserAssignProp('followUpDate', $event)" />
+      </el-form-item>
+
+      <el-form-item label="优先">
+        <el-input v-model="UAForm.priority" @change="updateUserAssignProp('priority', $event)" />
+      </el-form-item>
+    </el-form>
+  </el-card>
+</template>
+
 <script setup lang="ts">
-import { type PropType, ref } from "vue";
+import { ref } from "vue";
 import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUtil";
 import debounce from "lodash.debounce";
 import useElementUpdateListener from "@/components/bpmnJs/hooks/useElementUpdateListener";
@@ -22,13 +53,6 @@ const updateExModdleProp = debounce(
   300,
   { leading: true }
 );
-
-const props = defineProps({
-  labelWidth: {
-    type: Number as PropType<number>,
-    default: 100
-  }
-});
 
 let scopedElement: BpmnElement | undefined = undefined;
 let scopedBO: ModdleElement | undefined = undefined;
@@ -57,33 +81,3 @@ const reloadElementData = () =>
   });
 useElementUpdateListener(reloadElementData);
 </script>
-
-<template>
-  <n-collapse-item name="element-user-assignment">
-    <template #header>
-      <collapse-title title="用户分配">
-        <lucide-icon name="Contact" />
-      </collapse-title>
-    </template>
-    <div>
-      <edit-item :label-width="labelWidth" :label="$t('panel.assignee')">
-        <n-input v-model:value="UAForm.assignee" @change="updateUserAssignProp('assignee', $event)" />
-      </edit-item>
-      <edit-item :label-width="labelWidth" :label="$t('panel.candidateUsers')">
-        <n-input v-model:value="UAForm.candidateUsers" @change="updateUserAssignProp('candidateUsers', $event)" />
-      </edit-item>
-      <edit-item :label-width="labelWidth" :label="$t('panel.candidateGroups')">
-        <n-input v-model:value="UAForm.candidateGroups" @change="updateUserAssignProp('candidateGroups', $event)" />
-      </edit-item>
-      <edit-item :label-width="labelWidth" :label="$t('panel.dueDate')" description="The due date as an EL expression (e.g. ${someDate}) or an ISO date (e.g. 2015-06-26T09:54:00).">
-        <n-input v-model:value="UAForm.dueDate" @change="updateUserAssignProp('dueDate', $event)" />
-      </edit-item>
-      <edit-item :label-width="labelWidth" :label="$t('panel.followUpDate')" description="The follow up date as an EL expression (e.g. ${someDate}) or an ISO date (e.g. 2015-06-26T09:54:00).">
-        <n-input v-model:value="UAForm.followUpDate" @change="updateUserAssignProp('followUpDate', $event)" />
-      </edit-item>
-      <edit-item :label-width="labelWidth" :label="$t('panel.priority')">
-        <n-input v-model:value="UAForm.priority" @change="updateUserAssignProp('priority', $event)" />
-      </edit-item>
-    </div>
-  </n-collapse-item>
-</template>

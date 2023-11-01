@@ -1,171 +1,90 @@
 <template>
-  <n-collapse-item name="element-execution-listeners">
-    <template #header>
-      <collapse-title :title="$t('panel.executionListeners')">
-        <lucide-icon name="Radio" />
-      </collapse-title>
-    </template>
-    <template #header-extra>
-      <n-tag type="primary" round>
-        {{ listeners.length }}
-      </n-tag>
-    </template>
-    <div class="element-extension-listeners">
-      <n-data-table size="small" max-height="20vh" :columns="columns" :data="listeners" />
-
-      <n-button type="info" class="inline-large-button" secondary @click="openListenerModel(-1)">
-        <lucide-icon :size="20" name="Plus" />
-        <span>{{ $t("panel.addExecutionListener") }}</span>
-      </n-button>
-    </div>
-
-    <n-modal v-model:show="modelVisible" preset="dialog" :title="$t('panel.addExecutionListener')" :style="{ width: '640px' }">
-      <n-form ref="formRef" :model="newListener" :rules="formRules" class="need-filled" aria-modal="true">
-        <n-form-item path="event" :label="$t('panel.executionListenerEventType')">
-          <n-select v-model:value="newListener.event" :options="listenerEventTypeOptions" />
-        </n-form-item>
-        <n-form-item path="type" :label="$t('panel.executionListenerType')">
-          <n-select v-model:value="newListener.type" :options="listenerTypeOptions" @update:value="updateListenerType" />
-        </n-form-item>
-        <n-form-item v-if="formItemVisible.listenerType === 'class'" path="class" :label="$t('panel.javaClass')">
-          <n-input v-model:value="newListener.class" @keydown.enter.prevent />
-        </n-form-item>
-        <n-form-item v-if="formItemVisible.listenerType === 'expression'" path="expression" :label="$t('panel.expression')">
-          <n-input v-model:value="newListener.expression" @keydown.enter.prevent />
-        </n-form-item>
-        <n-form-item v-if="formItemVisible.listenerType === 'delegateExpression'" path="delegateExpression" :label="$t('panel.delegateExpression')">
-          <n-input v-model:value="newListener.delegateExpression" @keydown.enter.prevent />
-        </n-form-item>
-        <template v-if="formItemVisible.listenerType === 'script' && newListener.script">
-          <n-form-item key="scriptFormat" path="script.scriptFormat" :label="$t('panel.scriptFormat')">
-            <n-input v-model:value="newListener.script.scriptFormat" @keydown.enter.prevent />
-          </n-form-item>
-          <n-form-item key="scriptType" path="script.scriptType" :label="$t('panel.scriptType')">
-            <n-select v-model:value="newListener.script.scriptType" :options="scriptTypeOptions" @update:value="updateScriptType" />
-          </n-form-item>
-          <n-form-item v-if="formItemVisible.scriptType === 'inline'" key="scriptContent" path="script.value" :label="$t('panel.scriptBody')">
-            <n-input v-model:value="newListener.script.value" type="textarea" @keydown.enter.prevent />
-          </n-form-item>
-          <n-form-item v-if="formItemVisible.scriptType === 'external'" key="scriptResource" path="script.resource" :label="$t('panel.scriptResource')">
-            <n-input v-model:value="newListener.script.resource" @keydown.enter.prevent />
-          </n-form-item>
+  <el-card shadow="hover">
+    <template #header> 执行监听器 </template>
+    <el-table :data="listeners" style="width: 100%">
+      <el-table-column type="index" label="序号" />
+      <el-table-column prop="event" label="事件类型" />
+      <el-table-column prop="type" label="监听器类型" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button link type="primary" @click="openListenerModel(scope.$index, scope.row)">修改</el-button>
+          <el-button link type="primary" @click="removeListener(scope.$index)">删除</el-button>
         </template>
-      </n-form>
-      <template #action>
-        <n-button size="small" type="info" @click="saveExecutionListener">{{ $t("panel.confirm") }}</n-button>
-      </template>
-    </n-modal>
-  </n-collapse-item>
+      </el-table-column>
+    </el-table>
+    <el-button type="primary" @click="openListenerModel(-1, null)">添加</el-button>
+  </el-card>
+
+  <el-dialog v-model="modelVisible" title="添加" width="500px">
+    <el-form ref="formRef" :model="newListener" :rules="formRules" label-width="80px">
+      <el-form-item label="事件类型" prop="event">
+        <el-select v-model="newListener.event">
+          <el-option v-for="item in listenerEventTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="监听器类型" prop="type">
+        <el-input disabled v-model="newListener.type" value="class" />
+      </el-form-item>
+
+      <el-form-item label="java类" prop="class">
+        <el-input v-model="newListener.class" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="saveExecutionListener">确 定</el-button>
+        <el-button @click="modelVisible = false">取 消</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, h, markRaw, ref, computed, nextTick, onMounted, ComputedRef } from "vue";
-import { FormInst, FormRules, DataTableColumns, NButton } from "naive-ui";
-import modeler from "@/components/bpmnJs/store/modeler";
+import { defineComponent, markRaw, nextTick } from "vue";
+import { mapState } from "pinia";
+import modelerStore from "@/components/bpmnJs/store/modeler";
 import { ModdleElement } from "bpmn-moddle";
 import { Element } from "diagram-js/lib/model/Types";
-import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, getExecutionListenerTypes, removeExecutionListener, updateExecutionListener } from "@/components/bpmnJs/bo-utils/executionListenersUtil";
+import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, removeExecutionListener, updateExecutionListener } from "@/components/bpmnJs/bo-utils/executionListenersUtil";
 import { getScriptType } from "@/components/bpmnJs/bo-utils/scriptUtil";
 import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "ElementExecutionListeners",
-  setup() {
-    const { t } = useI18n();
-    const modelerStore = modeler();
-    const getActive = computed(() => modelerStore.getActive!);
-    const getActiveId = computed<string>(() => modelerStore.getActiveId!);
-    let listenersRaw = markRaw([]);
-    let activeIndex = -1;
-
-    const modelVisible = ref(false);
-    const listeners = ref<ExecutionListenerForm[]>([]);
-    const newListener = ref<ExecutionListenerForm>({ event: "", type: "class" });
-    const formRef = ref<FormInst | null>(null);
-    const formItemVisible = ref<FormItemVisible>({
-      listenerType: "class",
-      scriptType: "none"
-    });
-
-    const listenerEventTypeOptions = ref<Record<string, string>[]>([
-      { label: "Start", value: "start" },
-      { label: "End", value: "end" },
-      { label: "Take", value: "take" }
-    ]);
-    const listenerTypeOptions = ref<Record<string, string>[]>([
-      { label: "Java Class", value: "class" },
-      { label: "Expression", value: "expression" },
-      { label: "DelegateExpression", value: "delegateExpression" },
-      { label: "Script", value: "script" }
-    ]);
-    const scriptTypeOptions = ref<Record<string, string>[]>([
-      { label: "External Resource", value: "external" },
-      { label: "Inline Script", value: "inline" },
-      { label: "None", value: "none" }
-    ]);
-    const formRules: FormRules = {
-      event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
-      type: { required: true, trigger: ["blur", "change"], message: "监听器类型不能为空" }
+  data() {
+    return {
+      activeIndex: -1,
+      listeners: [],
+      listenerEventTypeOptions: [
+        { label: "Start", value: "start" },
+        { label: "End", value: "end" }
+      ],
+      listenerTypeOptions: [{ label: "Java Class", value: "class" }],
+      formRules: {
+        event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
+        type: { required: true, trigger: ["blur", "change"], message: "监听器类型不能为空" },
+        class: { required: true, trigger: ["blur", "change"], message: "java类不能为空" }
+      },
+      newListener: { event: "", type: "class", class: "" },
+      modelVisible: false,
+      listenersRaw: []
     };
-    const columns: ComputedRef<DataTableColumns<ExecutionListenerForm>> = computed(() => [
-      { title: t("panel.index"), key: "index", render: (a, index) => index + 1, width: 60 },
-      { title: "EventType", key: "event", ellipsis: { tooltip: true } },
-      { title: "ListenerType", key: "type", ellipsis: { tooltip: true } },
-      {
-        title: t("panel.operations"),
-        key: "operation",
-        width: 140,
-        align: "center",
-        render: (row, index) =>
-          h("span", {}, [
-            h(
-              NButton,
-              {
-                quaternary: true,
-                size: "small",
-                type: "info",
-                onClick: () => openListenerModel(index, row)
-              },
-              { default: () => t("panel.edit") }
-            ),
-            h(
-              NButton,
-              {
-                quaternary: true,
-                size: "small",
-                type: "error",
-                onClick: () => removeListener(index)
-              },
-              { default: () => t("panel.remove") }
-            )
-          ])
-      }
-    ]);
+  },
+  computed: {
+    ...mapState(modelerStore, ["getActive", "getActiveId"])
+  },
+  mounted() {
+    this.reloadExtensionListeners();
+    EventEmitter.on("element-update", this.reloadExtensionListeners);
+  },
+  methods: {
+    reloadExtensionListeners() {
+      this.modelVisible = false;
+      this.newListener = { event: getDefaultEvent(this.getActive), type: "class", class: "" };
+      (this.listenersRaw as ModdleElement[]) = markRaw(getExecutionListeners(this.getActive as Element));
+      console.log(this.listenersRaw);
 
-    const updateListenerType = (value: string) => {
-      formItemVisible.value.listenerType = value;
-      newListener.value = {
-        ...newListener.value,
-        type: value,
-        ...(value === "script" ? { script: newListener.value.script || {} } : {})
-      };
-    };
-    const updateScriptType = (value: string) => {
-      formItemVisible.value.scriptType = value;
-      newListener.value.script = {
-        scriptFormat: newListener.value.script?.scriptFormat,
-        scriptType: value
-      };
-    };
-
-    const reloadExtensionListeners = () => {
-      modelVisible.value = false;
-      updateListenerType("class");
-      newListener.value = { event: getDefaultEvent(getActive.value), type: "class" };
-      listenerEventTypeOptions.value = getExecutionListenerTypes(getActive.value);
-      (listenersRaw as ModdleElement[]) = markRaw(getExecutionListeners(getActive.value as Element));
-      const list = listenersRaw.map(
+      const list = this.listenersRaw.map(
         (item: ModdleElement & BpmnExecutionListener): ExecutionListenerForm => ({
           ...item,
           ...(item.script
@@ -179,55 +98,27 @@ export default defineComponent({
           type: getExecutionListenerType(item)
         })
       );
-      listeners.value = JSON.parse(JSON.stringify(list));
-    };
-
-    const removeListener = (index: number) => {
-      const listener: ModdleElement = listenersRaw[index];
-      removeExecutionListener(getActive.value, listener);
-      reloadExtensionListeners();
-    };
-
-    const saveExecutionListener = async () => {
-      await formRef.value!.validate();
-      activeIndex === -1 ? addExecutionListener(getActive.value, newListener.value) : updateExecutionListener(getActive.value, newListener.value, listenersRaw[activeIndex]);
-      reloadExtensionListeners();
-    };
-
-    const openListenerModel = async (index: number, listenerData?: ExecutionListenerForm) => {
-      activeIndex = index;
+      this.listeners = JSON.parse(JSON.stringify(list));
+    },
+    removeListener(index: number) {
+      const listener: ModdleElement = this.listenersRaw[index];
+      removeExecutionListener(this.getActive, listener);
+      this.reloadExtensionListeners();
+    },
+    async saveExecutionListener() {
+      await (this.$refs.formRef as any).validate();
+      console.log(this.newListener);
+      this.activeIndex === -1 ? addExecutionListener(this.getActive, this.newListener) : updateExecutionListener(this.getActive, this.newListener, this.listenersRaw[this.activeIndex]);
+      this.reloadExtensionListeners();
+    },
+    async openListenerModel(index: number, listenerData) {
+      this.activeIndex = index;
       console.log(JSON.stringify(listenerData));
-      listenerData && (newListener.value = JSON.parse(JSON.stringify(listenerData)));
-      updateListenerType(listenerData?.type || "class");
-      modelVisible.value = true;
+      listenerData && (this.newListener = JSON.parse(JSON.stringify(listenerData)));
+      this.modelVisible = true;
       await nextTick();
-      formRef.value && formRef.value.restoreValidation();
-    };
-
-    onMounted(() => {
-      reloadExtensionListeners();
-      EventEmitter.on("element-update", reloadExtensionListeners);
-    });
-
-    return {
-      modelVisible,
-      getActiveId,
-      getActive,
-      formRef,
-      listeners,
-      newListener,
-      formRules,
-      columns,
-      formItemVisible,
-      listenerEventTypeOptions,
-      listenerTypeOptions,
-      scriptTypeOptions,
-      removeListener,
-      saveExecutionListener,
-      openListenerModel,
-      updateListenerType,
-      updateScriptType
-    };
+      (this.$refs.formRef as any).formRef && (this.$refs.formRef as any).resetFields();
+    }
   }
 });
 </script>

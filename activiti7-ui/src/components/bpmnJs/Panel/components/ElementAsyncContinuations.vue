@@ -1,20 +1,18 @@
 <template>
-  <n-collapse-item name="element-async-continuations">
-    <template #header>
-      <collapse-title :title="$t('panel.asyncContinuations')">
-        <lucide-icon name="Shuffle" />
-      </collapse-title>
-    </template>
-    <edit-item :label="$t('panel.asyncBefore')" :label-width="120">
-      <n-switch v-model:value="acBefore" @update:value="updateElementACBefore" />
-    </edit-item>
-    <edit-item :label="$t('panel.asyncAfter')" :label-width="120">
-      <n-switch v-model:value="acAfter" @update:value="updateElementACAfter" />
-    </edit-item>
-    <edit-item v-if="showExclusive" :label="$t('panel.asyncExclusive')" :label-width="120">
-      <n-switch v-model:value="acExclusive" @update:value="updateElementACExclusive" />
-    </edit-item>
-  </n-collapse-item>
+  <el-card shadow="hover">
+    <template #header> 异步控制 </template>
+    <el-form label-width="100px">
+      <el-form-item label="异步前">
+        <el-switch v-model="acBefore" @change="updateElementACBefore" />
+      </el-form-item>
+      <el-form-item label="异步后">
+        <el-switch v-model="acAfter" @change="updateElementACAfter" />
+      </el-form-item>
+      <el-form-item label="异步优先" v-if="showExclusive">
+        <el-switch v-model="acExclusive" @change="updateElementACExclusive" />
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script lang="ts">

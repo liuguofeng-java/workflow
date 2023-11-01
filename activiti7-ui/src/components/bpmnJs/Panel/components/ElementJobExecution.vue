@@ -1,19 +1,17 @@
 <template>
-  <n-collapse-item name="element-external-task">
-    <template #header>
-      <collapse-title :title="$t('panel.executionJob')">
-        <lucide-icon name="CalendarClock" />
-      </collapse-title>
-    </template>
-    <div class="element-external-task">
-      <edit-item v-if="tpVisible" :label="$t('panel.taskPriority')" :label-width="100">
-        <n-input v-model:value="taskPriority" maxlength="32" @change="setExternalTaskPriority" />
-      </edit-item>
-      <edit-item v-if="rtVisible" :label="$t('panel.retryTimeCycle')" :label-width="100">
-        <n-input v-model:value="retryTimeCycle" maxlength="32" @change="setRetryTimeCycle" />
-      </edit-item>
-    </div>
-  </n-collapse-item>
+  <el-card shadow="hover">
+    <template #header> 执行作业 </template>
+    <el-form label-width="100px">
+      <div class="element-external-task">
+        <el-form-item label="任务优先级" v-if="tpVisible">
+          <el-input v-model="taskPriority" maxlength="32" @change="setExternalTaskPriority" />
+        </el-form-item>
+        <el-form-item label="重试周期" v-if="rtVisible">
+          <el-input v-model="retryTimeCycle" maxlength="32" @change="setRetryTimeCycle" />
+        </el-form-item>
+      </div>
+    </el-form>
+  </el-card>
 </template>
 
 <script lang="ts">

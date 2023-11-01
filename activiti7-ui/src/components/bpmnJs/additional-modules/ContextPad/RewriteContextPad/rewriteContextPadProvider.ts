@@ -293,30 +293,6 @@ class RewriteContextPadProvider extends ContextPadProvider {
       }
     }
 
-    // if (!popupMenu.isEmpty(element, "bpmn-replace")) {
-    //   // Replace menu entry
-    //   assign(actions, {
-    //     replace: {
-    //       group: "编辑",
-    //       className: "bpmn-icon-screw-wrench",
-    //       title: translate("Change type"),
-    //       action: {
-    //         click: function (event, element) {
-    //           const position = assign(getReplaceMenuPosition(element), {
-    //             cursor: { x: event.x, y: event.y }
-    //           });
-
-    //           popupMenu.open(element, "bpmn-replace", position, {
-    //             title: translate("Change element"),
-    //             width: 300,
-    //             search: true
-    //           });
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
-
     if (
       isAny(businessObject, [
         "bpmn:FlowNode",

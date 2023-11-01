@@ -1,48 +1,43 @@
 <template>
-  <n-collapse-item name="element-extension-properties">
-    <template #header>
-      <collapse-title :title="$t('panel.extensionProperties')">
-        <lucide-icon name="FileCog" />
-      </collapse-title>
-    </template>
-    <template #header-extra>
-      <n-tag type="primary" round>
-        {{ extensions.length }}
-      </n-tag>
-    </template>
-    <div class="element-extension-properties">
-      <n-data-table size="small" max-height="20vh" :columns="columns" :data="extensions" />
+  <el-card shadow="hover">
+    <template #header> 扩展属性 </template>
+    <el-table :data="extensions" style="width: 100%">
+      <el-table-column type="index" label="序号" />
+      <el-table-column prop="name" label="Name" />
+      <el-table-column prop="value" label="Value" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button link type="primary" @click="removeProperty(scope.row.index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button type="primary" @click="openPropertyModel">添加</el-button>
+  </el-card>
 
-      <n-button type="info" class="inline-large-button" secondary @click="openPropertyModel">
-        <lucide-icon :size="20" name="Plus" />
-        <span>{{ $t("panel.addExtensionProperties") }}</span>
-      </n-button>
-    </div>
-
-    <n-modal v-model:show="modelVisible" preset="dialog" :title="$t('panel.addExtensionProperties')" :style="{ width: '640px' }">
-      <n-form ref="formRef" :model="newProperty" :rules="rules" aria-modal="true">
-        <n-form-item path="name" :label="$t('panel.propertyName')">
-          <n-input v-model:value="newProperty.name" @keydown.enter.prevent />
-        </n-form-item>
-        <n-form-item path="value" :label="$t('panel.propertyValue')">
-          <n-input v-model:value="newProperty.value" @keydown.enter.prevent />
-        </n-form-item>
-      </n-form>
-      <template #action>
-        <n-button size="small" type="info" @click="addProperty">{{ $t("panel.confirm") }}</n-button>
-      </template>
-    </n-modal>
-  </n-collapse-item>
+  <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
+    <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">
+      <el-form-item label="name" prop="name">
+        <el-input v-model="newProperty.name" @keydown.enter.prevent />
+      </el-form-item>
+      <el-form-item label="value" prop="value">
+        <el-input v-model="newProperty.value" @keydown.enter.prevent />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="addProperty">确 定</el-button>
+        <el-button @click="modelVisible = false">取 消</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { h, defineComponent, toRaw, markRaw } from "vue";
+import { defineComponent, toRaw, markRaw } from "vue";
 import { mapState } from "pinia";
 import modelerStore from "@/components/bpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { addExtensionProperty, getExtensionProperties, removeExtensionProperty } from "@/components/bpmnJs/bo-utils/extensionPropertiesUtil";
-
-import { FormInst, NButton } from "naive-ui";
 import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
 
 export default defineComponent({
@@ -60,50 +55,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(modelerStore, ["getActive", "getActiveId"]),
-    columns() {
-      return [
-        {
-          title: this.$t("panel.index"),
-          key: "index",
-          render: (a, index) => index + 1,
-          width: 60
-        },
-        {
-          title: "Name",
-          key: "name",
-          ellipsis: {
-            tooltip: true
-          }
-        },
-        {
-          title: "Value",
-          key: "value",
-          ellipsis: {
-            tooltip: true
-          }
-        },
-        {
-          title: this.$t("panel.operations"),
-          key: "operation",
-          width: 80,
-          align: "center",
-          render: (row, index) =>
-            h(
-              NButton,
-              {
-                quaternary: true,
-                size: "small",
-                type: "error",
-                onClick: () => this.removeProperty(index)
-              },
-              {
-                default: () => this.$t("panel.remove")
-              }
-            )
-        }
-      ];
-    }
+    ...mapState(modelerStore, ["getActive", "getActiveId"])
   },
   watch: {
     getActiveId: {
@@ -129,22 +81,19 @@ export default defineComponent({
       removeExtensionProperty(this.getActive as Element, this.extensionsRaw[propIndex]);
       this.reloadExtensionProperties();
     },
-    async addProperty() {
-      (this.$refs.formRef as FormInst).validate((errors) => {
-        if (!errors) {
-          addExtensionProperty(this.getActive as Element, toRaw(this.newProperty));
-          this.reloadExtensionProperties();
-        }
+    addProperty() {
+      (this.$refs.formRef as any).validate((valid: boolean) => {
+        if (!valid) return;
+        addExtensionProperty(this.getActive as Element, toRaw(this.newProperty));
+        this.reloadExtensionProperties();
       });
     },
     async openPropertyModel() {
       this.modelVisible = true;
       await this.$nextTick();
-      (this.$refs.formRef as FormInst).restoreValidation();
+      (this.$refs.formRef as any).resetFields();
     }
   }
 });
 </script>
-
 <style scoped></style>
-@/components/bpmnJs/utils//EventEmitter @/components/bpmnJs/store/modeler @/store/modeler

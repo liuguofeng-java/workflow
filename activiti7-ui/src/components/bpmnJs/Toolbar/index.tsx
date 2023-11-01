@@ -6,7 +6,6 @@ import Previews from "@/components/bpmnJs/Toolbar/components/Previews";
 import Aligns from "@/components/bpmnJs/Toolbar/components/Aligns";
 import Scales from "@/components/bpmnJs/Toolbar/components/Scales";
 import Commands from "@/components/bpmnJs/Toolbar/components/Commands";
-import ExternalTools from "@/components/bpmnJs/Toolbar/components/ExternalTools";
 
 const Toolbar = defineComponent({
   name: "ToolBar",
@@ -21,7 +20,6 @@ const Toolbar = defineComponent({
         <Aligns></Aligns>
         <Scales></Scales>
         <Commands></Commands>
-        <ExternalTools></ExternalTools>
       </div>
     );
   }

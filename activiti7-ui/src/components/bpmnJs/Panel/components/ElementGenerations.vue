@@ -1,29 +1,23 @@
 <template>
-  <n-collapse-item name="base-info">
-    <template #header>
-      <collapse-title :title="$t('panel.general')">
-        <lucide-icon name="Info" />
-      </collapse-title>
-    </template>
-
-    <edit-item :label="$t('panel.id')">
-      <n-input v-model:value="elementId" maxlength="32" @change="updateElementId" />
-    </edit-item>
-
-    <edit-item :label="$t('panel.name')">
-      <n-input v-model:value="elementName" maxlength="20" @change="updateElementName" />
-    </edit-item>
-
-    <template v-if="isProcess">
-      <edit-item key="version" :label="$t('panel.version')">
-        <n-input v-model:value="elementVersion" maxlength="20" @change="updateElementVersion" />
-      </edit-item>
-
-      <edit-item key="executable" :label="$t('panel.executable')">
-        <n-switch v-model:value="elementExecutable" @update:value="updateElementExecutable" />
-      </edit-item>
-    </template>
-  </n-collapse-item>
+  <el-card shadow="hover">
+    <template #header> 常规信息 </template>
+    <el-form label-width="100px">
+      <el-form-item label="ID">
+        <el-input v-model="elementId" maxlength="32" @change="updateElementId" />
+      </el-form-item>
+      <el-form-item label="流程名称">
+        <el-input v-model="elementName" maxlength="20" @change="updateElementName" />
+      </el-form-item>
+      <template v-if="isProcess">
+        <el-form-item label="版本号" key="version">
+          <el-input v-model="elementVersion" maxlength="20" @change="updateElementVersion" />
+        </el-form-item>
+        <el-form-item label="可执行" key="executable">
+          <el-switch v-model="elementExecutable" @change="updateElementExecutable" />
+        </el-form-item>
+      </template>
+    </el-form>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -35,6 +29,7 @@ import { getNameValue, setNameValue } from "@/components/bpmnJs/bo-utils/nameUti
 import { setIdValue } from "@/components/bpmnJs/bo-utils/idUtil";
 import { getProcessExecutable, getProcessVersionTag, setProcessExecutable, setProcessVersionTag } from "@/components/bpmnJs/bo-utils/processUtil";
 import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
+import { ElMessage } from "element-plus";
 
 export default defineComponent({
   name: "ElementGenerations",
@@ -75,7 +70,7 @@ export default defineComponent({
       if (reg.test(value)) {
         setProcessVersionTag(this.getActive as Element, value);
       } else {
-        window.__messageBox.error("版本号必须符合语义化版本2.0.0 要点");
+        ElMessage.error("版本号必须符合语义化版本2.0.0 要点");
       }
     },
     updateElementExecutable(value: boolean) {

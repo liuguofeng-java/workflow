@@ -1,14 +1,12 @@
 <template>
-  <n-collapse-item name="element-documentations">
-    <template #header>
-      <collapse-title :title="$t('panel.documentationSettings')">
-        <lucide-icon name="FileText" />
-      </collapse-title>
-    </template>
-    <edit-item :label="$t('panel.documentationBody')" :label-width="120">
-      <n-input v-model:value="elementDoc" type="textarea" @change="updateElementDoc" />
-    </edit-item>
-  </n-collapse-item>
+  <el-card shadow="hover">
+    <template #header> 文档设置 </template>
+    <el-form label-width="100px">
+      <el-form-item label="ID">
+        <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script lang="ts">
