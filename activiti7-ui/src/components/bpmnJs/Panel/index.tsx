@@ -1,5 +1,4 @@
 import { defineComponent, Component, markRaw, onMounted, ref } from "vue";
-import { NCollapse } from "naive-ui";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import { Translate } from "diagram-js/lib/i18n/translate";
 import debounce from "lodash.debounce";
@@ -10,7 +9,6 @@ import Logger from "@/components/bpmnJs/utils/Logger";
 
 import getBpmnIconType from "@/components/bpmnJs/bpmn-icons/getIconType";
 import bpmnIcons from "@/components/bpmnJs/bpmn-icons";
-import BpmnIcon from "@/components/bpmnJs/common/BpmnIcon.vue";
 
 import { isAsynchronous } from "@/components/bpmnJs/bo-utils/asynchronousContinuationsUtil";
 import { isExecutable } from "@/components/bpmnJs/bo-utils/executionListenersUtil";
@@ -47,6 +45,8 @@ const Panel = defineComponent({
     const bpmnElementName = ref<string>("Process");
 
     const renderComponents = markRaw<Component[]>([]);
+
+    const activeNames = ref(["NormalInfo"]);
 
     const setCurrentComponents = (element: BpmnElement) => {
       // 清空
@@ -93,6 +93,7 @@ const Panel = defineComponent({
         "Selected element changed",
         `ID: ${activatedElement.id} , type: ${activatedElement.type}`
       );
+      activeNames.value = ["NormalInfo"];
     }, 100);
 
     EventEmitter.on("modeler-init", (modeler) => {
@@ -121,15 +122,14 @@ const Panel = defineComponent({
     return () => (
       <div ref={panel} class="panel">
         <div class="panel-header">
-          <BpmnIcon name={bpmnIconName.value}></BpmnIcon>
           <p>{bpmnElementName.value}</p>
           <p>{customTranslate(currentElementType.value || "Process")}</p>
         </div>
-        <NCollapse arrow-placement="right">
+        <el-collapse v-model={activeNames.value}>
           {renderComponents.map((component) => (
             <component is={component}></component>
           ))}
-        </NCollapse>
+        </el-collapse>
       </div>
     );
   }

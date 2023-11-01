@@ -1,6 +1,5 @@
 <template>
-  <el-card shadow="hover">
-    <template #header> 异步控制 </template>
+  <el-collapse-item title="执行作业" name="ExecuteJob">
     <el-form label-width="100px">
       <el-form-item label="异步前">
         <el-switch v-model="acBefore" @change="updateElementACBefore" />
@@ -12,7 +11,7 @@
         <el-switch v-model="acExclusive" @change="updateElementACExclusive" />
       </el-form-item>
     </el-form>
-  </el-card>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

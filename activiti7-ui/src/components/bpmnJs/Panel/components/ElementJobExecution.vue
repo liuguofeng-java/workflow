@@ -1,6 +1,5 @@
 <template>
-  <el-card shadow="hover">
-    <template #header> 执行作业 </template>
+  <el-collapse-item title="执行作业" name="ExecuteJob">
     <el-form label-width="100px">
       <div class="element-external-task">
         <el-form-item label="任务优先级" v-if="tpVisible">
@@ -11,7 +10,7 @@
         </el-form-item>
       </div>
     </el-form>
-  </el-card>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

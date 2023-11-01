@@ -1,6 +1,5 @@
 <template>
-  <el-card shadow="hover">
-    <template #header> 扩展属性 </template>
+  <el-collapse-item title="扩展属性" name="Property">
     <el-table :data="extensions" style="width: 100%">
       <el-table-column type="index" label="序号" />
       <el-table-column prop="name" label="Name" />
@@ -12,7 +11,7 @@
       </el-table-column>
     </el-table>
     <el-button type="primary" @click="openPropertyModel">添加</el-button>
-  </el-card>
+  </el-collapse-item>
 
   <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
     <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">

@@ -1,6 +1,5 @@
 <template>
-  <el-card shadow="hover">
-    <template #header> 执行监听器 </template>
+  <el-collapse-item title="执行监听器" name="Listener">
     <el-table :data="listeners" style="width: 100%">
       <el-table-column type="index" label="序号" />
       <el-table-column prop="event" label="事件类型" />
@@ -13,7 +12,7 @@
       </el-table-column>
     </el-table>
     <el-button type="primary" @click="openListenerModel(-1, null)">添加</el-button>
-  </el-card>
+  </el-collapse-item>
 
   <el-dialog v-model="modelVisible" title="添加" width="500px">
     <el-form ref="formRef" :model="newListener" :rules="formRules" label-width="80px">
@@ -82,8 +81,6 @@ export default defineComponent({
       this.modelVisible = false;
       this.newListener = { event: getDefaultEvent(this.getActive), type: "class", class: "" };
       (this.listenersRaw as ModdleElement[]) = markRaw(getExecutionListeners(this.getActive as Element));
-      console.log(this.listenersRaw);
-
       const list = this.listenersRaw.map(
         (item: ModdleElement & BpmnExecutionListener): ExecutionListenerForm => ({
           ...item,

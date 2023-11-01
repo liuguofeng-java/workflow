@@ -78,7 +78,7 @@ defineExpose({
   width: 100%;
   height: 100%;
 }
-.main-content{
+.main-content {
   height: 100%;
 }
 </style>
