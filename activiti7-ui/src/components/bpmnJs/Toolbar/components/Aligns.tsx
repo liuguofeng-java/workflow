@@ -1,10 +1,9 @@
 import { computed, ComputedRef, defineComponent } from "vue";
-import { NButton, NButtonGroup, NPopover } from "naive-ui";
 import Modeler from "bpmn-js/lib/Modeler";
 import Selection from "diagram-js/lib/features/selection/Selection";
 import Modeling from "bpmn-js/lib/features/modeling/Modeling.js";
 import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
-import LucideIcon from "@/components/bpmnJs/common/LucideIcon.vue";
+import { ElMessage } from "element-plus";
 
 import { useI18n } from "vue-i18n";
 
@@ -38,29 +37,22 @@ const Aligns = defineComponent({
       if (modeling && selection) {
         const SelectedElements = selection.get();
         if (!SelectedElements || SelectedElements.length <= 1) {
-          return window.__messageBox.warning("请按住 Shift 键选择多个元素对齐");
+          return ElMessage.warning("请按住 Shift 键选择多个元素对齐");
         }
         align.trigger(SelectedElements, tag);
       }
     };
 
     return () => (
-      <NButtonGroup>
+      <div>
         {buttons.value.map((item) => {
           return (
-            <NPopover
-              v-slots={{
-                default: () => item.name,
-                trigger: () => (
-                  <NButton onClick={() => alignElements(item.key)}>
-                    <LucideIcon name={item.icon} size={16}></LucideIcon>
-                  </NButton>
-                )
-              }}
-            ></NPopover>
+            <el-button type="text" onClick={() => alignElements(item.key)}>
+              {item.name}
+            </el-button>
           );
         })}
-      </NButtonGroup>
+      </div>
     );
   }
 });

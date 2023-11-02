@@ -1,5 +1,4 @@
 import { defineComponent } from "vue";
-import { NButton, NPopover } from "naive-ui";
 import { downloadFile, setEncoded } from "@/components/bpmnJs/utils//files";
 import modeler from "@/components/bpmnJs/store/modeler";
 import { useI18n } from "vue-i18n";
@@ -48,28 +47,17 @@ const Exports = defineComponent({
     };
 
     return () => (
-      <NPopover
-        v-slots={{
-          trigger: () => (
-            <NButton type="info" secondary>
-              {t("toolbar.exportAs")}
-            </NButton>
-          ),
-          default: () => (
-            <div class="button-list_column">
-              <NButton type="info" onClick={downloadProcessAsBpmn}>
-                {t("toolbar.exportAsBPMN")}
-              </NButton>
-              <NButton type="info" onClick={downloadProcessAsXml}>
-                {t("toolbar.exportAsXML")}
-              </NButton>
-              <NButton type="info" onClick={downloadProcessAsSvg}>
-                {t("toolbar.exportAsSVG")}
-              </NButton>
-            </div>
-          )
-        }}
-      ></NPopover>
+      <div>
+        <el-button type="info" onClick={downloadProcessAsBpmn}>
+          导出bpmn
+        </el-button>
+        <el-button type="info" onClick={downloadProcessAsXml}>
+          导出xml
+        </el-button>
+        <el-button type="info" onClick={downloadProcessAsSvg}>
+          导出svg
+        </el-button>
+      </div>
     );
   }
 });

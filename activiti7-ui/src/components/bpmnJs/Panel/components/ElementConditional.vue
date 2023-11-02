@@ -1,41 +1,46 @@
 <template>
-  <n-collapse-item name="element-conditional">
-    <template #header>
-      <collapse-title :title="$t('panel.conditionalSettings')">
-        <lucide-icon name="ArrowLeftRight" />
-      </collapse-title>
-    </template>
-    <div class="element-conditional">
+  <el-collapse-item title="条件设置" name="conditionalSettings">
+    <el-form label-width="100px">
       <template v-if="varVisible">
-        <edit-item key="variableName" :label="$t('panel.variableName')" :label-width="120">
-          <n-input v-model:value="variableName" maxlength="32" @change="setElementVariableName" />
-        </edit-item>
-        <edit-item v-if="varEventVisible" key="variableEvent" :label="$t('panel.variableEvents')" :label-width="120">
-          <n-input v-model:value="variableEvents" @change="setElementVariableEvents" />
-        </edit-item>
+        <el-form-item label="变量名称">
+          <el-input v-model="variableName" maxlength="32" @change="setElementVariableName" />
+        </el-form-item>
+        <el-form-item label="变量事件" v-if="varEventVisible">
+          <el-input v-model="variableEvents" maxlength="32" @change="setElementVariableEvents" />
+        </el-form-item>
       </template>
-      <edit-item key="condition" :label="$t('panel.conditionType')" :label-width="120">
-        <n-select v-model:value="conditionData.conditionType" :options="conditionTypeOptions" @update:value="setElementConditionType" />
-      </edit-item>
-      <edit-item v-if="conditionData.conditionType && conditionData.conditionType === 'expression'" key="expression" :label="$t('panel.conditionExpression')" :label-width="120">
-        <n-input v-model:value="conditionData.expression" @change="setConditionExpression" />
-      </edit-item>
+
+      <el-form-item label="条件类型">
+        <el-select v-model="conditionData.conditionType" @change="setElementConditionType">
+          <el-option v-for="item in conditionTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="条件内容" v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
+        <el-input v-model="conditionData.expression" maxlength="32" @change="setConditionExpression" />
+      </el-form-item>
+
       <template v-if="conditionData.conditionType && conditionData.conditionType === 'script'">
-        <edit-item key="scriptType" :label="$t('panel.scriptType')" :label-width="120">
-          <n-select v-model:value="conditionData.scriptType" :options="scriptTypeOptions" @update:value="setElementConditionScriptType" />
-        </edit-item>
-        <edit-item key="scriptLanguage" :label="$t('panel.scriptLanguage')" :label-width="120">
-          <n-input v-model:value="conditionData.language" @change="setConditionScriptLanguage" />
-        </edit-item>
-        <edit-item v-show="conditionData.scriptType === 'inline'" key="scriptBody" :label="$t('panel.scriptBody')" :label-width="120">
-          <n-input v-model:value="conditionData.body" type="textarea" @change="setConditionScriptBody" />
-        </edit-item>
-        <edit-item v-show="conditionData.scriptType === 'external'" key="scriptResource" :label="$t('panel.scriptResource')" :label-width="120">
-          <n-input v-model:value="conditionData.resource" @change="setConditionScriptResource" />
-        </edit-item>
+        <el-form-item label="脚本类型">
+          <el-select v-model="conditionData.conditionType" @change="setElementConditionScriptType">
+            <el-option v-for="item in scriptTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="脚本语言">
+          <el-input v-model="conditionData.language" @change="setConditionScriptLanguage" />
+        </el-form-item>
+
+        <el-form-item v-show="conditionData.scriptType === 'inline'" label="脚本内容">
+          <el-input v-model="conditionData.body" @change="setConditionScriptBody" />
+        </el-form-item>
+
+        <el-form-item v-show="conditionData.scriptType === 'external'" label="资源地址">
+          <el-input v-model="conditionData.resource" @change="setConditionScriptResource" />
+        </el-form-item>
       </template>
-    </div>
-  </n-collapse-item>
+    </el-form>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

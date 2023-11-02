@@ -61,9 +61,7 @@
     "lucide-vue-next": "0.256.0",
     "min-dash": "4.1.1",
     "min-dom": "^4.1.0",
-    "naive-ui": "^2.34.4",
     "tiny-svg": "^3.0.1",
-
     "vue-i18n": "^9.2.2",
     "vue": "^3.2.37",
     "vue-router": "4.0.11"

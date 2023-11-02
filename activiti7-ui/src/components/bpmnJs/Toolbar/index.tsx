@@ -1,5 +1,4 @@
 import { defineComponent } from "vue";
-import { NButtonGroup } from "naive-ui";
 import Imports from "@/components/bpmnJs/Toolbar/components/Imports";
 import Exports from "@/components/bpmnJs/Toolbar/components/Exports";
 import Previews from "@/components/bpmnJs/Toolbar/components/Previews";
@@ -12,11 +11,9 @@ const Toolbar = defineComponent({
   setup() {
     return () => (
       <div class="toolbar">
-        <NButtonGroup>
-          <Imports></Imports>
-          <Exports></Exports>
-          <Previews></Previews>
-        </NButtonGroup>
+        <Imports></Imports>
+        <Exports></Exports>
+        <Previews></Previews>
         <Aligns></Aligns>
         <Scales></Scales>
         <Commands></Commands>

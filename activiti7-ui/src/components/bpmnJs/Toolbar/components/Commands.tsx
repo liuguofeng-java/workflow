@@ -1,10 +1,8 @@
 import { defineComponent } from "vue";
-import { NButton, NButtonGroup, NPopover } from "naive-ui";
 import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type CommandStack from "diagram-js/lib/command/CommandStack";
 import { createNewDiagram } from "@/components/bpmnJs/utils/";
-import LucideIcon from "@/components/bpmnJs/common/LucideIcon.vue";
 import { useI18n } from "vue-i18n";
 
 const Commands = defineComponent({
@@ -31,38 +29,11 @@ const Commands = defineComponent({
     };
 
     return () => (
-      <NButtonGroup>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.undo"),
-            trigger: () => (
-              <NButton onClick={undo}>
-                <LucideIcon name="Undo2" size={16}></LucideIcon>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.redo"),
-            trigger: () => (
-              <NButton onClick={redo}>
-                <LucideIcon name="Redo2" size={16}></LucideIcon>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.restart"),
-            trigger: () => (
-              <NButton onClick={restart}>
-                <LucideIcon name="Eraser" size={16}></LucideIcon>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-      </NButtonGroup>
+      <div>
+        <el-button onClick={undo}>撤销</el-button>
+        <el-button onClick={redo}>恢复</el-button>
+        <el-button onClick={restart}>擦除重做</el-button>
+      </div>
     );
   }
 });

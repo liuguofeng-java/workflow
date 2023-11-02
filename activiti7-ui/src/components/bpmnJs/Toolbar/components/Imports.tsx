@@ -1,5 +1,4 @@
 import { defineComponent, ref } from "vue";
-import { NButton } from "naive-ui";
 import modeler from "@/components/bpmnJs/store/modeler";
 import { useI18n } from "vue-i18n";
 
@@ -30,9 +29,9 @@ const Imports = defineComponent({
 
     return () => (
       <span>
-        <NButton type="info" secondary onClick={openImportWindow}>
+        <el-button type="info" secondary onClick={openImportWindow}>
           {t("toolbar.openFile")}
-        </NButton>
+        </el-button>
         <input
           type="file"
           ref={importRef}

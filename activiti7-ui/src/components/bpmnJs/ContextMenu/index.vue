@@ -1,5 +1,5 @@
 <template>
-  <n-popover :show="showPopover" :x="x" :y="y" :show-arrow="false" trigger="manual" placement="right-start">
+  <n-popover v-if="showPopover" :show="showPopover" :x="x" :y="y">
     <div class="bpmn-context-menu">
       <div class="context-menu_header">{{ contextMenuTitle }}</div>
       <div class="context-menu_body">

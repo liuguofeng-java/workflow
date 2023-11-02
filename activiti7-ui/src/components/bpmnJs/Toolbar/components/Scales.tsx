@@ -1,16 +1,12 @@
 import { defineComponent, ref } from "vue";
-import { NButton, NButtonGroup, NPopover } from "naive-ui";
-import LucideIcon from "@/components/bpmnJs/common/LucideIcon.vue";
 import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type Canvas from "diagram-js/lib/core/Canvas";
 import { CanvasEvent } from "diagram-js/lib/core/EventBus";
-import { useI18n } from "vue-i18n";
 
 const Scales = defineComponent({
   name: "Scales",
   setup() {
-    const { t } = useI18n();
     const currentScale = ref(1);
     let canvas: Canvas | null = null;
 
@@ -40,40 +36,13 @@ const Scales = defineComponent({
     };
 
     return () => (
-      <NButtonGroup>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.zoomOut"),
-            trigger: () => (
-              <NButton onClick={() => zoomOut()}>
-                <LucideIcon name="ZoomOut" size={16}></LucideIcon>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.zoomReset"),
-            trigger: () => (
-              <NButton onClick={() => zoomReset("fit-viewport")}>
-                <span style="text-align: center; display: inline-block; width: 40px">
-                  {Math.floor(currentScale.value * 10) * 10 + "%"}
-                </span>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-        <NPopover
-          v-slots={{
-            default: () => t("toolbar.zoomIn"),
-            trigger: () => (
-              <NButton onClick={() => zoomIn()}>
-                <LucideIcon name="ZoomIn" size={16}></LucideIcon>
-              </NButton>
-            )
-          }}
-        ></NPopover>
-      </NButtonGroup>
+      <div>
+        <el-button onClick={() => zoomOut()}>缩小</el-button>
+        <el-button onClick={() => zoomReset("fit-viewport")}>
+          {Math.floor(currentScale.value * 10) * 10 + "%"}
+        </el-button>
+        <el-button onClick={() => zoomIn()}>放大</el-button>
+      </div>
     );
   }
 });

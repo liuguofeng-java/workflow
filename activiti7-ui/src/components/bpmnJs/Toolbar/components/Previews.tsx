@@ -1,85 +1,43 @@
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 import BpmnModdle from "bpmn-moddle";
 import modeler from "@/components/bpmnJs/store/modeler";
-import { NButton, NPopover, NCode, useDialog } from "naive-ui";
-import { useI18n } from "vue-i18n";
+import { ElMessage } from "element-plus";
 
 const Previews = defineComponent({
   name: "Previews",
   setup() {
-    const { t } = useI18n();
-    const previewModel = useDialog();
     const modelerStore = modeler();
 
-    const moddle = new BpmnModdle();
+    const xmlStr = ref("");
+    const drawer = ref(false);
 
     const openXMLPreviewModel = async () => {
       try {
         const modeler = modelerStore.getModeler!;
 
         if (!modeler) {
-          return window.__messageBox.warning("模型加载失败，请刷新重试");
+          return ElMessage.warning("模型加载失败，请刷新重试");
         }
 
         const { xml } = await modeler.saveXML({ format: true, preamble: true });
-
-        previewModel.create({
-          title: t("toolbar.previewAs"),
-          showIcon: false,
-          content: () => (
-            <div class="preview-model">
-              <NCode code={xml!} language="xml" wordWrap={true}></NCode>
-            </div>
-          )
-        });
+        xmlStr.value = xml || "";
+        drawer.value = true;
       } catch (e) {
-        window.__messageBox.error((e as Error).message || (e as string));
+        ElMessage.error((e as Error).message || (e as string));
       }
-    };
-
-    const openJsonPreviewModel = async () => {
-      const modeler = modelerStore.getModeler!;
-
-      if (!modeler) {
-        return window.__messageBox.warning("模型加载失败，请刷新重试");
-      }
-
-      const { xml } = await modeler.saveXML({ format: true });
-
-      const jsonStr = await moddle.fromXML(xml!);
-
-      previewModel.create({
-        title: t("toolbar.previewAs"),
-        showIcon: false,
-        content: () => (
-          <div class="preview-model">
-            <NCode code={JSON.stringify(jsonStr, null, 2)} language="json" wordWrap={true}></NCode>
-          </div>
-        )
-      });
     };
 
     return () => (
-      <NPopover
-        v-slots={{
-          trigger: () => (
-            <NButton type="info" secondary>
-              {t("toolbar.previewAs")}
-            </NButton>
-          ),
-          default: () => (
-            <div class="button-list_column">
-              <NButton type="info" onClick={openXMLPreviewModel}>
-                {t("toolbar.previewAsXML")}
-              </NButton>
-              <NButton type="info" onClick={openJsonPreviewModel}>
-                {t("toolbar.previewAsJSON")}
-              </NButton>
-            </div>
-          )
-        }}
-      ></NPopover>
+      <div>
+        <el-button type="info" onClick={openXMLPreviewModel}>
+          浏览xml
+        </el-button>
+
+        <el-drawer v-model={drawer.value} with-header={false}>
+          {xmlStr.value}
+        </el-drawer>
+      </div>
     );
   }
 });

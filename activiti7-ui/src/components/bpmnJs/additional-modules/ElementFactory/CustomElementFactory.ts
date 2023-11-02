@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import ElementFactory from "bpmn-js/lib/features/modeling/ElementFactory";
 import BpmnFactory from "bpmn-js/lib/features/modeling/BpmnFactory";
 import BpmnModdle from "bpmn-moddle";
