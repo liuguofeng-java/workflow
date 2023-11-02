@@ -23,8 +23,16 @@ public interface ProcessDefinitionService {
     TableDataInfo queryPage(ProcessDefinitionListDto dto);
 
     /**
+     * 部署流程xml
+     * @param xmlStr xml字符串
+     */
+    void deploymentXmlByStr(String xmlStr);
+
+    /**
      * 删除流程
      * @param id 部署id
      */
     void delete(String id);
+
+
 }

@@ -56,6 +56,17 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     }
 
     /**
+     * 部署流程xml
+     * @param xmlStr xml字符串
+     */
+    @Override
+    public void deploymentXmlByStr(String xmlStr) {
+        repositoryService.createDeployment()
+                .addString("index.bpmn", xmlStr)
+                .deploy();
+    }
+
+    /**
      * 删除流程
      *
      * @param id 部署id

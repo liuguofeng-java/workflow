@@ -1,6 +1,5 @@
 import { defineComponent, ref } from "vue";
 
-import BpmnModdle from "bpmn-moddle";
 import modeler from "@/components/bpmnJs/store/modeler";
 import { ElMessage } from "element-plus";
 
@@ -14,6 +13,7 @@ const Previews = defineComponent({
 
     const openXMLPreviewModel = async () => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const modeler = modelerStore.getModeler!;
 
         if (!modeler) {

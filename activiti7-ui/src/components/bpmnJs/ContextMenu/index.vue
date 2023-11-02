@@ -34,7 +34,6 @@ const y = ref(0);
 
 const currentReplaceOptions = ref<any[]>([]);
 
-let mouseEvent: MouseEvent | null = null;
 let currentElement: Element | null = null;
 const isAppend = ref<boolean>(false);
 const contextMenuTitle = ref<string>("创建元素");

@@ -3,12 +3,10 @@ import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type CommandStack from "diagram-js/lib/command/CommandStack";
 import { createNewDiagram } from "@/components/bpmnJs/utils/";
-import { useI18n } from "vue-i18n";
 
 const Commands = defineComponent({
   name: "Commands",
   setup() {
-    const { t } = useI18n();
     let command: CommandStack | null = null;
 
     EventEmitter.on("modeler-init", (modeler: Modeler) => {

@@ -25,7 +25,6 @@
       <el-table-column label="版本" align="center" prop="version" />
       <el-table-column>
         <template #default="scope">
-          <!-- <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.userId)">修改</el-button> -->
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deploymentId)">删除</el-button>
         </template>
       </el-table-column>
@@ -34,7 +33,7 @@
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <!-- bpmn弹出框 -->
-    <Bpmn ref="bpmn" />
+    <Bpmn ref="bpmn" @ok="getList" />
   </div>
 </template>
 <script setup lang="ts">

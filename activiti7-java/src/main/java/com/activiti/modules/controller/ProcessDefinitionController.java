@@ -30,6 +30,17 @@ public class ProcessDefinitionController {
     }
 
     /**
+     * 部署流程
+     *
+     * @param xmlStr xml字符串
+     */
+    @PostMapping("deployment")
+    public R<String> deployment(@RequestBody String xmlStr) {
+        processDefinitionService.deploymentXmlByStr(xmlStr);
+        return R.ok();
+    }
+
+    /**
      * 删除
      *
      * @param id 主键
