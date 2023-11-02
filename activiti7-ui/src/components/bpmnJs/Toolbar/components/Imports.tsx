@@ -29,9 +29,7 @@ const Imports = defineComponent({
 
     return () => (
       <span>
-        <el-button type="info" secondary onClick={openImportWindow}>
-          {t("toolbar.openFile")}
-        </el-button>
+        <el-button onClick={openImportWindow}>打开文件</el-button>
         <input
           type="file"
           ref={importRef}

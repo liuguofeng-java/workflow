@@ -29,11 +29,11 @@ const Commands = defineComponent({
     };
 
     return () => (
-      <div>
+      <el-button-group>
         <el-button onClick={undo}>撤销</el-button>
         <el-button onClick={redo}>恢复</el-button>
         <el-button onClick={restart}>擦除重做</el-button>
-      </div>
+      </el-button-group>
     );
   }
 });

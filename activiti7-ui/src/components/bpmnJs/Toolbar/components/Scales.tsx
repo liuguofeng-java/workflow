@@ -36,13 +36,21 @@ const Scales = defineComponent({
     };
 
     return () => (
-      <div>
-        <el-button onClick={() => zoomOut()}>缩小</el-button>
+      <el-button-group>
+        <el-button onClick={() => zoomOut()}>
+          <el-icon>
+            <zoom-out />
+          </el-icon>
+        </el-button>
         <el-button onClick={() => zoomReset("fit-viewport")}>
           {Math.floor(currentScale.value * 10) * 10 + "%"}
         </el-button>
-        <el-button onClick={() => zoomIn()}>放大</el-button>
-      </div>
+        <el-button onClick={() => zoomIn()}>
+          <el-icon>
+            <zoom-in />
+          </el-icon>
+        </el-button>
+      </el-button-group>
     );
   }
 });

@@ -11,12 +11,12 @@ const Toolbar = defineComponent({
   setup() {
     return () => (
       <div class="toolbar">
-        <Imports></Imports>
-        <Exports></Exports>
-        <Previews></Previews>
-        <Aligns></Aligns>
-        <Scales></Scales>
-        <Commands></Commands>
+        <Imports class="room"></Imports>
+        <Exports class="room"></Exports>
+        <Previews class="room"></Previews>
+        <Aligns class="room"></Aligns>
+        <Scales class="room"></Scales>
+        <Commands class="room"></Commands>
       </div>
     );
   }

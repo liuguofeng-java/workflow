@@ -47,17 +47,11 @@ const Exports = defineComponent({
     };
 
     return () => (
-      <div>
-        <el-button type="info" onClick={downloadProcessAsBpmn}>
-          导出bpmn
-        </el-button>
-        <el-button type="info" onClick={downloadProcessAsXml}>
-          导出xml
-        </el-button>
-        <el-button type="info" onClick={downloadProcessAsSvg}>
-          导出svg
-        </el-button>
-      </div>
+      <el-button-group>
+        <el-button onClick={downloadProcessAsBpmn}>导出bpmn</el-button>
+        <el-button onClick={downloadProcessAsXml}>导出xml</el-button>
+        <el-button onClick={downloadProcessAsSvg}>导出svg</el-button>
+      </el-button-group>
     );
   }
 });

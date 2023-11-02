@@ -1,8 +1,11 @@
 <template>
   <el-drawer v-model="drawer" size="100%" :with-header="false">
     <div id="designer-container">
-      <el-button @click="drawer = false">关闭</el-button>
-
+      <div class="close">
+        <el-icon @click="drawer = false" size="20">
+          <CloseBold />
+        </el-icon>
+      </div>
       <Toolbar></Toolbar>
       <div class="main-content">
         <Designer v-model:xml="processXml"></Designer>
@@ -14,20 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import Toolbar from "@/components/bpmnJs/Toolbar";
 import Designer from "@/components/bpmnJs/Designer";
 import Panel from "@/components/bpmnJs/Panel";
 import ContextMenu from "@/components/bpmnJs/ContextMenu/index.vue";
-import { EditorSettings } from "@/components/bpmnJs/types/editor/settings";
-import { defaultSettings } from "@/components/bpmnJs/config";
-
-import hljs from "highlight.js/lib/core";
-import xml from "highlight.js/lib/languages/xml";
-import json from "highlight.js/lib/languages/json";
-
-hljs.registerLanguage("xml", xml);
-hljs.registerLanguage("json", json);
 
 // 是否加载抽屉
 let drawer = ref<boolean>(false);
@@ -51,11 +45,17 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-#designer-container {
-  width: 100%;
-  height: 100%;
+.close {
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+  i {
+    cursor: pointer;
+  }
 }
-.main-content {
+#designer-container {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 </style>

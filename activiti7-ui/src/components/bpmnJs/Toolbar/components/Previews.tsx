@@ -30,9 +30,7 @@ const Previews = defineComponent({
 
     return () => (
       <div>
-        <el-button type="info" onClick={openXMLPreviewModel}>
-          浏览xml
-        </el-button>
+        <el-button onClick={openXMLPreviewModel}>浏览xml</el-button>
 
         <el-drawer v-model={drawer.value} with-header={false}>
           {xmlStr.value}

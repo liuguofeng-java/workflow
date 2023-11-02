@@ -5,21 +5,17 @@ import Modeling from "bpmn-js/lib/features/modeling/Modeling.js";
 import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
 import { ElMessage } from "element-plus";
 
-import { useI18n } from "vue-i18n";
-
 const Aligns = defineComponent({
   name: "Aligns",
   setup() {
-    const { t } = useI18n();
-
     const buttons: ComputedRef<{ name: string; key: string; icon: string }[]> = computed(() => {
       return [
-        { name: t("toolbar.alignLeft"), key: "left", icon: "AlignStartVertical" },
-        { name: t("toolbar.alignCenter"), key: "center", icon: "AlignCenterVertical" },
-        { name: t("toolbar.alignRight"), key: "right", icon: "AlignEndVertical" },
-        { name: t("toolbar.alignTop"), key: "top", icon: "AlignStartHorizontal" },
-        { name: t("toolbar.alignMiddle"), key: "middle", icon: "AlignCenterHorizontal" },
-        { name: t("toolbar.alignBottom"), key: "bottom", icon: "AlignEndHorizontal" }
+        { name: "左对齐", key: "left", icon: "AlignStartVertical" },
+        { name: "水平居中", key: "center", icon: "AlignCenterVertical" },
+        { name: "右对齐", key: "right", icon: "AlignEndVertical" },
+        { name: "上对齐", key: "top", icon: "AlignStartHorizontal" },
+        { name: "垂直居中", key: "middle", icon: "AlignCenterHorizontal" },
+        { name: "下对齐", key: "bottom", icon: "AlignEndHorizontal" }
       ];
     });
 
@@ -44,15 +40,11 @@ const Aligns = defineComponent({
     };
 
     return () => (
-      <div>
+      <el-button-group>
         {buttons.value.map((item) => {
-          return (
-            <el-button type="text" onClick={() => alignElements(item.key)}>
-              {item.name}
-            </el-button>
-          );
+          return <el-button onClick={() => alignElements(item.key)}>{item.name}</el-button>;
         })}
-      </div>
+      </el-button-group>
     );
   }
 });

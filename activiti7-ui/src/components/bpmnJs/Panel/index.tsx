@@ -62,10 +62,19 @@ const Panel = defineComponent({
       isUserAssignmentSupported(element) && renderComponents.push(UserAssignment);
     };
 
+    // 记录前一个节点id
+    let activatedId = null;
     // 设置选中元素，更新 store
     const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
       let activatedElementTypeName = "";
+
+      // 如果切换节点,就收起 el-collapse
+      if (activatedElement) {
+        if (activatedId != null && activatedId != activatedElement.id) {
+          activeNames.value = ["NormalInfo"];
+        }
+      }
 
       if (!activatedElement) {
         activatedElement =
@@ -93,7 +102,7 @@ const Panel = defineComponent({
         "Selected element changed",
         `ID: ${activatedElement.id} , type: ${activatedElement.type}`
       );
-      activeNames.value = ["NormalInfo"];
+      activatedId = activatedElement.id;
     }, 100);
 
     EventEmitter.on("modeler-init", (modeler) => {
