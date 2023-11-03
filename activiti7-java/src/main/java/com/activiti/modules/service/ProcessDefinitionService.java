@@ -4,6 +4,7 @@ import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.ProcessDefinitionListDto;
 import com.activiti.utils.page.TableDataInfo;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,6 +24,13 @@ public interface ProcessDefinitionService {
     TableDataInfo queryPage(ProcessDefinitionListDto dto);
 
     /**
+     * 获取流程定义xml
+     * @param deploymentId 部署id
+     * @return 流程xml字符串
+     */
+    String getDefinitionXml(String deploymentId) throws IOException;
+
+    /**
      * 部署流程xml
      * @param xmlStr xml字符串
      */
@@ -30,9 +38,7 @@ public interface ProcessDefinitionService {
 
     /**
      * 删除流程
-     * @param id 部署id
+     * @param deploymentId 部署id
      */
-    void delete(String id);
-
-
+    void delete(String deploymentId);
 }

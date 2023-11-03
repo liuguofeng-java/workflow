@@ -7,6 +7,8 @@ import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 /**
  * 流程维护
  *
@@ -27,6 +29,17 @@ public class ProcessDefinitionController {
     @GetMapping("list")
     public TableDataInfo list(ProcessDefinitionListDto dto) {
         return processDefinitionService.queryPage(dto);
+    }
+
+    /**
+     * 获取流程定义xml
+     *
+     * @param deploymentId 部署id
+     */
+    @GetMapping("getDefinitionXml")
+    public R<String> getDefinitionXml(String deploymentId) throws IOException {
+        String xml = processDefinitionService.getDefinitionXml(deploymentId);
+        return R.ok(xml);
     }
 
     /**

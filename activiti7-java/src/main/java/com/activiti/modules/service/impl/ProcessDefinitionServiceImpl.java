@@ -13,6 +13,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +59,23 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     }
 
     /**
+     * 获取流程定义xml
+     *
+     * @param deploymentId 部署id
+     * @return 流程xml字符串
+     */
+    @Override
+    public String getDefinitionXml(String deploymentId) throws IOException {
+        InputStream inputStream = repositoryService.getResourceAsStream(deploymentId, "index.bpmn");
+        byte[] bytes = new byte[inputStream.available()];
+        while (inputStream.read(bytes) != -1);
+        inputStream.close();
+        return new String(bytes);
+    }
+
+    /**
      * 部署流程xml
+     *
      * @param xmlStr xml字符串
      */
     @Override
@@ -69,10 +88,10 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     /**
      * 删除流程
      *
-     * @param id 部署id
+     * @param deploymentId 部署id
      */
     @Override
-    public void delete(String id) {
-        repositoryService.deleteDeployment(id, true);
+    public void delete(String deploymentId) {
+        repositoryService.deleteDeployment(deploymentId, true);
     }
 }

@@ -72,6 +72,8 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
   // 配置 contextPad (可覆盖 contextPadProvider 取消原生上下文菜单)
   settings.value.contextPadMode === "enhancement" && modules.push(EnhancementContextPad);
   settings.value.contextPadMode === "rewrite" && modules.push(RewriteContextPad);
+  settings.value.contextPadMode === "custom" &&
+    modules.push({ contextPadProvider: ["type", function () {}] });
 
   // 配置 自定义渲染
   settings.value.rendererMode === "enhancement" && modules.push(EnhancementRenderer);
@@ -93,20 +95,6 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
       options["propertiesPanel"] = { parent: "#camunda-penal" };
       moddle["camunda"] = camundaModdleDescriptors;
     }
-    // if (settings.value.templateChooser) {
-    //   modules.push(
-    //     CloudElementTemplatesPropertiesProviderModule,
-    //     ElementTemplateChooserModule,
-    //     ConnectorsExtensionModule
-    //   )
-    //   options['exporter'] = {
-    //     name: 'element-template-chooser',
-    //     version: '0.0.1'
-    //   }
-    //   options['connectorsExtension'] = {
-    //     appendAnything: true
-    //   }
-    // }
   }
 
   // 设置 lint 校验
@@ -125,11 +113,6 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
       open: true
     };
   }
-
-  // 官方网点背景
-  // if (settings.value.bg === 'grid') {
-  //   modules.push(Grid)
-  // }
 
   // 设置其他模块的启用
   if (settings.value.otherModule) {

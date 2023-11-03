@@ -8,7 +8,7 @@ export interface EditorSettings {
   processEngine: "flowable" | "activiti" | "camunda";
   paletteMode: "default" | "custom" | "rewrite" | "enhancement";
   penalMode: "default" | "custom" | "rewrite";
-  contextPadMode: "default" | "rewrite" | "enhancement";
+  contextPadMode: "default" | "rewrite" | "enhancement" | "custom";
   rendererMode: "default" | "rewrite" | "enhancement";
   bg: string;
   toolbar: boolean;

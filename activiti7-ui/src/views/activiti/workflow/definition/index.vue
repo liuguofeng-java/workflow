@@ -25,6 +25,7 @@
       <el-table-column label="版本" align="center" prop="version" />
       <el-table-column>
         <template #default="scope">
+          <el-button link type="primary" icon="Pointer" @click="handleDetails(scope.row.deploymentId)">查看</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deploymentId)">删除</el-button>
         </template>
       </el-table-column>
@@ -32,15 +33,19 @@
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
-    <!-- bpmn弹出框 -->
-    <Bpmn ref="bpmn" @ok="getList" />
+    <!-- 部署bpmn弹出框 -->
+    <DeployBpmn ref="deployBpmn" @ok="getList" />
+
+    <!-- 流程详情 -->
+    <BpmnDetails ref="bpmnDetails" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
-import Bpmn from "./bpmn.vue";
+import DeployBpmn from "./deployBpmn.vue";
+import BpmnDetails from "./bpmnDetails.vue";
 
 // 查询参数
 const queryForm = reactive({
@@ -55,9 +60,10 @@ const total = ref(0);
 const loading = ref(true);
 // 列表返回值
 const list = ref<any[]>([]);
-
-// bpmn
-const bpmn = ref();
+// 部署bpmn
+const deployBpmn = ref();
+//流程详情
+const bpmnDetails = ref();
 
 // 查询列表
 const getList = () => {
@@ -84,9 +90,14 @@ function handleQuery() {
   getList();
 }
 
+// 详情
+function handleDetails(id) {
+  bpmnDetails.value.open(id);
+}
+
 // 新增
 function handleAdd() {
-  bpmn.value.open();
+  deployBpmn.value.open();
 }
 
 // 删除按钮操作
