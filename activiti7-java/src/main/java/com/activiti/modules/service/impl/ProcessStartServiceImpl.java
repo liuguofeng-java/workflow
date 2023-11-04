@@ -123,4 +123,25 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         variables.put(Constant.PROCESS_INITIATOR, userId);
         runtimeService.startProcessInstanceById(definitionId, variables);
     }
+
+    /**
+     * 删除流程实例
+     *
+     * @param instanceId 流程实例id
+     */
+    @Override
+    public void delete(String instanceId) {
+        // 查询历史数据
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(instanceId)
+                .singleResult();
+        if (historicProcessInstance.getEndTime() != null) {
+            historyService.deleteHistoricProcessInstance(historicProcessInstance.getId());
+            return;
+        }
+        // 删除流程实例
+        runtimeService.deleteProcessInstance(instanceId, null);
+        // 删除历史流程实例
+        historyService.deleteHistoricProcessInstance(instanceId);
+    }
 }

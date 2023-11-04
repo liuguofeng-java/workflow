@@ -87,13 +87,18 @@ function handleSelect(id: any) {
     baseService.get(`/processStart/start?definitionId=${id}`).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
-        getList();
+        open.value = false;
+        emit("ok");
       } else {
         ElMessage.error(res.msg);
       }
     });
   });
 }
+
+const emit = defineEmits<{
+  (event: "ok"): void;
+}>();
 
 defineExpose({
   init

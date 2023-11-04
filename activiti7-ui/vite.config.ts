@@ -4,7 +4,7 @@ import { defineConfig, loadEnv, UserConfig, UserConfigExport } from "vite";
 import html from "vite-plugin-html";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueJsx from "@vitejs/plugin-vue-jsx";
 
 export default (config: UserConfig): UserConfigExport => {
   const mode = config.mode as string;
@@ -62,7 +62,7 @@ export default (config: UserConfig): UserConfigExport => {
       alias: {
         // 配置别名
         "@": resolve(__dirname, "./src"),
-        'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
+        "vue-i18n": "vue-i18n/dist/vue-i18n.cjs.js"
       },
       extensions: [".js", ".vue", ".json", ".ts", ".tsx"] // 使用路径别名时想要省略的后缀名，可以自己 增减
     },

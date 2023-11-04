@@ -28,14 +28,13 @@
       <el-table-column label="当前节点" align="center" prop="taskName" />
       <el-table-column>
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.deptId)">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deptId)">删除</el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
-    <StartProcess ref="startProcessRef" />
+    <StartProcess ref="startProcessRef" @ok="getList" />
   </div>
 </template>
 <script setup lang="ts">
@@ -94,7 +93,7 @@ function handleAdd() {
 // 删除按钮操作
 function handleDelete(id: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
-    baseService.delete(`/sysDept/delete`, id).then((res) => {
+    baseService.delete(`/processStart/delete`, id).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         getList();

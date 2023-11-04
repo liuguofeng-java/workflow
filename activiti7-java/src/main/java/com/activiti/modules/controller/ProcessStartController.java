@@ -45,4 +45,15 @@ public class ProcessStartController {
         processStartService.startProcess(definitionId, user.getUserId());
         return R.ok();
     }
+
+    /**
+     * 删除
+     *
+     * @param id 主键
+     */
+    @DeleteMapping("delete")
+    public R<String> delete(@RequestBody String id) {
+        processStartService.delete(id);
+        return R.ok();
+    }
 }

@@ -27,4 +27,10 @@ public interface ProcessStartService {
      * @param userId       当前用户登录id
      */
     void startProcess(String definitionId, String userId);
+
+    /**
+     * 删除流程实例
+     * @param instanceId 流程实例id
+     */
+    void delete(String instanceId);
 }
