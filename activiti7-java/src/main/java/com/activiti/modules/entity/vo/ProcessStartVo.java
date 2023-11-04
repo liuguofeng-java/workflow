@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 public class ProcessStartVo {
     /**
-     * 流程定义id
+     * 流程实例id
      */
     private String id;
 
@@ -30,10 +30,6 @@ public class ProcessStartVo {
     private Date endTime;
 
     /**
-     * 流程部署id
-     */
-    private String deploymentId;
-    /**
      * 流程部署名称
      */
     private String definitionName;
@@ -41,19 +37,25 @@ public class ProcessStartVo {
     /**
      * 流程版本号
      */
-    private Integer version;
+    private Integer definitionVersion;
 
     /**
      * 流程key
      */
-    private String key;
+    private String definitionKey;
 
     /**
      * 任务id
      */
     private String taskId;
+
     /**
      * 任务名称
      */
     private String taskName;
+
+    /**
+     * 1:进行中,2:已完成
+     */
+    private Integer status;
 }

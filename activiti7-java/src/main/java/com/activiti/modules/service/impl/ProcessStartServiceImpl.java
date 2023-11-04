@@ -75,15 +75,17 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         for (HistoricProcessInstance item : list) {
             // 设置流程实例
             ProcessStartVo vo = new ProcessStartVo();
-            BeanUtils.copyProperties(item, vo);
+            vo.setId(item.getId());
+            vo.setStartTime(item.getStartTime());
+            vo.setEndTime(item.getEndTime());
 
             // 流程定义信息
             ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(item.getProcessDefinitionId())
                     .singleResult();
             vo.setDefinitionName(definition.getName());
-            vo.setKey(definition.getKey());
-            vo.setVersion(definition.getVersion());
+            vo.setDefinitionKey(definition.getKey());
+            vo.setDefinitionVersion(definition.getVersion());
 
             // 获取任务处理节点
             List<Task> taskList = taskService.createTaskQuery()
@@ -93,6 +95,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 Task task = taskList.get(0);
                 vo.setTaskId(task.getId());
                 vo.setTaskName(task.getName());
+                vo.setStatus(1);
             } else {
                 // 任务处理完成在history获取
                 List<HistoricTaskInstance> historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
@@ -103,6 +106,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 HistoricTaskInstance task = historicTaskInstance.get(0);
                 vo.setTaskId(task.getId());
                 vo.setTaskName(task.getName());
+                vo.setStatus(2);
             }
             resultList.add(vo);
         }
