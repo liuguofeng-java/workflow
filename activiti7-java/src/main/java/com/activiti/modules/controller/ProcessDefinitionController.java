@@ -1,6 +1,6 @@
 package com.activiti.modules.controller;
 
-import com.activiti.modules.entity.dto.ProcessDefinitionListDto;
+import com.activiti.modules.entity.dto.ProcessDefinitionDto;
 import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.utils.R;
 import com.activiti.utils.page.TableDataInfo;
@@ -27,7 +27,7 @@ public class ProcessDefinitionController {
      * @param dto 参数
      */
     @GetMapping("list")
-    public TableDataInfo list(ProcessDefinitionListDto dto) {
+    public TableDataInfo list(ProcessDefinitionDto dto) {
         return processDefinitionService.queryPage(dto);
     }
 

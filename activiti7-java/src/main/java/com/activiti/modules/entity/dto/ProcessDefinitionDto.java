@@ -3,13 +3,13 @@ package com.activiti.modules.entity.dto;
 import lombok.Data;
 
 /**
- * 流程列表参数
+ * 流程定义列表参数
  *
  * @author liuguofeng
  * @date 2023/10/21 11:38
  **/
 @Data
-public class ProcessDefinitionListDto {
+public class ProcessDefinitionDto {
     // 流程定义名称
     private String definitionName;
 

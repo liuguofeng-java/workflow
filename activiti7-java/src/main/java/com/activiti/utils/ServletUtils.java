@@ -82,4 +82,11 @@ public class ServletUtils {
         }
     }
 
+    /**
+     * 获取请求头参数
+     */
+    public static String getHeader(String name) {
+        return getRequest().getHeader(name);
+    }
+
 }

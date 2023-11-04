@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/workflow/vform",
         name: "vform", // 流程定义
         component: () => import("@/views/activiti/workflow/vform/index.vue")
+      },
+      {
+        path: "/my/start",
+        name: "start", // 我发起的
+        component: () => import("@/views/activiti/my/start/index.vue")
       }
     ]
   },

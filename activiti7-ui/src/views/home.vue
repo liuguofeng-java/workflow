@@ -42,9 +42,24 @@
           </el-menu-item>
           <el-menu-item index="/workflow/vform">
             <el-icon>
-              <Tickets />
+              <MessageBox />
             </el-icon>
             <span>表单配置</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="/my">
+          <template #title>
+            <el-icon>
+              <Position />
+            </el-icon>
+            <span>与我有关</span>
+          </template>
+          <el-menu-item index="/my/start">
+            <el-icon>
+              <Odometer />
+            </el-icon>
+            <span>我发起的</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>

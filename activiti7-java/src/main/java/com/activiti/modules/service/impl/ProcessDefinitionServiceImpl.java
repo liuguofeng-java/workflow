@@ -1,6 +1,6 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.dto.ProcessDefinitionListDto;
+import com.activiti.modules.entity.dto.ProcessDefinitionDto;
 import com.activiti.modules.entity.vo.ProcessDefinitionVo;
 import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.utils.page.PageDomain;
@@ -13,14 +13,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 流程管理实现
+ * 流程定义实现
  *
  * @author liuguofeng
  * @date 2023/10/21 11:31
@@ -39,7 +38,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
      * @return 列表
      */
     @Override
-    public TableDataInfo queryPage(ProcessDefinitionListDto dto) {
+    public TableDataInfo queryPage(ProcessDefinitionDto dto) {
         PageDomain params = PageUtils.getPageParams();
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionId()
