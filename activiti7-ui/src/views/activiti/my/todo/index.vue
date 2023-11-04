@@ -2,10 +2,10 @@
   <div>
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
       <el-form-item label="流程名称">
-        <el-input v-model="queryForm.definitionName" placeholder="流程名称(不是模糊查询)" clearable />
+        <el-input v-model="queryForm.definitionName" placeholder="流程名称" clearable />
       </el-form-item>
       <el-form-item label="流程key">
-        <el-input v-model="queryForm.definitionKey" placeholder="流程key(不是模糊查询)" clearable />
+        <el-input v-model="queryForm.definitionKey" placeholder="流程key" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
@@ -28,7 +28,7 @@
       <el-table-column label="发起人" align="center" prop="startUserName" />
       <el-table-column>
         <template #default="scope">
-          <!-- <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button> -->
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">处置</el-button>
         </template>
       </el-table-column>
     </el-table>

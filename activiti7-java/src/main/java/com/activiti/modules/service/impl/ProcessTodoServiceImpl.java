@@ -56,6 +56,8 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
                 .active()
                 .includeProcessVariables()
                 .taskCandidateOrAssigned(dto.getUserId())
+                .processDefinitionNameLike("%" + dto.getDefinitionName() + "%")
+                .processDefinitionKeyLike("%" + dto.getDefinitionKey() + "%")
                 .orderByTaskCreateTime()
                 .desc();
         List<Task> list = query
