@@ -1,7 +1,7 @@
 package com.activiti.modules.controller;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.ProcessStartDto;
+import com.activiti.modules.entity.dto.ProcessStartListDto;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.utils.R;
 import com.activiti.utils.TokenUtils;
@@ -27,7 +27,7 @@ public class ProcessStartController {
      * @param dto 参数
      */
     @GetMapping("list")
-    public TableDataInfo list(ProcessStartDto dto) {
+    public TableDataInfo list(ProcessStartListDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         return processStartService.queryPage(dto);

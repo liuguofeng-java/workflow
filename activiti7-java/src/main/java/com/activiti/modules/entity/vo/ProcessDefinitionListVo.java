@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/10/21 12:38
  **/
 @Data
-public class ProcessDefinitionVo {
+public class ProcessDefinitionListVo {
     // 流程id
     private String id;
 

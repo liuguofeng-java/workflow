@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2023/11/04 19:24
  **/
 @Data
-public class ProcessTodoVo {
+public class ProcessTodoListVo {
 
     /**
      * 任务id

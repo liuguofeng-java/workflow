@@ -1,7 +1,7 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.dto.ProcessStartDto;
-import com.activiti.modules.entity.vo.ProcessStartVo;
+import com.activiti.modules.entity.dto.ProcessStartListDto;
+import com.activiti.modules.entity.vo.ProcessStartListVo;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.utils.constant.Constant;
 import com.activiti.utils.page.PageDomain;
@@ -18,7 +18,6 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +51,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
      * @return 结果
      */
     @Override
-    public TableDataInfo queryPage(ProcessStartDto dto) {
+    public TableDataInfo queryPage(ProcessStartListDto dto) {
         PageDomain params = PageUtils.getPageParams();
 
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
@@ -71,10 +70,10 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
         List<HistoricProcessInstance> list = query
                 .listPage(params.getPageNo() - 1, params.getPageSize());
-        List<ProcessStartVo> resultList = new ArrayList<>();
+        List<ProcessStartListVo> resultList = new ArrayList<>();
         for (HistoricProcessInstance item : list) {
             // 设置流程实例
-            ProcessStartVo vo = new ProcessStartVo();
+            ProcessStartListVo vo = new ProcessStartListVo();
             vo.setId(item.getId());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());

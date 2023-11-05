@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/10/21 11:38
  **/
 @Data
-public class ProcessDefinitionDto {
+public class ProcessDefinitionListDto {
     // 流程定义名称
     private String definitionName;
 

@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -128,6 +130,29 @@ public class ActivitiDiscountTest {
             taskService.addComment(task.getId(), task.getProcessInstanceId(), "审批通过--测试xx");
             taskService.complete(task.getId());
         }
+    }
+
+    /**
+     * 审批节点，驳回
+     */
+    @Test
+    public void doCheckRejectTask() {
+        //任务负责人
+        String assignee = "wangwu";
+        //获取任务集合
+        List<Task> taskList = taskService.createTaskQuery()
+                .processDefinitionKey("leave_demo")
+//                .processInstanceId()
+                .taskAssignee(assignee)
+                .list();
+        Map<String, Object> varMap = new HashMap<>();
+        varMap.put("checkReject", true);
+        varMap.put("checkPass", false);
+        for (Task task : taskList) {
+            taskService.addComment(task.getId(), task.getProcessInstanceId(), "审批通过--测试xx");
+            taskService.complete("7509", varMap);
+        }
+
     }
 
     /**

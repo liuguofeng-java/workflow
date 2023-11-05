@@ -11,7 +11,7 @@ import java.util.Date;
  * @date 2023/11/04 14:22
  **/
 @Data
-public class ProcessStartVo {
+public class ProcessStartListVo {
     /**
      * 流程实例id
      */

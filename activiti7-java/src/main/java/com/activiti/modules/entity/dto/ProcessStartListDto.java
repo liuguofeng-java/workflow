@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2023/11/04 14:11
  **/
 @Data
-public class ProcessTodoDto {
+public class ProcessStartListDto {
     /**
      * 用户id
      */

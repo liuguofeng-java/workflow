@@ -1,8 +1,8 @@
 package com.activiti.modules.service;
 
 
-import com.activiti.modules.entity.dto.ProcessStartDto;
-import com.activiti.modules.entity.dto.ProcessTodoDto;
+import com.activiti.modules.entity.dto.ProcessTodoApprovalDto;
+import com.activiti.modules.entity.dto.ProcessTodoListDto;
 import com.activiti.utils.page.TableDataInfo;
 
 /**
@@ -18,5 +18,12 @@ public interface ProcessTodoService {
      *
      * @param dto 参数
      */
-    TableDataInfo queryPage(ProcessTodoDto dto);
+    TableDataInfo queryPage(ProcessTodoListDto dto);
+
+    /**
+     * 节点审批
+     *
+     * @param dto 参数
+     */
+    void approval(ProcessTodoApprovalDto dto);
 }

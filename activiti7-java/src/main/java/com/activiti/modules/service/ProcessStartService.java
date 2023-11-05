@@ -1,7 +1,7 @@
 package com.activiti.modules.service;
 
 
-import com.activiti.modules.entity.dto.ProcessStartDto;
+import com.activiti.modules.entity.dto.ProcessStartListDto;
 import com.activiti.utils.page.TableDataInfo;
 
 /**
@@ -18,7 +18,7 @@ public interface ProcessStartService {
      * @param dto 参数
      * @return 结果
      */
-    TableDataInfo queryPage(ProcessStartDto dto);
+    TableDataInfo queryPage(ProcessStartListDto dto);
 
     /**
      * 启动流程

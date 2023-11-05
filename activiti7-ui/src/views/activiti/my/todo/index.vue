@@ -12,12 +12,6 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
-      </el-col>
-    </el-row>
-
     <el-table v-loading="loading" :data="list">
       <el-table-column label="序号" type="index" width="100" />
       <el-table-column label="流程名称" align="center" prop="definitionName" />
@@ -28,18 +22,21 @@
       <el-table-column label="发起人" align="center" prop="startUserName" />
       <el-table-column>
         <template #default="scope">
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">处置</el-button>
+          <el-button link type="primary" icon="Pointer" @click="handleApproval(scope.row.processInstanceId)">审批</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+
+    <!-- 审批 -->
+    <Approval ref="approvalRef" @ok="getList" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
-import { ElMessage, ElMessageBox } from "element-plus";
+import Approval from "./approval.vue";
 
 // 查询参数
 const queryForm = reactive({
@@ -56,7 +53,7 @@ const loading = ref(true);
 const list = ref<any[]>([]);
 
 // 发起流程弹出框
-const startProcessRef = ref();
+const approvalRef = ref();
 
 // 查询列表
 const getList = () => {
@@ -83,23 +80,9 @@ function handleQuery() {
   getList();
 }
 
-// 发起流程
-function handleAdd() {
-  startProcessRef.value.init();
-}
-
-// 删除按钮操作
-function handleDelete(id: any) {
-  ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
-    baseService.delete(`/processTodo/delete`, id).then((res) => {
-      if (res.code === 200) {
-        ElMessage.success(res.msg);
-        getList();
-      } else {
-        ElMessage.error(res.msg);
-      }
-    });
-  });
+// 审批
+function handleApproval(instanceId: string) {
+  approvalRef.value.init(instanceId);
 }
 
 getList();

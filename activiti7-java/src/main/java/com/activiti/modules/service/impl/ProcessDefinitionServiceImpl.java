@@ -1,7 +1,7 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.dto.ProcessDefinitionDto;
-import com.activiti.modules.entity.vo.ProcessDefinitionVo;
+import com.activiti.modules.entity.dto.ProcessDefinitionListDto;
+import com.activiti.modules.entity.vo.ProcessDefinitionListVo;
 import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
@@ -38,7 +38,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
      * @return 列表
      */
     @Override
-    public TableDataInfo queryPage(ProcessDefinitionDto dto) {
+    public TableDataInfo queryPage(ProcessDefinitionListDto dto) {
         PageDomain params = PageUtils.getPageParams();
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionId()
@@ -48,9 +48,9 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         query.processDefinitionKeyLike("%" + dto.getDefinitionKey() + "%");
         List<ProcessDefinition> list =
                 query.listPage(params.getPageNo() - 1, params.getPageSize());
-        List<ProcessDefinitionVo> resultList = new ArrayList<>();
+        List<ProcessDefinitionListVo> resultList = new ArrayList<>();
         for (ProcessDefinition item : list) {
-            ProcessDefinitionVo vo = new ProcessDefinitionVo();
+            ProcessDefinitionListVo vo = new ProcessDefinitionListVo();
             BeanUtils.copyProperties(item, vo);
             resultList.add(vo);
         }

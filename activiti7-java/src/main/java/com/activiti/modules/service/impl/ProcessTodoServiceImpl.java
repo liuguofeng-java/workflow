@@ -1,10 +1,12 @@
 package com.activiti.modules.service.impl;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.ProcessTodoDto;
-import com.activiti.modules.entity.vo.ProcessTodoVo;
+import com.activiti.modules.entity.dto.ProcessTodoApprovalDto;
+import com.activiti.modules.entity.dto.ProcessTodoListDto;
+import com.activiti.modules.entity.vo.ProcessTodoListVo;
 import com.activiti.modules.service.ProcessTodoService;
 import com.activiti.modules.service.SysUserService;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
@@ -19,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流程启动
@@ -49,9 +53,8 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      * @param dto 参数
      */
     @Override
-    public TableDataInfo queryPage(ProcessTodoDto dto) {
+    public TableDataInfo queryPage(ProcessTodoListDto dto) {
         PageDomain params = PageUtils.getPageParams();
-
         TaskQuery query = taskService.createTaskQuery()
                 .active()
                 .includeProcessVariables()
@@ -63,9 +66,9 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
         List<Task> list = query
                 .listPage(params.getPageNo() - 1, params.getPageSize());
 
-        List<ProcessTodoVo> resultList = new ArrayList<>();
+        List<ProcessTodoListVo> resultList = new ArrayList<>();
         for (Task task : list) {
-            ProcessTodoVo vo = new ProcessTodoVo();
+            ProcessTodoListVo vo = new ProcessTodoListVo();
             // 当前流程
             vo.setTaskId(task.getId());
             vo.setTaskName(task.getName());
@@ -86,11 +89,32 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
             HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery()
                     .processInstanceId(task.getProcessInstanceId())
                     .singleResult();
-            SysUserEntity startUser = userService.getById((instance.getStartUserId()));
-            vo.setStartUserId(startUser.getUserId());
-            vo.setStartUserName(startUser.getUsername());
+            SysUserEntity user = userService.getById((instance.getStartUserId()));
+            vo.setStartUserId(user.getUserId());
+            vo.setStartUserName(user.getUsername());
             resultList.add(vo);
         }
         return PageUtils.getDataTable(resultList, query.count());
+    }
+
+    /**
+     * 节点审批
+     *
+     * @param dto 参数
+     */
+    @Override
+    public void approval(ProcessTodoApprovalDto dto) {
+        TaskQuery query = taskService.createTaskQuery()
+                .active()
+                .includeProcessVariables()
+                .processInstanceId(dto.getProcessInstanceId())
+                .taskCandidateOrAssigned(dto.getUserId())
+                .orderByTaskCreateTime()
+                .desc();
+        List<Task> list = query.list();
+        if (list.size() == 0) throw new AException("未找到审批节点!");
+        Task task = list.get(0);
+        taskService.addComment(task.getId(), task.getProcessInstanceId(), dto.getComment());
+        taskService.complete(task.getId());
     }
 }
