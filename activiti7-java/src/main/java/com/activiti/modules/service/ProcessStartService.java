@@ -1,8 +1,11 @@
 package com.activiti.modules.service;
 
 
-import com.activiti.modules.entity.dto.ProcessStartListDto;
+import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.utils.page.TableDataInfo;
+
+import java.util.List;
 
 /**
  * 流程启动
@@ -18,7 +21,7 @@ public interface ProcessStartService {
      * @param dto 参数
      * @return 结果
      */
-    TableDataInfo queryPage(ProcessStartListDto dto);
+    TableDataInfo queryPage(StartListDto dto);
 
     /**
      * 启动流程
@@ -29,8 +32,18 @@ public interface ProcessStartService {
     void startProcess(String definitionId, String userId);
 
     /**
+     * 查询审批近路
+     *
+     * @param instanceId 流程实例id
+     * @return 审批记录
+     */
+    List<HistoryRecordVo> getHistoryRecord(String instanceId);
+
+    /**
      * 删除流程实例
+     *
      * @param instanceId 流程实例id
      */
     void delete(String instanceId);
+
 }

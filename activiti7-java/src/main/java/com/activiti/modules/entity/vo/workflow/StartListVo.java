@@ -1,4 +1,4 @@
-package com.activiti.modules.entity.vo;
+package com.activiti.modules.entity.vo.workflow;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.Date;
  * @date 2023/11/04 14:22
  **/
 @Data
-public class ProcessStartListVo {
+public class StartListVo {
     /**
      * 流程实例id
      */

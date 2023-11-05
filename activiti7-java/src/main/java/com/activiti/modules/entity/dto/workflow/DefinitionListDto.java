@@ -1,4 +1,4 @@
-package com.activiti.modules.entity.dto;
+package com.activiti.modules.entity.dto.workflow;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/10/21 11:38
  **/
 @Data
-public class ProcessDefinitionListDto {
+public class DefinitionListDto {
     // 流程定义名称
     private String definitionName;
 

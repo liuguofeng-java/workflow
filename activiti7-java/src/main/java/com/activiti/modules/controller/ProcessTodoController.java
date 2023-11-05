@@ -1,8 +1,8 @@
 package com.activiti.modules.controller;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.ProcessTodoApprovalDto;
-import com.activiti.modules.entity.dto.ProcessTodoListDto;
+import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
+import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.modules.service.ProcessTodoService;
 import com.activiti.utils.R;
 import com.activiti.utils.TokenUtils;
@@ -29,7 +29,7 @@ public class ProcessTodoController {
      * @param dto 参数
      */
     @GetMapping("list")
-    public TableDataInfo list(ProcessTodoListDto dto) {
+    public TableDataInfo list(TodoListDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         return processTodoService.queryPage(dto);
@@ -41,7 +41,7 @@ public class ProcessTodoController {
      * @param dto 参数
      */
     @PostMapping("approval")
-    public R<String> approval(@RequestBody ProcessTodoApprovalDto dto) {
+    public R<String> approval(@RequestBody TodoApprovalDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         processTodoService.approval(dto);

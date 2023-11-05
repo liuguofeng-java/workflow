@@ -1,4 +1,4 @@
-package com.activiti.modules.entity.vo;
+package com.activiti.modules.entity.vo.workflow;
 
 import lombok.Data;
 
@@ -9,20 +9,30 @@ import lombok.Data;
  * @date 2023/10/21 12:38
  **/
 @Data
-public class ProcessDefinitionListVo {
-    // 流程id
+public class DefinitionListVo {
+    /**
+     * 流程id
+     */
     private String id;
 
-    // 部署id
+    /**
+     * 部署id
+     */
     private String deploymentId;
 
-    // 流程名称
+    /**
+     * 流程名称
+     */
     private String name;
 
-    // 流程key
+    /**
+     * 流程key
+     */
     private String key;
 
-    // 版本
+    /**
+     * 版本
+     */
     private int version;
 
 }

@@ -16,12 +16,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "/sys/user",
         name: "sysUser", // 用户信息
-        component: () => import("@/views/activiti/system/user/index.vue")
+        component: () => import("@/views/system/user/index.vue")
       },
       {
         path: "/sys/dept",
         name: "sysDept", // 部门信息
-        component: () => import("@/views/activiti/system/dept/index.vue")
+        component: () => import("@/views/system/dept/index.vue")
       },
       {
         path: "/workflow/definition",

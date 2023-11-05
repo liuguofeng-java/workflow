@@ -1,9 +1,9 @@
 package com.activiti.modules.service.impl;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.ProcessTodoApprovalDto;
-import com.activiti.modules.entity.dto.ProcessTodoListDto;
-import com.activiti.modules.entity.vo.ProcessTodoListVo;
+import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
+import com.activiti.modules.entity.dto.workflow.TodoListDto;
+import com.activiti.modules.entity.vo.workflow.TodoListVo;
 import com.activiti.modules.service.ProcessTodoService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.exception.AException;
@@ -21,9 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流程启动
@@ -53,7 +51,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      * @param dto 参数
      */
     @Override
-    public TableDataInfo queryPage(ProcessTodoListDto dto) {
+    public TableDataInfo queryPage(TodoListDto dto) {
         PageDomain params = PageUtils.getPageParams();
         TaskQuery query = taskService.createTaskQuery()
                 .active()
@@ -66,9 +64,9 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
         List<Task> list = query
                 .listPage(params.getPageNo() - 1, params.getPageSize());
 
-        List<ProcessTodoListVo> resultList = new ArrayList<>();
+        List<TodoListVo> resultList = new ArrayList<>();
         for (Task task : list) {
-            ProcessTodoListVo vo = new ProcessTodoListVo();
+            TodoListVo vo = new TodoListVo();
             // 当前流程
             vo.setTaskId(task.getId());
             vo.setTaskName(task.getName());
@@ -103,7 +101,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      * @param dto 参数
      */
     @Override
-    public void approval(ProcessTodoApprovalDto dto) {
+    public void approval(TodoApprovalDto dto) {
         TaskQuery query = taskService.createTaskQuery()
                 .active()
                 .includeProcessVariables()

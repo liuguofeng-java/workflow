@@ -1,13 +1,16 @@
 package com.activiti.modules.controller;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.ProcessStartListDto;
+import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.utils.R;
 import com.activiti.utils.TokenUtils;
 import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 流程启动
@@ -27,7 +30,7 @@ public class ProcessStartController {
      * @param dto 参数
      */
     @GetMapping("list")
-    public TableDataInfo list(ProcessStartListDto dto) {
+    public TableDataInfo list(StartListDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         return processStartService.queryPage(dto);
@@ -47,13 +50,25 @@ public class ProcessStartController {
     }
 
     /**
-     * 删除
+     * 查询审批近路
      *
-     * @param id 主键
+     * @param instanceId 流程实例id
+     * @return 审批记录
+     */
+    @GetMapping("getHistoryRecord")
+    public R<List<HistoryRecordVo>> getHistoryRecord(String instanceId) {
+        List<HistoryRecordVo> list = processStartService.getHistoryRecord(instanceId);
+        return R.ok(list);
+    }
+
+    /**
+     * 删除流程实例
+     *
+     * @param instanceId 流程实例id
      */
     @DeleteMapping("delete")
-    public R<String> delete(@RequestBody String id) {
-        processStartService.delete(id);
+    public R<String> delete(@RequestBody String instanceId) {
+        processStartService.delete(instanceId);
         return R.ok();
     }
 }

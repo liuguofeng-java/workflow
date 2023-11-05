@@ -1,6 +1,6 @@
 package com.activiti.modules.service;
 
-import com.activiti.modules.entity.dto.ProcessDefinitionListDto;
+import com.activiti.modules.entity.dto.workflow.DefinitionListDto;
 import com.activiti.utils.page.TableDataInfo;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public interface ProcessDefinitionService {
      * @param dto 参数
      * @return 列表
      */
-    TableDataInfo queryPage(ProcessDefinitionListDto dto);
+    TableDataInfo queryPage(DefinitionListDto dto);
 
     /**
      * 获取流程定义xml

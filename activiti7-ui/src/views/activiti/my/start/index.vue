@@ -34,19 +34,25 @@
       </el-table-column>
       <el-table-column>
         <template #default="scope">
+          <el-button link type="primary" icon="Pointer" @click="handleHistoryRecord(scope.row.id)">审批记录</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
+    <!-- 发起流程 -->
     <StartProcess ref="startProcessRef" @ok="getList" />
+
+    <!-- 审批记录 -->
+    <HistoryRecord ref="historyRecordRef" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import StartProcess from "./startProcess.vue";
+import HistoryRecord from "./historyRecord.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
@@ -65,6 +71,9 @@ const list = ref<any[]>([]);
 
 // 发起流程弹出框
 const startProcessRef = ref();
+
+// 审批记录弹出框
+const historyRecordRef = ref();
 
 // 查询列表
 const getList = () => {
@@ -96,10 +105,15 @@ function handleAdd() {
   startProcessRef.value.init();
 }
 
+// 审批记录
+function handleHistoryRecord(instanceId: string) {
+  historyRecordRef.value.init(instanceId);
+}
+
 // 删除按钮操作
-function handleDelete(id: any) {
+function handleDelete(instanceId: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
-    baseService.delete(`/processStart/delete`, id).then((res) => {
+    baseService.delete(`/processStart/delete`, instanceId).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         getList();

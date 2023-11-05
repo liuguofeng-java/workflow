@@ -1,9 +1,13 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.dto.ProcessStartListDto;
-import com.activiti.modules.entity.vo.ProcessStartListVo;
+import com.activiti.modules.entity.SysUserEntity;
+import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
+import com.activiti.modules.entity.vo.workflow.StartListVo;
 import com.activiti.modules.service.ProcessStartService;
+import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.constant.Constant;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
@@ -11,11 +15,13 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +50,9 @@ public class ProcessStartServiceImpl implements ProcessStartService {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private SysUserService userService;
+
     /**
      * 我发起的任务列表
      *
@@ -51,7 +60,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
      * @return 结果
      */
     @Override
-    public TableDataInfo queryPage(ProcessStartListDto dto) {
+    public TableDataInfo queryPage(StartListDto dto) {
         PageDomain params = PageUtils.getPageParams();
 
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
@@ -70,10 +79,10 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
         List<HistoricProcessInstance> list = query
                 .listPage(params.getPageNo() - 1, params.getPageSize());
-        List<ProcessStartListVo> resultList = new ArrayList<>();
+        List<StartListVo> resultList = new ArrayList<>();
         for (HistoricProcessInstance item : list) {
             // 设置流程实例
-            ProcessStartListVo vo = new ProcessStartListVo();
+            StartListVo vo = new StartListVo();
             vo.setId(item.getId());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());
@@ -126,6 +135,66 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         variables.put(Constant.PROCESS_INITIATOR, userId);
         runtimeService.startProcessInstanceById(definitionId, variables);
     }
+
+    /**
+     * 查询审批近路
+     *
+     * @param instanceId 流程实例id
+     * @return 审批记录
+     */
+    @Override
+    public List<HistoryRecordVo> getHistoryRecord(String instanceId) {
+        if (StringUtils.isEmpty(instanceId)) throw new AException("instanceId不能为空!");
+        List<HistoryRecordVo> resultList = new ArrayList<>();
+        // 已审批审批节点
+        List<HistoricActivityInstance> historicList = historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(instanceId)
+                .finished()
+                .orderByHistoricActivityInstanceEndTime().asc()
+                .list();
+        for (HistoricActivityInstance item : historicList) {
+            // 过滤掉没有名称的节点
+            if(StringUtils.isEmpty(item.getActivityName())) continue;
+            HistoryRecordVo vo = new HistoryRecordVo();
+            vo.setNodeName(item.getActivityName());
+            vo.setStartTime(item.getStartTime());
+            vo.setEndTime(item.getEndTime());
+            vo.setUserId(item.getAssignee());
+            // 审批意见
+            taskService.getTaskComments(item.getTaskId())
+                    .stream()
+                    .findAny()
+                    .ifPresent(t -> vo.setComment(t.getFullMessage()));
+            // 审批人
+            SysUserEntity user = userService.getById(item.getAssignee());
+            if (user != null) {
+                vo.setUserName(user.getUsername());
+            }
+            vo.setStatus(1);
+            resultList.add(vo);
+        }
+
+        // 获取未审批节点
+        List<HistoricTaskInstance> unfinishedList = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceId(instanceId)
+                .unfinished()
+                .list();
+        for (HistoricTaskInstance item : unfinishedList) {
+            HistoryRecordVo vo = new HistoryRecordVo();
+            vo.setNodeName(item.getName());
+            vo.setStartTime(item.getStartTime());
+            // 审批人
+            SysUserEntity user = userService.getById(item.getAssignee());
+            if (user != null) {
+                vo.setUserName(user.getUsername());
+            }
+            vo.setStatus(2);
+            resultList.add(vo);
+        }
+        return resultList;
+    }
+
 
     /**
      * 删除流程实例

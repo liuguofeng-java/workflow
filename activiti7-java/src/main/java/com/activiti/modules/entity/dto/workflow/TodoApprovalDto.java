@@ -1,4 +1,4 @@
-package com.activiti.modules.entity.dto;
+package com.activiti.modules.entity.dto.workflow;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2023/11/05 09:00
  **/
 @Data
-public class ProcessTodoApprovalDto {
+public class TodoApprovalDto {
     /**
      * 用户id
      */

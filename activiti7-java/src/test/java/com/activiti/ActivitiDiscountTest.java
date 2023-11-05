@@ -6,13 +6,16 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -161,14 +164,12 @@ public class ActivitiDiscountTest {
     @Test
     public void testSelectHistoryTask() {
         //流程实例ID
-        String processInstanceId = "f8c05d75-6c94-11ee-87d0-30c9aba6c580";
-        //任务审核人
-        String taskAssignee = "王五";
+        String processInstanceId = "04a48245-7b0f-11ee-afbf-30c9aba6c580";
         //获取历史审核信息
         List<HistoricActivityInstance> list = historyService
                 .createHistoricActivityInstanceQuery()
                 .activityType("userTask")//只获取用户任务
-//                .processInstanceId(processInstanceId)
+                .processInstanceId(processInstanceId)
 //                .taskAssignee(taskAssignee)
                 .finished()
                 .list();
@@ -185,5 +186,26 @@ public class ActivitiDiscountTest {
             }
         }
     }
+
+    @Test
+    public void testHistoric() {
+        String processInstanceId = "1f4fdde6-7bbc-11ee-917f-30c9aba6c580";
+
+
+        // 已审批审批节点
+        List<HistoricActivityInstance> historicList = historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .finished()
+                .list();
+
+        // 获取未审批节点
+        List<HistoricTaskInstance> unfinishedList = historyService.createHistoricTaskInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .unfinished()
+                .list();
+
+    }
+
 
 }
