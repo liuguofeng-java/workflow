@@ -3,6 +3,7 @@ package com.activiti.modules.service.impl;
 import com.activiti.modules.entity.dto.workflow.DefinitionListDto;
 import com.activiti.modules.entity.vo.workflow.DefinitionListVo;
 import com.activiti.modules.service.ProcessDefinitionService;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
@@ -64,12 +65,25 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
      * @return 流程xml字符串
      */
     @Override
-    public String getDefinitionXml(String deploymentId) throws IOException {
-        InputStream inputStream = repositoryService.getResourceAsStream(deploymentId, "index.bpmn");
-        byte[] bytes = new byte[inputStream.available()];
-        while (inputStream.read(bytes) != -1);
-        inputStream.close();
-        return new String(bytes);
+    public String getDefinitionXml(String deploymentId) {
+        InputStream is = null;
+        try {
+            is = repositoryService.getResourceAsStream(deploymentId, "index.bpmn");
+            byte[] bytes = new byte[is.available()];
+            while (is.read(bytes) != -1) ;
+            return new String(bytes);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new AException("获取流程图失败");
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**

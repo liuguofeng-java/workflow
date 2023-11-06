@@ -16,7 +16,7 @@ export const defaultSettings: EditorSettings = {
   miniMap: false,
   contextmenu: false,
   customContextmenu: false,
-  otherModule: false,
+  otherModule: true,
   templateChooser: false,
   useLint: false,
   customTheme: {}

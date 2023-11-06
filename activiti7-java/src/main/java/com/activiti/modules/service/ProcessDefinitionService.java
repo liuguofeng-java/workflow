@@ -26,7 +26,7 @@ public interface ProcessDefinitionService {
      * @param deploymentId 部署id
      * @return 流程xml字符串
      */
-    String getDefinitionXml(String deploymentId) throws IOException;
+    String getDefinitionXml(String deploymentId);
 
     /**
      * 部署流程xml

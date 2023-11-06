@@ -2,8 +2,10 @@ package com.activiti.modules.service.impl;
 
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
+import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.constant.Constant;
@@ -21,12 +23,12 @@ import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -49,6 +51,9 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ProcessDefinitionService processDefinitionService;
 
     @Autowired
     private SysUserService userService;
@@ -155,7 +160,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 .list();
         for (HistoricActivityInstance item : historicList) {
             // 过滤掉没有名称的节点
-            if(StringUtils.isEmpty(item.getActivityName())) continue;
+            if (StringUtils.isEmpty(item.getActivityName())) continue;
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
             vo.setStartTime(item.getStartTime());
@@ -175,15 +180,14 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             resultList.add(vo);
         }
 
-        // 获取未审批节点
-        List<HistoricTaskInstance> unfinishedList = historyService.createHistoricTaskInstanceQuery()
+        // 获取未审批节点(活动的待审批(下一个待审批节点))
+        List<HistoricActivityInstance> unfinishedList = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .unfinished()
                 .list();
-        for (HistoricTaskInstance item : unfinishedList) {
+        for (HistoricActivityInstance item : unfinishedList) {
             HistoryRecordVo vo = new HistoryRecordVo();
-            vo.setNodeName(item.getName());
-            vo.setStartTime(item.getStartTime());
+            vo.setNodeName(item.getActivityName());
             // 审批人
             SysUserEntity user = userService.getById(item.getAssignee());
             if (user != null) {
@@ -193,6 +197,57 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             resultList.add(vo);
         }
         return resultList;
+    }
+
+    /**
+     * 查询流程图信息(高亮信息)
+     *
+     * @param instanceId 流程实例id
+     * @return 流程图信息
+     */
+    @Override
+    public Map<String, Object> getHighlightNodeInfo(String instanceId) {
+        Map<String, Object> result = new HashMap<>();
+        // 流程实例记录
+        HistoricProcessInstance historicInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(instanceId).singleResult();
+        if (historicInstance == null) {
+            throw new AException("未知流程");
+        }
+        // 获取bpmn流程图
+        String xml = processDefinitionService.getDefinitionXml(historicInstance.getDeploymentId());
+        result.put("xml", xml);
+
+        // 高亮节点信息
+        List<HighlightNodeInfoVo> nodeInfo = new ArrayList<>();
+        // 已审批审批节点
+        List<HistoricActivityInstance> historicList = historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(instanceId)
+                .finished()
+                .list();
+        historicList.forEach(item -> {
+            nodeInfo.add(new HighlightNodeInfoVo() {{
+                setActivityId(item.getActivityId());
+                setActivityType(item.getActivityType());
+                setStatus(1);
+            }});
+        });
+
+        // 获取未审批节点(活动的待审批(下一个待审批节点))
+        List<HistoricActivityInstance> unfinishedList = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(instanceId)
+                .unfinished()
+                .list();
+        unfinishedList.forEach(item -> {
+            nodeInfo.add(new HighlightNodeInfoVo() {{
+                setActivityId(item.getActivityId());
+                setActivityType(item.getActivityType());
+                setStatus(2);
+            }});
+        });
+        result.put("nodeInfo", nodeInfo);
+        return result;
     }
 
 

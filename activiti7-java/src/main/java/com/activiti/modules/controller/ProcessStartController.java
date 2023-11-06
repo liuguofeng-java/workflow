@@ -10,7 +10,9 @@ import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流程启动
@@ -59,6 +61,18 @@ public class ProcessStartController {
     public R<List<HistoryRecordVo>> getHistoryRecord(String instanceId) {
         List<HistoryRecordVo> list = processStartService.getHistoryRecord(instanceId);
         return R.ok(list);
+    }
+
+    /**
+     * 查询流程图信息(高亮信息)
+     *
+     * @param instanceId 流程实例id
+     * @return 流程图信息
+     */
+    @GetMapping("getHighlightNodeInfo")
+    public R<Map<String, Object>> getHighlightNodeInfo(String instanceId) {
+        Map<String, Object> result = processStartService.getHighlightNodeInfo(instanceId);
+        return R.ok(result);
     }
 
     /**

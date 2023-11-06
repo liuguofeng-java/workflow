@@ -95,21 +95,6 @@ class RewriteContextPadProvider extends ContextPadProvider {
       modeling.removeElements([element]);
     }
 
-    function getReplaceMenuPosition(element) {
-      const Y_OFFSET = 5;
-
-      const pad = contextPad.getPad(element).html;
-
-      const padRect = pad.getBoundingClientRect();
-
-      const pos = {
-        x: padRect.left,
-        y: padRect.bottom + Y_OFFSET
-      };
-
-      return pos;
-    }
-
     /**
      * Create an append action.
      *

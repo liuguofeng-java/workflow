@@ -73,6 +73,7 @@ function getNewShapePosition(source, element, minDistance) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 CustomAutoPlace.$inject = ["config.autoPlace", "eventBus"];
 

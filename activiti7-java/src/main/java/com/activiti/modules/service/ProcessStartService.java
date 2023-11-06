@@ -5,7 +5,9 @@ import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.utils.page.TableDataInfo;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流程启动
@@ -38,6 +40,14 @@ public interface ProcessStartService {
      * @return 审批记录
      */
     List<HistoryRecordVo> getHistoryRecord(String instanceId);
+
+    /**
+     * 查询流程图信息(高亮信息)
+     *
+     * @param instanceId 流程实例id
+     * @return 流程图信息
+     */
+    Map<String, Object> getHighlightNodeInfo(String instanceId);
 
     /**
      * 删除流程实例

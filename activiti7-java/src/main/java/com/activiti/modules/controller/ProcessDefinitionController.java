@@ -37,7 +37,7 @@ public class ProcessDefinitionController {
      * @param deploymentId 部署id
      */
     @GetMapping("getDefinitionXml")
-    public R<String> getDefinitionXml(String deploymentId) throws IOException {
+    public R<String> getDefinitionXml(String deploymentId) {
         String xml = processDefinitionService.getDefinitionXml(deploymentId);
         return R.ok(xml);
     }

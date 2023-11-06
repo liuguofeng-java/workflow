@@ -31,35 +31,17 @@ class RewritePaletteProvider extends PaletteProvider {
       handTool = this._handTool,
       globalConnect = this._globalConnect;
 
-    function createSqlTask(event) {
-      const sqlTask = elementFactory.createShape({ type: "miyue:SqlTask" });
-
-      create.start(event, sqlTask);
-    }
-
-    function createSubprocess(event) {
-      const subProcess = elementFactory.createShape({
-        type: "bpmn:SubProcess",
-        x: 0,
-        y: 0,
-        isExpanded: true
-      });
-
-      const startEvent = elementFactory.createShape({
-        type: "bpmn:StartEvent",
-        x: 40,
-        y: 82,
-        parent: subProcess
-      });
-
-      create.start(event, [subProcess, startEvent], {
-        hints: {
-          autoSelect: [startEvent]
-        }
-      });
-    }
-
     assign(actions, {
+      "hand-tool": {
+        group: "tools",
+        className: "bpmn-icon-hand-tool",
+        title: "激活手动工具",
+        action: {
+          click: function (event) {
+            handTool.activateHand(event);
+          }
+        }
+      },
       "lasso-tool": {
         group: "tools",
         className: "bpmn-icon-lasso-tool",
