@@ -45,3 +45,26 @@ html,
     }
   }
 }
+
+// 流程图高亮样式
+// 已完成节点高亮颜色
+.executed > .djs-visual * {
+  stroke: #058105 !important;
+  fill: #9fbda0 !important;
+}
+.executed.djs-element.djs-connection > .djs-visual * {
+  stroke: #058105 !important;
+  fill: none !important;
+}
+
+// 流程图高亮样式
+// 活动待审核节点高亮颜色
+.unfinished > .djs-visual * {
+  stroke: #ffa500 !important;
+  fill: #ffff3d !important;
+}
+
+.unfinished.djs-element.djs-connection > .djs-visual * {
+  stroke: #ffa500 !important;
+  fill: none !important;
+}

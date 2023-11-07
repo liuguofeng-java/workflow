@@ -15,11 +15,6 @@ public class HighlightNodeInfoVo {
     private String activityId;
 
     /**
-     * 节点名称
-     */
-    private String activityType;
-
-    /**
      * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点)
      */
     private Integer status;

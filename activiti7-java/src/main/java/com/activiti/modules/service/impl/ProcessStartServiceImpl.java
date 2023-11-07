@@ -13,6 +13,9 @@ import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -152,13 +155,13 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         if (StringUtils.isEmpty(instanceId)) throw new AException("instanceId不能为空!");
         List<HistoryRecordVo> resultList = new ArrayList<>();
         // 已审批审批节点
-        List<HistoricActivityInstance> historicList = historyService
+        List<HistoricActivityInstance> executedList = historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
                 .orderByHistoricActivityInstanceEndTime().asc()
                 .list();
-        for (HistoricActivityInstance item : historicList) {
+        for (HistoricActivityInstance item : executedList) {
             // 过滤掉没有名称的节点
             if (StringUtils.isEmpty(item.getActivityName())) continue;
             HistoryRecordVo vo = new HistoryRecordVo();
@@ -221,15 +224,14 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 高亮节点信息
         List<HighlightNodeInfoVo> nodeInfo = new ArrayList<>();
         // 已审批审批节点
-        List<HistoricActivityInstance> historicList = historyService
+        List<HistoricActivityInstance> executedList = historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
                 .list();
-        historicList.forEach(item -> {
+        executedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setActivityType(item.getActivityType());
                 setStatus(1);
             }});
         });
@@ -242,10 +244,15 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         unfinishedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setActivityType(item.getActivityType());
                 setStatus(2);
             }});
         });
+
+        // 获取流程图图像字符流
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(historicInstance.getProcessDefinitionId());
+        // 添加已经流转和活动待审批的线
+        nodeInfo.addAll(getFlowsStatus(bpmnModel, executedList, unfinishedList));
+
         result.put("nodeInfo", nodeInfo);
         return result;
     }
@@ -271,4 +278,68 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 删除历史流程实例
         historyService.deleteHistoricProcessInstance(instanceId);
     }
+
+    /**
+     * 获取已经流转和活动待审批的线
+     *
+     * @param bpmnModel      bpmn模型
+     * @param executedList   已审批审批节点
+     * @param unfinishedList 活动待审批节点
+     */
+    private List<HighlightNodeInfoVo> getFlowsStatus(BpmnModel bpmnModel,
+                                                     List<HistoricActivityInstance> executedList,
+                                                     List<HistoricActivityInstance> unfinishedList) {
+        List<HighlightNodeInfoVo> resultList = new ArrayList<>();
+        // 获取已经流转的线-------------
+        // 先找到流入到 ‘已审批审批节点’ 的线
+        for (HistoricActivityInstance item : executedList) {
+            List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
+            sequenceFlows.forEach(flow -> {
+                // 排除sourceRef,如果 sourceRef 不包含 ‘活动待审批节点’ 中则排除
+                String sourceRef = flow.getSourceRef();
+                long count = executedList.stream().filter(t -> t.getActivityId().equals(sourceRef)).count();
+                if (count != 0) {
+                    resultList.add(new HighlightNodeInfoVo() {{
+                        setActivityId(flow.getId());
+                        setStatus(1);
+                    }});
+                }
+            });
+        }
+        // 获取已经流转的线-------------
+
+        // 活动待审批节点的线-------------
+        for (HistoricActivityInstance item : unfinishedList) {
+            List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
+            sequenceFlows.forEach(flow -> {
+                // 排除sourceRef,如果 sourceRef 不包含 ‘活动待审批节点’ 中则排除
+                String sourceRef = flow.getSourceRef();
+                long count = executedList.stream().filter(t -> t.getActivityId().equals(sourceRef)).count();
+                if (count != 0) {
+                    resultList.add(new HighlightNodeInfoVo() {{
+                        setActivityId(flow.getId());
+                        setStatus(2);
+                    }});
+                }
+            });
+        }
+        // 活动待审批节点的线-------------
+        return resultList;
+    }
+
+    /**
+     * 获取节点输入的线
+     *
+     * @param bpmnModel  bpmn模型
+     * @param activityId 节点id
+     * @return 线list
+     */
+    private List<SequenceFlow> getSequenceFlowsByActivityId(BpmnModel bpmnModel, String activityId) {
+        // 获取到当前节点
+        FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess()
+                .getFlowElement(activityId, true);
+        // 获取到流入的线
+        return flowNode.getIncomingFlows();
+    }
+
 }

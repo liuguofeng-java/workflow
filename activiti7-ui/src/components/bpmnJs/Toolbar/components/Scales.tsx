@@ -1,5 +1,5 @@
 import { defineComponent, ref } from "vue";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type Canvas from "diagram-js/lib/core/Canvas";
 import { CanvasEvent } from "diagram-js/lib/core/EventBus";

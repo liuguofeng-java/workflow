@@ -20,7 +20,7 @@
         </el-timeline>
       </el-tab-pane>
       <el-tab-pane label="流程节点" name="2">
-        <DesignerDetails :xml="highlightNode.xml" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
+        <DesignerDetails :xml="highlightNode.xml" id="highlightNode" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
       </el-tab-pane>
     </el-tabs>
   </el-drawer>
@@ -72,6 +72,17 @@ const highlightNodeInfo = () => {
     if (res.code === 200) {
       highlightNode.value = res.data;
       loading.value = false;
+
+      // 高亮流程图 待优化
+      setTimeout(() => {
+        const nodeInfo = highlightNode.value.nodeInfo;
+        var svg = document.getElementById("highlightNode");
+
+        nodeInfo.forEach((item) => {
+          var node = svg?.querySelector(`[data-element-id='${item.activityId}']`);
+          node?.classList.add(item.status == 1 ? "executed" : "unfinished");
+        });
+      }, 10);
     }
   });
 };
