@@ -44,7 +44,10 @@ const loading = ref(false);
 // tab 选择的值
 const tabsValue = ref("1");
 
-// 初始化
+/**
+ * 初始化
+ * @param id 流程实例id
+ */
 const init = (id: string) => {
   drawer.value = true;
   instanceId.value = id;
@@ -52,7 +55,9 @@ const init = (id: string) => {
   historyRecord();
 };
 
-// 审批记录
+/**
+ * 审批记录
+ */
 const historyRecord = () => {
   historyRecordList.value = [];
   loading.value = true;
@@ -64,7 +69,9 @@ const historyRecord = () => {
   });
 };
 
-// 查询流程图信息(高亮信息)
+/**
+ * 查询流程图信息(高亮信息)
+ */
 const highlightNodeInfo = () => {
   highlightNode.value = {};
   loading.value = true;
@@ -87,7 +94,10 @@ const highlightNodeInfo = () => {
   });
 };
 
-// 切换tab
+/**
+ * 切换tab
+ * @param name tab的item name的名称
+ */
 const tabChange = (name: string) => {
   switch (name) {
     case "1":

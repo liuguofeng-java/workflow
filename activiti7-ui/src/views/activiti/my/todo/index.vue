@@ -55,7 +55,9 @@ const list = ref<any[]>([]);
 // 发起流程弹出框
 const approvalRef = ref();
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -74,13 +76,18 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 审批
+/**
+ * 审批流程实例
+ * @param instanceId 流程实例id
+ */
 function handleApproval(instanceId: string) {
   approvalRef.value.init(instanceId);
 }

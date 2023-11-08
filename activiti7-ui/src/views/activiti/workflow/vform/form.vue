@@ -35,12 +35,17 @@ let form = toRef(
   })
 );
 
-// 表单验证
+/**
+ * 表单验证
+ */
 const rules = ref({
   formName: [{ required: true, message: "表单名称不能为空！", trigger: "blur" }]
 });
 
-// 初始化表单
+/**
+ * 初始化表单
+ * @param formId 表单id
+ */
 const open = (formId: string) => {
   drawer.value = true;
   nextTick(() => {
@@ -67,7 +72,9 @@ const open = (formId: string) => {
   }
 };
 
-// 提交
+/**
+ * 提交
+ */
 const submit = () => {
   formRef.value.validate((valid: boolean) => {
     if (!valid) return;

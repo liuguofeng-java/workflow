@@ -14,7 +14,7 @@
         <Commands class="room"></Commands>
       </div>
       <div class="main-content">
-        <Designer></Designer>
+        <Designer :xml="xml"></Designer>
         <Panel></Panel>
       </div>
       <ContextMenu></ContextMenu>
@@ -40,12 +40,21 @@ let drawer = ref<boolean>(false);
 
 const modelerStore = modeler();
 
-// 初始化表单
-const open = () => {
+// 初始化的xml
+const xml = ref("");
+
+/**
+ * 初始化
+ * @param lastXml 上一个部署流程图xml
+ */
+const open = (lastXml: string) => {
+  xml.value = lastXml;
   drawer.value = true;
 };
 
-// 部署流程
+/**
+ * 部署流程
+ */
 const deployment = async () => {
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

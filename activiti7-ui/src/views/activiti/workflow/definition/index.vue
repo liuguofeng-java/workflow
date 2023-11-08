@@ -25,6 +25,7 @@
       <el-table-column label="版本" align="center" prop="version" />
       <el-table-column>
         <template #default="scope">
+          <el-button link type="primary" icon="Crop" @click="handleDesign(scope.row.deploymentId)">设计</el-button>
           <el-button link type="primary" icon="Pointer" @click="handleDetails(scope.row.deploymentId)">查看</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deploymentId)">删除</el-button>
         </template>
@@ -65,7 +66,9 @@ const deployBpmn = ref();
 //流程详情
 const bpmnDetails = ref();
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -84,26 +87,49 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 详情
-function handleDetails(id) {
-  bpmnDetails.value.open(id);
+/**
+ * 详情
+ * @param deploymentId 流程部署id
+ */
+function handleDetails(deploymentId: string) {
+  bpmnDetails.value.open(deploymentId);
 }
 
-// 新增
+/**
+ * 新增
+ */
 function handleAdd() {
   deployBpmn.value.open();
 }
 
-// 删除按钮操作
-function handleDelete(id: any) {
+/**
+ * 设计
+ * @param deploymentId 流程部署id
+ */
+function handleDesign(deploymentId: string) {
+  // 获取到上一个版本的流程图xml
+  baseService.get("/processDefinition/getDefinitionXml", { deploymentId }).then((res) => {
+    if (res.code === 200) {
+      deployBpmn.value.open(res.data);
+    }
+  });
+}
+
+/**
+ * 删除按钮操作
+ * @param deploymentId 流程部署id
+ */
+function handleDelete(deploymentId: any) {
   ElMessageBox.confirm("确认要删除当前项吗? 流程实例启动的也将被删除,谨慎删除", "提示").then(() => {
-    baseService.delete(`/processDefinition/delete`, id).then((res) => {
+    baseService.delete(`/processDefinition/delete`, deploymentId).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         getList();

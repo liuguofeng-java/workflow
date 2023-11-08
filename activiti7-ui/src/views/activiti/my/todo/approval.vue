@@ -32,13 +32,18 @@ let form = toRef(
 // 表单验证
 const rules = ref({});
 
-// 初始化
+/**
+ * 初始化
+ * @param instanceId 流程实例id
+ */
 const init = (instanceId: string) => {
   form.value.processInstanceId = instanceId;
   open.value = true;
 };
 
-// 提交
+/**
+ * 提交
+ */
 function submit() {
   ElMessageBox.confirm("是否要提交?", "提示").then(() => {
     baseService.post(`/processTodo/approval`, form.value).then((res) => {

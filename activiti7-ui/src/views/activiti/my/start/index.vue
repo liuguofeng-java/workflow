@@ -75,7 +75,9 @@ const startProcessRef = ref();
 // 审批记录弹出框
 const historyRecordRef = ref();
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -94,23 +96,33 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 发起流程
+/**
+ * 发起流程
+ */
 function handleAdd() {
   startProcessRef.value.init();
 }
 
-// 审批记录
+/**
+ * 审批记录
+ * @param instanceId 流程实例id
+ */
 function handleHistoryRecord(instanceId: string) {
   historyRecordRef.value.init(instanceId);
 }
 
-// 删除按钮操作
+/**
+ * 删除按钮操作
+ * @param instanceId 流程实例id
+ */
 function handleDelete(instanceId: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
     baseService.delete(`/processStart/delete`, instanceId).then((res) => {

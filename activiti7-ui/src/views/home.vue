@@ -103,25 +103,34 @@ const user = ref({
 
 let dateVal = ref<string>();
 
-// 初始化
+/**
+ * 初始化
+ */
 const onInit = () => {
   const userInfo = getCache(CacheToken);
   user.value = userInfo;
   router.push(defaultActive.value);
 };
 
-// 退出登录
+/**
+ * 退出登录
+ */
 const logout = () => {
   removeCache(CacheToken);
   router.replace("/login");
 };
 
-// 菜单选择
+/**
+ * 菜单选择
+ * @param key 路由
+ */
 const handleSelect = (key: string) => {
   router.push(key);
 };
 
-// 获取时间
+/**
+ * 获取时间
+ */
 const getDate = () => {
   var date = new Date(); // 获取时间
   var year = date.getFullYear(); // 获取年

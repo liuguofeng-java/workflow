@@ -13,7 +13,10 @@ import baseService from "@/service/baseService";
 let drawer = ref<boolean>(false);
 let xml = ref<string>();
 
-// 初始化表单
+/**
+ * 初始化表单
+ * @param deploymentId 流程部署id
+ */
 const open = (deploymentId) => {
   baseService
     .get("/processDefinition/getDefinitionXml", {

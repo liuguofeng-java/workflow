@@ -56,7 +56,9 @@ const list = ref<any[]>([]);
 // 表单实例
 const formRef = ref<any>(null);
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -75,23 +77,33 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 新增按钮操作
+/**
+ * 新增按钮操作
+ */
 function handleAdd() {
   formRef.value.open();
 }
 
-// 修改按钮操作
+/**
+ * 修改按钮操作
+ * @param id
+ */
 function handleUpdate(id: string) {
   formRef.value.open(id);
 }
 
-// 删除按钮操作
+/**
+ * 删除按钮操作
+ * @param id 表单id
+ */
 function handleDelete(id: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
     baseService.delete(`/sysForm/delete`, id).then((res) => {

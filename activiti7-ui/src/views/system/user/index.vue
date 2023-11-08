@@ -143,7 +143,9 @@ const rules = ref({
 // 部门列表
 const deptList = ref<any[]>();
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   // 处理时间
@@ -171,13 +173,17 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 表单重置
+/**
+ * 表单重置
+ */
 function reset() {
   form.value = {
     userId: "",
@@ -194,14 +200,19 @@ function reset() {
   });
 }
 
-// 新增按钮操作
+/**
+ * 新增按钮操作
+ */
 function handleAdd() {
   reset();
   open.value = true;
   title.value = "添加";
 }
 
-// 修改按钮操作
+/**
+ * 修改按钮操作
+ * @param id 主键
+ */
 function handleUpdate(id: string) {
   open.value = true;
   title.value = "修改";
@@ -213,7 +224,9 @@ function handleUpdate(id: string) {
   });
 }
 
-// 提交按钮
+/**
+ * 提交按钮
+ */
 function submitForm() {
   formRef.value.validate((valid: boolean) => {
     if (!valid) return;
@@ -229,7 +242,10 @@ function submitForm() {
   });
 }
 
-// 删除按钮操作
+/**
+ * 删除按钮操作
+ * @param id 主键
+ */
 function handleDelete(id: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
     baseService.delete(`/sysUser/delete`, id).then((res) => {
@@ -243,7 +259,9 @@ function handleDelete(id: any) {
   });
 }
 
-// 查询部门列表
+/**
+ * 查询部门列表
+ */
 const getDeptList = () => {
   baseService.get("/sysUser/deptList").then((res) => {
     if (res.code === 200) {

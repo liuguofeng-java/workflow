@@ -56,7 +56,9 @@ const init = () => {
   open.value = true;
 };
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -75,16 +77,21 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 选择
-function handleSelect(id: any) {
+/**
+ * 选择流程
+ * @param definitionId 流程定义id
+ */
+function handleSelect(definitionId: any) {
   ElMessageBox.confirm("是否要发起流程?", "提示").then(() => {
-    baseService.get(`/processStart/start?definitionId=${id}`).then((res) => {
+    baseService.get(`/processStart/start?definitionId=${definitionId}`).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         open.value = false;

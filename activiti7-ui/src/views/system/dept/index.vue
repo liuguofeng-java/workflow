@@ -99,7 +99,9 @@ const rules = ref({
   email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }]
 });
 
-// 查询列表
+/**
+ * 查询列表
+ */
 const getList = () => {
   loading.value = true;
   baseService
@@ -118,13 +120,17 @@ const getList = () => {
     });
 };
 
-// 搜索按钮操作
+/**
+ * 搜索按钮操作
+ */
 function handleQuery() {
   queryForm.pageNo = 1;
   getList();
 }
 
-// 表单重置
+/**
+ * 表单重置
+ */
 function reset() {
   form.value = {
     deptId: "",
@@ -139,14 +145,19 @@ function reset() {
   });
 }
 
-// 新增按钮操作
+/**
+ * 新增按钮操作
+ */
 function handleAdd() {
   reset();
   open.value = true;
   title.value = "添加";
 }
 
-// 修改按钮操作
+/**
+ * 修改按钮操作
+ * @param id 主键
+ */
 function handleUpdate(id: string) {
   open.value = true;
   title.value = "修改";
@@ -158,7 +169,9 @@ function handleUpdate(id: string) {
   });
 }
 
-// 提交按钮
+/**
+ * 提交按钮
+ */
 function submitForm() {
   formRef.value.validate((valid: boolean) => {
     if (!valid) return;
@@ -174,7 +187,10 @@ function submitForm() {
   });
 }
 
-// 删除按钮操作
+/**
+ * 删除按钮操作
+ * @param id 主键
+ */
 function handleDelete(id: any) {
   ElMessageBox.confirm("确认要删除当前项吗?", "提示").then(() => {
     baseService.delete(`/sysDept/delete`, id).then((res) => {

@@ -48,6 +48,9 @@ const rules = ref({
   password: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
 });
 
+/**
+ * 登录
+ */
 const onLogin = () => {
   formRef.value.validate((valid: boolean) => {
     if (valid) {
