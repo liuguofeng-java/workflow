@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getCache, removeCache } from "@/utils/cache";
 import { CacheToken } from "@/constants/cacheKey";
@@ -109,7 +109,7 @@ let dateVal = ref<string>();
 const onInit = () => {
   const userInfo = getCache(CacheToken);
   user.value = userInfo;
-  router.push(defaultActive.value);
+  defaultActive.value = router.currentRoute.value.path;
 };
 
 /**
@@ -146,8 +146,10 @@ const getNum = (num: number) => {
   return num < 10 ? "0" + num : num;
 };
 
-getDate();
-onInit();
+onMounted(() => {
+  getDate();
+  onInit();
+});
 </script>
 
 <style scoped>

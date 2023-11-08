@@ -43,8 +43,8 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         PageDomain params = PageUtils.getPageParams();
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery()
                 .orderByProcessDefinitionId()
-                .orderByProcessDefinitionVersion()
-                .desc();
+                .orderByProcessDefinitionKey().desc()
+                .orderByProcessDefinitionVersion().desc();
         query.processDefinitionNameLike("%" + dto.getDefinitionName() + "%");
         query.processDefinitionKeyLike("%" + dto.getDefinitionKey() + "%");
         List<ProcessDefinition> list =
@@ -93,7 +93,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
      */
     @Override
     public void deploymentXmlByStr(String xmlStr) {
-        repositoryService.createDeployment()
+        repositoryService.createDeployment().disableBpmnValidation()
                 .addString("index.bpmn", xmlStr)
                 .deploy();
     }

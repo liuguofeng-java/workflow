@@ -24,12 +24,12 @@ const Designer = defineComponent({
 
     watch(
       () => editorSettings.value,
-      async (value, oldValue) => {
+      async () => {
         try {
           const modelerModules = modulesAndModdle(editorSettings);
           await nextTick();
           await initModeler(designer, modelerModules, emit);
-          if (!oldValue || value.processEngine !== oldValue!.processEngine) {
+          if (!xml) {
             await createNewDiagram();
           } else {
             await createNewDiagram(xml.value, editorSettings.value);

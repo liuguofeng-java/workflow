@@ -7,14 +7,14 @@
       <el-form-item label="流程名称">
         <el-input v-model="elementName" maxlength="20" @change="updateElementName" />
       </el-form-item>
-      <template v-if="isProcess">
+      <!-- <template v-if="isProcess">
         <el-form-item label="版本号" key="version">
           <el-input v-model="elementVersion" maxlength="20" @change="updateElementVersion" />
         </el-form-item>
         <el-form-item label="可执行" key="executable">
           <el-switch v-model="elementExecutable" @change="updateElementExecutable" />
         </el-form-item>
-      </template>
+      </template> -->
     </el-form>
   </el-collapse-item>
 </template>
