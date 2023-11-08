@@ -3,6 +3,8 @@ import Login from "@/views/login.vue";
 import Home from "@/views/home.vue";
 import { getToken } from "@/utils/cache";
 import { createWebHistory, createRouter, RouteRecordRaw } from "vue-router";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 /**
  * 框架基础路由
@@ -76,6 +78,8 @@ const router = createRouter({
 
 // 设置路由守卫
 router.beforeEach((to, from, next) => {
+  // 执行进度条开始加载
+  NProgress.start();
   const token = getToken();
   if (to.path === "/login") {
     if (token) next({ path: "/" });
@@ -83,6 +87,11 @@ router.beforeEach((to, from, next) => {
     if (!token) next({ path: "/login" });
   }
   next();
+});
+
+// 路由跳转后钩子函数中 - 执行进度条加载结束
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;

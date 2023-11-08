@@ -52,7 +52,6 @@ const triggerAction = (entry, event) => {
 const initEventCallback = (event: MouseEvent, element?: Element) => {
   x.value = event.clientX;
   y.value = event.clientY;
-  mouseEvent = event;
   currentElement = element || null;
   isAppend.value = isAppendAction(element);
   currentReplaceOptions.value = BpmnReplaceOptions(element);
