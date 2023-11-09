@@ -10,13 +10,13 @@
       </el-form-item>
     </el-form>
 
-    <v-form-designer ref="vfdRef"></v-form-designer>
+    <VFormDesigner ref="vfdRef" />
   </el-drawer>
 </template>
 
 <script setup lang="ts">
 import { nextTick, ref, toRef, reactive } from "vue";
-import VFormDesigner from "@/components/form-designer/index.vue";
+import VFormDesigner from "@/components/FormDesigner/index.vue";
 import baseService from "@/service/baseService";
 import { ElMessage } from "element-plus";
 

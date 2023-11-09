@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import baseService from "@/service/baseService";
-import DesignerDetails from "@/components/bpmnJs/Designer/details";
+import DesignerDetails from "@/components/BpmnJs/Designer/details";
 
 // 是否打开弹出框
 const drawer = ref(false);

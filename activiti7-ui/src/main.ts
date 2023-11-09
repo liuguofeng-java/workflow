@@ -26,19 +26,19 @@ app.use(ElementPlus, {
 app.use(ElementPlus);
 
 // vfrom相关依赖引入---------------------------------------------
-import "@/components/form-designer/styles/index.scss";
+import "@/components/FormDesigner/styles/index.scss";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Draggable from "@/../lib/vuedraggable/dist/vuedraggable.umd.js";
 import "virtual:svg-icons-register";
-import { registerIcon } from "@/components/form-designer/utils/el-icons";
+import { registerIcon } from "@/components/FormDesigner/utils/el-icons";
 
-import ContainerWidgets from "@/components/form-designer/form-widget/container-widget/index";
-import ContainerItems from "@/components/form-designer/form-render/container-item/index";
+import ContainerWidgets from "@/components/FormDesigner/form-widget/container-widget/index";
+import ContainerItems from "@/components/FormDesigner/form-render/container-item/index";
 
-import { addDirective } from "@/components/form-designer/utils/directive";
-import { installI18n } from "@/components/form-designer/utils/i18n";
-import { loadExtension } from "@/components/form-designer/extension/extension-loader";
+import { addDirective } from "@/components/FormDesigner/utils/directive";
+import { installI18n } from "@/components/FormDesigner/utils/i18n";
+import { loadExtension } from "@/components/FormDesigner/extension/extension-loader";
 registerIcon(app);
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -51,9 +51,9 @@ loadExtension(app);
 // vfrom相关依赖引入---------------------------------------------
 
 // bpmn.js 相关-------------------------------------------------
-import "@/components/bpmnJs/styles/index.scss";
+import "@/components/BpmnJs/styles/index.scss";
 import "virtual:svg-icons-register";
-import i18n from "@/components/bpmnJs/i18n";
+import i18n from "@/components/BpmnJs/i18n";
 app.use(i18n);
 // bpmn.js 相关-------------------------------------------------
 

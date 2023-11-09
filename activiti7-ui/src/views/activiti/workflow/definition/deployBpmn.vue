@@ -24,14 +24,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import Aligns from "@/components/bpmnJs/Toolbar/components/Aligns";
-import Scales from "@/components/bpmnJs/Toolbar/components/Scales";
-import Commands from "@/components/bpmnJs/Toolbar/components/Commands";
+import Aligns from "@/components/BpmnJs/Toolbar/components/Aligns";
+import Scales from "@/components/BpmnJs/Toolbar/components/Scales";
+import Commands from "@/components/BpmnJs/Toolbar/components/Commands";
 
-import Designer from "@/components/bpmnJs/Designer";
-import Panel from "@/components/bpmnJs/Panel";
-import ContextMenu from "@/components/bpmnJs/ContextMenu/index.vue";
-import modeler from "@/components/bpmnJs/store/modeler";
+import Designer from "@/components/BpmnJs/Designer";
+import Panel from "@/components/BpmnJs/Panel";
+import ContextMenu from "@/components/BpmnJs/ContextMenu/index.vue";
+import modeler from "@/components/BpmnJs/store/modeler";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
 

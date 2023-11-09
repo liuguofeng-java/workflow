@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import DesignerDetails from "@/components/bpmnJs/Designer/details";
+import DesignerDetails from "@/components/BpmnJs/Designer/details";
 import baseService from "@/service/baseService";
 
 // 是否加载抽屉

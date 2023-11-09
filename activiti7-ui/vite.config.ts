@@ -26,7 +26,7 @@ export default (config: UserConfig): UserConfigExport => {
       createSvgIconsPlugin({
         iconDirs: [
           resolve(__dirname, "src/assets/icons/svg"),
-          resolve(process.cwd(), "src/components/form-designer/svg"),
+          resolve(process.cwd(), "src/components/FormDesigner/svg"),
           resolve(process.cwd(), "src/bpmn-icons")
         ],
         symbolId: "icon-[dir]-[name]"
@@ -36,7 +36,7 @@ export default (config: UserConfig): UserConfigExport => {
       preprocessorOptions: {
         scss: {
           /* 自动引入全局scss文件 */
-          additionalData: '@import "./src/components/form-designer/styles/global.scss";'
+          additionalData: '@import "./src/components/FormDesigner/styles/global.scss";'
         }
       }
     },
