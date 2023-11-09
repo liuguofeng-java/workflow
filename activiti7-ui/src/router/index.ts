@@ -13,6 +13,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: Home,
+    redirect: "/sys/user",
     meta: { title: "主页" },
     children: [
       {
