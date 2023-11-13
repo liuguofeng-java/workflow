@@ -1,11 +1,11 @@
 <template>
-  <el-tab-pane label="文档设置" name="Document">
+  <el-collapse-item title="文档设置" name="Document">
     <el-form label-width="100px">
       <el-form-item label="ID">
         <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
       </el-form-item>
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

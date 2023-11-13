@@ -17,6 +17,8 @@ export function setIdValue(element: Element, value: string) {
   const store = modelerStore();
   const modeling = store.getModeling;
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   modeling.updateProperties(element, {
     id: value
   });

@@ -1,5 +1,5 @@
 <template>
-  <el-tab-pane label="常规信息" name="NormalInfo">
+  <el-collapse-item title="常规信息" name="NormalInfo">
     <el-form label-width="100px">
       <el-form-item label="ID">
         <el-input v-model="elementId" maxlength="32" @change="updateElementId" />
@@ -16,7 +16,7 @@
         </el-form-item>
       </template> -->
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

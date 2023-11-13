@@ -1,5 +1,5 @@
 <template>
-  <el-tab-pane label="用户分配" name="User">
+  <el-collapse-item title="用户分配" name="User">
     <el-form label-width="100px">
       <el-form-item label="代理人">
         <el-input v-model="UAForm.assignee" @change="updateUserAssignProp('assignee', $event)" />
@@ -25,7 +25,7 @@
         <el-input v-model="UAForm.priority" @change="updateUserAssignProp('priority', $event)" />
       </el-form-item>
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script setup lang="ts">

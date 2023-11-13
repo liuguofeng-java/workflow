@@ -1,5 +1,5 @@
 <template>
-  <el-tab-pane label="扩展属性" name="Property">
+  <el-collapse-item title="扩展属性" name="Property">
     <el-table :data="extensions" style="width: 100%">
       <el-table-column type="index" label="序号" />
       <el-table-column prop="name" label="Name" />
@@ -11,7 +11,7 @@
       </el-table-column>
     </el-table>
     <el-button type="primary" @click="openPropertyModel">添加</el-button>
-  </el-tab-pane>
+  </el-collapse-item>
 
   <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
     <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">

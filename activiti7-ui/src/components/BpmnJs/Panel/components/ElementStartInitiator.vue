@@ -1,11 +1,11 @@
 <template>
-  <el-tab-pane label="启动器配置" name="Initiator">
+  <el-collapse-item title="启动器配置" name="Initiator">
     <el-form label-width="100px">
       <el-form-item label="异步前">
         <el-input v-model="initiator" @change="setElementInitiator" />
       </el-form-item>
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <el-tab-pane label="条件设置" name="conditionalSettings">
+  <el-collapse-item title="条件设置" name="conditionalSettings">
     <el-form label-width="100px">
       <template v-if="varVisible">
         <el-form-item label="变量名称">
@@ -40,7 +40,7 @@
         </el-form-item>
       </template>
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

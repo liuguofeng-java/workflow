@@ -1,5 +1,5 @@
 <template>
-  <el-tab-pane label="执行作业" name="ExecuteJob">
+  <el-collapse-item title="执行作业" name="ExecuteJob">
     <el-form label-width="100px">
       <el-form-item label="异步前">
         <el-switch v-model="acBefore" @change="updateElementACBefore" />
@@ -11,7 +11,7 @@
         <el-switch v-model="acExclusive" @change="updateElementACExclusive" />
       </el-form-item>
     </el-form>
-  </el-tab-pane>
+  </el-collapse-item>
 </template>
 
 <script lang="ts">

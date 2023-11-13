@@ -21,6 +21,6 @@
                 and a1.create_time between concat(#{startTime},' 00:00:00') and concat(#{endTime},' 23:59:59')
             </if>
         </where>
-        order by create_time desc
+        order by a1.create_time asc
     </select>
 </mapper>
