@@ -97,11 +97,6 @@ const Panel = defineComponent({
 
       setCurrentComponents(activatedElement);
       EventEmitter.emit("element-update", activatedElement);
-
-      Logger.prettyPrimary(
-        "Selected element changed",
-        `ID: ${activatedElement.id} , type: ${activatedElement.type}`
-      );
       activatedId = activatedElement.id;
     }, 100);
 
@@ -112,15 +107,19 @@ const Panel = defineComponent({
       });
       // 监听选择事件，修改当前激活的元素以及表单
       modeler.on("selection.changed", ({ newSelection }) => {
-        setCurrentElement(newSelection[0] || null);
+        if (newSelection[0]) {
+          EventEmitter.emit("element-init", newSelection);
+          setCurrentElement(newSelection[0] || null);
+        }
       });
+      // 节点表单修改时触发
       modeler.on("element.changed", ({ element }) => {
         // 保证 修改 "默认流转路径" 等类似需要修改多个元素的事件发生的时候，更新表单的元素与原选中元素不一致。
         if (element && element.id === currentElementId.value) {
           setCurrentElement(element);
         }
       });
-
+      // 点击节点触发
       modeler.on("element.click", (event) => {
         Logger.prettyInfo("Element Click", event);
       });

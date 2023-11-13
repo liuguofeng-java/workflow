@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onMounted } from "vue";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
 
 export default function (listener: Function) {
   const thisListener = listener;
