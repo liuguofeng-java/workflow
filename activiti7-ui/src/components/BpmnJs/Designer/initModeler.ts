@@ -1,6 +1,6 @@
 import { markRaw, Ref } from "vue";
 import Modeler from "bpmn-js/lib/Modeler";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import EnhancementContextmenu from "@/components/BpmnJs/additional-functions/EnhancementContextmenu";
@@ -16,7 +16,7 @@ export default async function (
   const store = modelerStore();
 
   const options: BaseViewerOptions = {
-    container: designer!.value as HTMLElement,
+    container: designer.value as HTMLElement,
     additionalModules: modelerModules[0] || [],
     moddleExtensions: modelerModules[1] || {},
     ...modelerModules[2]

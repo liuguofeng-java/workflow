@@ -49,7 +49,7 @@ import modeler from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { scriptTypeOptions } from "@/components/BpmnJs/config/selectOptions";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementConditional",

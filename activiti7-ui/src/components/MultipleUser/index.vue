@@ -48,8 +48,15 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, watch, reactive } from "vue";
 import baseService from "@/service/baseService";
+
+const props = defineProps({
+  list: {
+    type: Array,
+    default: () => []
+  }
+});
 
 // 表格实例
 const tableRef = ref();
@@ -59,6 +66,14 @@ const tableSelectionList = ref<any[]>([]);
 
 // 选择的用户信息
 const selectUserList = ref<any[]>([]);
+
+watch(
+  () => props.list,
+  async () => {
+    selectUserList.value = props.list;
+  },
+  { deep: true, immediate: true }
+);
 
 // 查询参数
 const queryForm = reactive({

@@ -18,7 +18,7 @@ import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { getExternalTaskValue, getRetryTimeCycleValue, retryTimeCycleVisible, setExternalTaskValue, setRetryTimeCycleValue, taskPriorityVisible } from "@/components/BpmnJs/bo-utils/jobExecutionUtil";
 import { Element } from "diagram-js/lib/model/Types";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementJobExecution",

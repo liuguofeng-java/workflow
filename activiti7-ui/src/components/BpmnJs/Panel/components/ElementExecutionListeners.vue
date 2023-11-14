@@ -46,7 +46,7 @@ import { ModdleElement } from "bpmn-moddle";
 import { Element } from "diagram-js/lib/model/Types";
 import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, removeExecutionListener, updateExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import { getScriptType } from "@/components/BpmnJs/bo-utils/scriptUtil";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementExecutionListeners",

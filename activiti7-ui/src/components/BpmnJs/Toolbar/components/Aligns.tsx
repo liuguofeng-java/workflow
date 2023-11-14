@@ -2,7 +2,7 @@ import { computed, ComputedRef, defineComponent } from "vue";
 import Modeler from "bpmn-js/lib/Modeler";
 import Selection from "diagram-js/lib/features/selection/Selection";
 import Modeling from "bpmn-js/lib/features/modeling/Modeling.js";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 import { ElMessage } from "element-plus";
 

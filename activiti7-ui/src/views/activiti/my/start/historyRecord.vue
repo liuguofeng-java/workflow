@@ -80,7 +80,8 @@ const highlightNodeInfo = () => {
       highlightNode.value = res.data;
       loading.value = false;
 
-      // 高亮流程图 待优化
+      // 高亮流程图
+      // 因为渲染流程图需要时间,所以加延时
       setTimeout(() => {
         const nodeInfo = highlightNode.value.nodeInfo;
         var svg = document.getElementById("highlightNode");

@@ -14,7 +14,7 @@ import { mapState } from "pinia";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { getDocumentValue, setDocumentValue } from "@/components/BpmnJs/bo-utils/documentationUtil";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementDocumentations",

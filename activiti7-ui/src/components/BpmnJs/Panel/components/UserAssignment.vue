@@ -14,8 +14,7 @@
 
       <el-form-item label="候选人" v-if="UAForm.userType === 'candidateUsers'">
         <!-- 多选用户 -->
-        <MultipleUser ref="multipleUser" @ok="multipleUserOk" />
-        <!-- <el-input v-model="UAForm.candidateUsers" @change="updateUserAssignProp('candidateUsers', $event)" /> -->
+        <MultipleUser :list="multipleUserList" ref="multipleUser" @ok="multipleUserOk" />
       </el-form-item>
 
       <el-form-item label="候选组" v-if="UAForm.userType === 'candidateGroups'">
@@ -38,17 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUtil";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import useElementUpdateListener from "@/components/BpmnJs/hooks/useElementUpdateListener";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
 import MultipleUser from "@/components/MultipleUser/index.vue";
-import baseService from "@/service/baseService";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
-
-import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 // element The element.
 let scopedElement: any = undefined;
@@ -57,8 +52,8 @@ let scopedElement: any = undefined;
 let moddleElement: ModdleElement | undefined = undefined;
 
 // 表单参数
-type UserAssigneeProp = "userType" | "assignee" | "candidateUsers" | "candidateGroups" | "dueDate" | "followUpDate" | "priority";
-const PROP_KEYS: UserAssigneeProp[] = ["userType", "assignee", "candidateUsers", "candidateGroups", "dueDate", "followUpDate", "priority"];
+type UserAssigneeProp = "userType" | "assignee" | "candidateUsers" | "candidateGroups" | "userNames" | "dueDate" | "followUpDate" | "priority";
+const PROP_KEYS: UserAssigneeProp[] = ["userType", "assignee", "candidateUsers", "candidateGroups", "userNames", "dueDate", "followUpDate", "priority"];
 
 const EmptyUAForm = PROP_KEYS.reduce((a, b) => (a[b] = "") || a, {});
 // 表单
@@ -140,36 +135,38 @@ const multipleUserOk = (list: any[]) => {
   const userIds = multipleUserList.value.map((item) => {
     return item.userId;
   });
+  const userNames = multipleUserList.value.map((item) => {
+    return item.username;
+  });
+  console.log(userNames);
+
   updateUserAssignProp("candidateUsers", userIds.join(","));
+  updateUserAssignProp("userNames", userNames.join(","));
 };
 
-/**
- * 初始化
- */
-onMounted(() => {
+// 先销毁事件，防止重复触发
+EventBus.off("element-init");
+// 点击用户节点，初始化用
+EventBus.on("element-init", function () {
   catchUndefElement((element) => {
     scopedElement = element;
     moddleElement = getBusinessObject(element);
     getElementData();
+
+    // 重置变量
+    multipleUserList.value = [];
+    // 还原用户组选择项
+    if (UAForm.value.userType === "candidateUsers" && UAForm.value.candidateUsers !== "") {
+      const candidateUsers = UAForm.value.candidateUsers.split(",");
+      const userNames = UAForm.value.userNames.split(",");
+      for (let i = 0; i < candidateUsers.length; i++) {
+        multipleUserList.value.push({
+          userId: candidateUsers[i],
+          username: userNames[i]
+        });
+      }
+    }
   });
-});
-
-// 初始化用户信息
-const initUser = () => {
-  // switch (UAForm.value.userType) {
-  //   case "candidateUsers":
-  //     baseService.get("/processDefinition/userListByIds", UAForm.value.candidateUsers.split(",")).then((res) => {
-  //       if (res.code === 200) {
-  //         console.log(res.data);
-  //       }
-  //     });
-  //     break;
-  // }
-};
-
-// useElementUpdateListener(initUser);
-EventBus.on("element-init", function (s) {
-  console.log("-----", s);
 });
 </script>
 

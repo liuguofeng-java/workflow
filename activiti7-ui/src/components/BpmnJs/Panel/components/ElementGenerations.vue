@@ -28,7 +28,7 @@ import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUti
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
 import { getProcessExecutable, getProcessVersionTag, setProcessExecutable, setProcessVersionTag } from "@/components/BpmnJs/bo-utils/processUtil";
 import { ElMessage } from "element-plus";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementGenerations",
@@ -47,9 +47,6 @@ export default defineComponent({
   mounted() {
     this.reloadGenerationData();
     EventBus.on("element-update", this.reloadGenerationData);
-    EventBus.on("element-update", () => {
-      console.log("---=---");
-    });
   },
   methods: {
     reloadGenerationData() {

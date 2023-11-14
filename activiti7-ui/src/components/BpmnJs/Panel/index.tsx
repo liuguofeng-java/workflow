@@ -5,7 +5,7 @@ import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import { Translate } from "diagram-js/lib/i18n/translate";
 import debounce from "lodash.debounce";
 
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import Logger from "@/components/BpmnJs/utils/Logger";
 
@@ -99,8 +99,6 @@ const Panel = defineComponent({
 
       setCurrentComponents(activatedElement);
       EventBus.emit("element-update", activatedElement);
-      console.log("element-update");
-
       activatedId = activatedElement.id;
     }, 100);
 
@@ -112,7 +110,9 @@ const Panel = defineComponent({
       // 监听选择事件，修改当前激活的元素以及表单
       modeler.on("selection.changed", ({ newSelection }) => {
         if (newSelection[0]) {
-          EventBus.emit("element-init", newSelection);
+          setTimeout(() => {
+            EventBus.emit("element-init", newSelection);
+          }, 200);
           setCurrentElement(newSelection[0] || null);
         }
       });

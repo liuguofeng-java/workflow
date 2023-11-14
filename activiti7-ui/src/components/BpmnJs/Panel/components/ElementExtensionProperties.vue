@@ -37,7 +37,7 @@ import { mapState } from "pinia";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { addExtensionProperty, getExtensionProperties, removeExtensionProperty } from "@/components/BpmnJs/bo-utils/extensionPropertiesUtil";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementExtensionProperties",

@@ -1,6 +1,6 @@
 // 右键扩展
 import editor from "@/components/BpmnJs/store/editor";
-import EventBus from "@/components/bpmnJs/utils/EventBus";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 import { isAppendAction } from "@/components/bpmnJs/utils//BpmnDesignerUtils";
 
 import type Modeler from "bpmn-js/lib/Modeler";
