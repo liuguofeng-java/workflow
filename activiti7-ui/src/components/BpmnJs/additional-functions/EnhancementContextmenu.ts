@@ -1,6 +1,6 @@
 // 右键扩展
 import editor from "@/components/BpmnJs/store/editor";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 import { isAppendAction } from "@/components/bpmnJs/utils//BpmnDesignerUtils";
 
 import type Modeler from "bpmn-js/lib/Modeler";
@@ -23,7 +23,7 @@ export default function (modeler: Modeler) {
 
     // 自定义右键菜单
     if (config.customContextmenu) {
-      return EventEmitter.emit("show-contextmenu", originalEvent, element);
+      return EventBus.emit("show-contextmenu", originalEvent, element);
     }
 
     // 原生面板扩展

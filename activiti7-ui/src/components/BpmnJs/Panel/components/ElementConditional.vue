@@ -49,7 +49,7 @@ import modeler from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { scriptTypeOptions } from "@/components/BpmnJs/config/selectOptions";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementConditional",
@@ -119,7 +119,7 @@ export default defineComponent({
       getElementVariables();
       getElementConditionType();
       conditionTypeOptions.value = CU.getConditionTypeOptions(getActive.value!);
-      EventEmitter.on("element-update", () => {
+      EventBus.on("element-update", () => {
         conditionTypeOptions.value = CU.getConditionTypeOptions(getActive.value!);
         getElementVariables();
         getElementConditionType();

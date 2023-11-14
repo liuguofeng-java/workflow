@@ -13,7 +13,7 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import { getInitiatorValue, setInitiatorValue } from "@/components/BpmnJs/bo-utils/initiatorUtil";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementStartInitiator",
@@ -31,8 +31,7 @@ export default defineComponent({
 
     onMounted(() => {
       getElementInitiator();
-
-      EventEmitter.on("element-update", getElementInitiator);
+      EventBus.on("element-update", getElementInitiator);
     });
 
     return {

@@ -20,7 +20,7 @@ import { mapState } from "pinia";
 import { Element } from "diagram-js/lib/model/Types";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { getACAfter, getACBefore, getACExclusive, setACAfter, setACBefore, setACExclusive } from "@/components/BpmnJs/bo-utils/asynchronousContinuationsUtil";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementAsyncContinuations",
@@ -39,7 +39,7 @@ export default defineComponent({
   },
   mounted() {
     this.reloadACStatus();
-    EventEmitter.on("element-update", this.reloadACStatus);
+    EventBus.on("element-update", this.reloadACStatus);
   },
   methods: {
     reloadACStatus() {

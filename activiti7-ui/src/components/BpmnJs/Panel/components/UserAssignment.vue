@@ -46,6 +46,7 @@ import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
 import MultipleUser from "@/components/MultipleUser/index.vue";
 import baseService from "@/service/baseService";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
 
@@ -167,7 +168,7 @@ const initUser = () => {
 };
 
 // useElementUpdateListener(initUser);
-EventEmitter.addListener("element-init", function (s) {
+EventBus.on("element-init", function (s) {
   console.log("-----", s);
 });
 </script>

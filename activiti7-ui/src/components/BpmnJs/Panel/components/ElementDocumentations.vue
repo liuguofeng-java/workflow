@@ -14,7 +14,7 @@ import { mapState } from "pinia";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { getDocumentValue, setDocumentValue } from "@/components/BpmnJs/bo-utils/documentationUtil";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementDocumentations",
@@ -36,7 +36,7 @@ export default defineComponent({
   },
   mounted() {
     this.elementDoc = getDocumentValue(this.getActive as Element) || "";
-    EventEmitter.on("element-update", () => {
+    EventBus.on("element-update", () => {
       this.elementDoc = getDocumentValue(this.getActive as Element) || "";
     });
   },

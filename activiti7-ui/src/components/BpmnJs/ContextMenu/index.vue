@@ -20,6 +20,7 @@
  */
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/BpmnJs/utils/EventBus";
 import { Element } from "diagram-js/lib/model/Types";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 import BpmnReplaceOptions from "@/components/BpmnJs/utils/BpmnReplaceOptions";
@@ -62,12 +63,12 @@ const initEventCallback = (event: MouseEvent, element?: Element) => {
 const closePopover = () => (showPopover.value = false);
 
 onMounted(() => {
-  EventEmitter.on("show-contextmenu", initEventCallback);
+  EventBus.on("show-contextmenu", initEventCallback);
   document.body.addEventListener("click", closePopover);
 });
 
 onBeforeUnmount(() => {
-  EventEmitter.removeListener("show-contextmenu", initEventCallback);
+  EventBus.off("show-contextmenu", initEventCallback);
   document.body.removeEventListener("click", closePopover);
 });
 </script>

@@ -2,7 +2,8 @@ import { computed, ComputedRef, defineComponent } from "vue";
 import Modeler from "bpmn-js/lib/Modeler";
 import Selection from "diagram-js/lib/features/selection/Selection";
 import Modeling from "bpmn-js/lib/features/modeling/Modeling.js";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
+
 import { ElMessage } from "element-plus";
 
 const Aligns = defineComponent({
@@ -23,7 +24,7 @@ const Aligns = defineComponent({
     let selection: Selection | null = null;
     let align: any = null;
 
-    EventEmitter.on("modeler-init", (modeler: Modeler) => {
+    EventBus.on("modeler-init", (modeler: Modeler) => {
       modeling = modeler.get("modeling");
       selection = modeler.get("selection");
       align = modeler.get("alignElements");

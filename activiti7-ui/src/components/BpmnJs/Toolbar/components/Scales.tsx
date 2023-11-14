@@ -1,8 +1,8 @@
 import { defineComponent, ref } from "vue";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type Canvas from "diagram-js/lib/core/Canvas";
 import { CanvasEvent } from "diagram-js/lib/core/EventBus";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 const Scales = defineComponent({
   name: "Scales",
@@ -10,7 +10,7 @@ const Scales = defineComponent({
     const currentScale = ref(1);
     let canvas: Canvas | null = null;
 
-    EventEmitter.on("modeler-init", (modeler: Modeler) => {
+    EventBus.on("modeler-init", (modeler: Modeler) => {
       try {
         canvas = modeler.get<Canvas>("canvas");
         currentScale.value = canvas.zoom();

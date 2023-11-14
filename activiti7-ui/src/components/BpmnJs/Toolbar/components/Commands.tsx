@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type CommandStack from "diagram-js/lib/command/CommandStack";
 import { createNewDiagram } from "@/components/BpmnJs/utils/";
@@ -9,7 +9,7 @@ const Commands = defineComponent({
   setup() {
     let command: CommandStack | null = null;
 
-    EventEmitter.on("modeler-init", (modeler: Modeler) => {
+    EventBus.on("modeler-init", (modeler: Modeler) => {
       command = modeler.get<CommandStack>("commandStack");
     });
 

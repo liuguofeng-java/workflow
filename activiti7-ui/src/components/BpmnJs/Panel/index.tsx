@@ -5,7 +5,7 @@ import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import { Translate } from "diagram-js/lib/i18n/translate";
 import debounce from "lodash.debounce";
 
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import Logger from "@/components/BpmnJs/utils/Logger";
 
@@ -98,11 +98,13 @@ const Panel = defineComponent({
       bpmnElementName.value = activatedElementTypeName;
 
       setCurrentComponents(activatedElement);
-      EventEmitter.emit("element-update", activatedElement);
+      EventBus.emit("element-update", activatedElement);
+      console.log("element-update");
+
       activatedId = activatedElement.id;
     }, 100);
 
-    EventEmitter.on("modeler-init", (modeler) => {
+    EventBus.on("modeler-init", (modeler) => {
       // 导入完成后默认选中 process 节点
       modeler.on("import.done", () => {
         setCurrentElement(null);
@@ -110,7 +112,7 @@ const Panel = defineComponent({
       // 监听选择事件，修改当前激活的元素以及表单
       modeler.on("selection.changed", ({ newSelection }) => {
         if (newSelection[0]) {
-          EventEmitter.emit("element-init", newSelection);
+          EventBus.emit("element-init", newSelection);
           setCurrentElement(newSelection[0] || null);
         }
       });

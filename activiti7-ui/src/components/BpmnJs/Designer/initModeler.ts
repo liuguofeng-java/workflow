@@ -1,6 +1,7 @@
 import { markRaw, Ref } from "vue";
 import Modeler from "bpmn-js/lib/Modeler";
-import EventEmitter from "@/components/bpmnJs/utils//EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
+
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import EnhancementContextmenu from "@/components/BpmnJs/additional-functions/EnhancementContextmenu";
 
@@ -31,7 +32,7 @@ export default async function (
 
   await store.setModeler(markRaw(modeler));
 
-  EventEmitter.emit("modeler-init", modeler);
+  EventBus.emit("modeler-init", modeler);
 
   EnhancementContextmenu(modeler);
 

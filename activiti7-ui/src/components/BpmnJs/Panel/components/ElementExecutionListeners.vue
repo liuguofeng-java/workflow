@@ -46,7 +46,7 @@ import { ModdleElement } from "bpmn-moddle";
 import { Element } from "diagram-js/lib/model/Types";
 import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, removeExecutionListener, updateExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import { getScriptType } from "@/components/BpmnJs/bo-utils/scriptUtil";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementExecutionListeners",
@@ -74,7 +74,7 @@ export default defineComponent({
   },
   mounted() {
     this.reloadExtensionListeners();
-    EventEmitter.on("element-update", this.reloadExtensionListeners);
+    EventBus.on("element-update", this.reloadExtensionListeners);
   },
   methods: {
     reloadExtensionListeners() {

@@ -1,19 +1,19 @@
 import { onBeforeUnmount, onMounted } from "vue";
-import EventEmitter from "@/components/bpmnJs/utils/EventEmitter";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default function (listener: Function) {
   const thisListener = listener;
 
   const removeListener = () => {
-    EventEmitter.removeListener("element-update", thisListener);
+    EventBus.off("element-update", thisListener);
   };
 
   onMounted(() => {
     thisListener();
-    if (EventEmitter.hasListener("element-update", thisListener)) {
-      return;
-    }
-    EventEmitter.addListener("element-update", thisListener);
+    // if (EventEmitter.hasListener("element-update", thisListener)) {
+    //   return;
+    // }
+    EventBus.on("element-update", thisListener);
   });
   onBeforeUnmount(() => removeListener());
 

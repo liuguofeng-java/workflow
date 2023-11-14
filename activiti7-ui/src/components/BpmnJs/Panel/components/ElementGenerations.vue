@@ -27,8 +27,8 @@ import { Element } from "diagram-js/lib/model/Types";
 import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUtil";
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
 import { getProcessExecutable, getProcessVersionTag, setProcessExecutable, setProcessVersionTag } from "@/components/BpmnJs/bo-utils/processUtil";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
 import { ElMessage } from "element-plus";
+import EventBus from "@/components/bpmnJs/utils/EventBus";
 
 export default defineComponent({
   name: "ElementGenerations",
@@ -46,7 +46,10 @@ export default defineComponent({
   },
   mounted() {
     this.reloadGenerationData();
-    EventEmitter.on("element-update", this.reloadGenerationData);
+    EventBus.on("element-update", this.reloadGenerationData);
+    EventBus.on("element-update", () => {
+      console.log("---=---");
+    });
   },
   methods: {
     reloadGenerationData() {
