@@ -9,18 +9,18 @@
       </el-form-item>
 
       <el-form-item label="代理人" v-if="UAForm.userType === 'assignee'">
-        <el-input v-model="UAForm.assignee" @change="updateUserAssignProp('assignee', $event)" />
+        <!-- 单选用户 -->
+        <SingleUser :user="singleUser" @ok="singleUserOk" />
       </el-form-item>
 
       <el-form-item label="候选人" v-if="UAForm.userType === 'candidateUsers'">
         <!-- 多选用户 -->
-        <MultipleUser :list="multipleUserList" ref="multipleUser" @ok="multipleUserOk" />
+        <MultipleUser :list="multipleUserList" @ok="multipleUserOk" />
       </el-form-item>
 
       <el-form-item label="候选组" v-if="UAForm.userType === 'candidateGroups'">
-        <!-- 多选用户 -->
-        <MultipleDept :list="multipleDeptList" ref="multipleUser" @ok="multipleDeptOk" />
-        <!-- <el-input v-model="UAForm.candidateGroups" @change="updateUserAssignProp('candidateGroups', $event)" /> -->
+        <!-- 多选部门 -->
+        <MultipleDept :list="multipleDeptList" @ok="multipleDeptOk" />
       </el-form-item>
 
       <el-form-item label="到期日">
@@ -44,6 +44,7 @@ import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUti
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
+import SingleUser from "@/components/SingleUser/index.vue";
 import MultipleUser from "@/components/MultipleUser/index.vue";
 import MultipleDept from "@/components/MultipleDept/index.vue";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
@@ -78,13 +79,12 @@ const userType = ref<any>([
   }
 ]);
 
-// 多选用户
-const multipleUser = ref();
+// 单选用户 选择的数据
+const singleUser = ref<any>({});
+
 // 多选用户 选择的数据
 const multipleUserList = ref<any[]>([]);
 
-// 多选部门
-const multipleDept = ref();
 // 多选部门 选择的数据
 const multipleDeptList = ref<any[]>([]);
 
@@ -138,6 +138,15 @@ const getElementData = () => {
 };
 
 /**
+ * 单选用户选择完成
+ * @param user 用户信息
+ */
+const singleUserOk = (user: any) => {
+  updateUserAssignProp("assignee", user.userId);
+  updateUserAssignProp("names", user.username);
+};
+
+/**
  * 多选用户选择完成
  * @param list 选择的数据
  */
@@ -179,8 +188,14 @@ EventBus.on("element-init", function () {
     getElementData();
 
     // 重置变量
+    singleUser.value = {};
     multipleUserList.value = [];
     multipleDeptList.value = [];
+    // 还原代理人选择项
+    if (UAForm.value.userType === "assignee" && UAForm.value.assignee !== "") {
+      singleUser.value.assignee = UAForm.value.assignee;
+      singleUser.value.username = UAForm.value.names;
+    }
     // 还原候选人选择项
     if (UAForm.value.userType === "candidateUsers" && UAForm.value.candidateUsers !== "") {
       const candidateUsers = UAForm.value.candidateUsers.split(",");
@@ -203,6 +218,7 @@ EventBus.on("element-init", function () {
         });
       }
     }
+
     // 如果一个都没有选择
     if (UAForm.value.userType === "") {
       UAForm.value.userType = "assignee";
