@@ -34,7 +34,7 @@ public interface ProcessStartService {
     void startProcess(String definitionId, String userId);
 
     /**
-     * 查询审批近路
+     * 查询审批进度
      *
      * @param instanceId 流程实例id
      * @return 审批记录

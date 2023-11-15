@@ -18,7 +18,9 @@
       </el-form-item>
 
       <el-form-item label="候选组" v-if="UAForm.userType === 'candidateGroups'">
-        <el-input v-model="UAForm.candidateGroups" @change="updateUserAssignProp('candidateGroups', $event)" />
+        <!-- 多选用户 -->
+        <MultipleDept :list="multipleDeptList" ref="multipleUser" @ok="multipleDeptOk" />
+        <!-- <el-input v-model="UAForm.candidateGroups" @change="updateUserAssignProp('candidateGroups', $event)" /> -->
       </el-form-item>
 
       <el-form-item label="到期日">
@@ -43,6 +45,7 @@ import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
 import MultipleUser from "@/components/MultipleUser/index.vue";
+import MultipleDept from "@/components/MultipleDept/index.vue";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 // element The element.
@@ -52,8 +55,8 @@ let scopedElement: any = undefined;
 let moddleElement: ModdleElement | undefined = undefined;
 
 // 表单参数
-type UserAssigneeProp = "userType" | "assignee" | "candidateUsers" | "candidateGroups" | "userNames" | "dueDate" | "followUpDate" | "priority";
-const PROP_KEYS: UserAssigneeProp[] = ["userType", "assignee", "candidateUsers", "candidateGroups", "userNames", "dueDate", "followUpDate", "priority"];
+type UserAssigneeProp = "userType" | "assignee" | "candidateUsers" | "candidateGroups" | "names" | "dueDate" | "followUpDate" | "priority";
+const PROP_KEYS: UserAssigneeProp[] = ["userType", "assignee", "candidateUsers", "candidateGroups", "names", "dueDate", "followUpDate", "priority"];
 
 const EmptyUAForm = PROP_KEYS.reduce((a, b) => (a[b] = "") || a, {});
 // 表单
@@ -79,6 +82,11 @@ const userType = ref<any>([
 const multipleUser = ref();
 // 多选用户 选择的数据
 const multipleUserList = ref<any[]>([]);
+
+// 多选部门
+const multipleDept = ref();
+// 多选部门 选择的数据
+const multipleDeptList = ref<any[]>([]);
 
 /**
  * 获取设置的值
@@ -112,7 +120,7 @@ const updateUserAssignProp = (key: UserAssigneeProp, value: string) => {
     });
     // 重置变量
     multipleUserList.value = [];
-    updateUserAssignProp("userNames", "");
+    updateUserAssignProp("names", "");
   }
   // 更新组件
   updateExModdleProp(scopedElement, moddleElement, key, value);
@@ -142,7 +150,23 @@ const multipleUserOk = (list: any[]) => {
     return item.username;
   });
   updateUserAssignProp("candidateUsers", userIds.join(","));
-  updateUserAssignProp("userNames", userNames.join(","));
+  updateUserAssignProp("names", userNames.join(","));
+};
+
+/**
+ * 多选部门选择完成
+ * @param list 选择的数据
+ */
+const multipleDeptOk = (list: any[]) => {
+  multipleDeptList.value = list;
+  const deptIds = multipleDeptList.value.map((item) => {
+    return item.deptId;
+  });
+  const deptNames = multipleDeptList.value.map((item) => {
+    return item.deptName;
+  });
+  updateUserAssignProp("candidateGroups", deptIds.join(","));
+  updateUserAssignProp("names", deptNames.join(","));
 };
 
 // 先销毁事件，防止重复触发
@@ -156,14 +180,26 @@ EventBus.on("element-init", function () {
 
     // 重置变量
     multipleUserList.value = [];
-    // 还原用户组选择项
+    multipleDeptList.value = [];
+    // 还原候选人选择项
     if (UAForm.value.userType === "candidateUsers" && UAForm.value.candidateUsers !== "") {
       const candidateUsers = UAForm.value.candidateUsers.split(",");
-      const userNames = UAForm.value.userNames.split(",");
+      const userNames = UAForm.value.names.split(",");
       for (let i = 0; i < candidateUsers.length; i++) {
         multipleUserList.value.push({
           userId: candidateUsers[i],
           username: userNames[i]
+        });
+      }
+    }
+    // 还原候选组选择项
+    if (UAForm.value.userType === "candidateGroups" && UAForm.value.candidateGroups !== "") {
+      const candidateGroups = UAForm.value.candidateGroups.split(",");
+      const deptNames = UAForm.value.names.split(",");
+      for (let i = 0; i < candidateGroups.length; i++) {
+        multipleDeptList.value.push({
+          deptId: candidateGroups[i],
+          deptName: deptNames[i]
         });
       }
     }

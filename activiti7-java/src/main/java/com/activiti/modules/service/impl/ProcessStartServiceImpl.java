@@ -145,7 +145,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
     }
 
     /**
-     * 查询审批近路
+     * 查询审批进度
      *
      * @param instanceId 流程实例id
      * @return 审批记录
