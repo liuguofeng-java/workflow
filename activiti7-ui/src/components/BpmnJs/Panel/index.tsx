@@ -113,8 +113,8 @@ const Panel = defineComponent({
           setTimeout(() => {
             EventBus.emit("element-init", newSelection);
           }, 200);
-          setCurrentElement(newSelection[0] || null);
         }
+        setCurrentElement(newSelection[0] || null);
       });
       // 节点表单修改时触发
       modeler.on("element.changed", ({ element }) => {
@@ -124,9 +124,9 @@ const Panel = defineComponent({
         }
       });
       // 点击节点触发
-      modeler.on("element.click", (event) => {
-        Logger.prettyInfo("Element Click", event);
-      });
+      // modeler.on("element.click", (event) => {
+      //   Logger.prettyInfo("Element Click", event);
+      // });
     });
 
     onMounted(() => !currentElementId.value && setCurrentElement(null));

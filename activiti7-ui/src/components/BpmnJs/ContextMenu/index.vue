@@ -1,5 +1,5 @@
 <template>
-  <n-popover v-if="showPopover" :show="showPopover" :x="x" :y="y">
+  <div v-if="showPopover" :show="showPopover" :x="x" :y="y">
     <div class="bpmn-context-menu">
       <div class="context-menu_header">{{ contextMenuTitle }}</div>
       <div class="context-menu_body">
@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-  </n-popover>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -19,7 +19,6 @@
  * @date 2022/7/11
  */
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import EventEmitter from "@/components/BpmnJs/utils/EventEmitter";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
 import { Element } from "diagram-js/lib/model/Types";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";

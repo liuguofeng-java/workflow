@@ -20,10 +20,9 @@ Object.keys(ElementPlusIcons).forEach((iconName) => {
 });
 
 app.use(ElementPlus, {
-  locale: zhCn
+  locale: zhCn,
+  size: "default"
 });
-
-app.use(ElementPlus);
 
 // vfrom相关依赖引入---------------------------------------------
 import "@/components/FormDesigner/styles/index.scss";
@@ -57,6 +56,6 @@ import i18n from "@/components/BpmnJs/i18n";
 app.use(i18n);
 // bpmn.js 相关-------------------------------------------------
 
-app.use(createPinia()).use(router).use(ElementPlus, { size: "default" }).mount("#app");
+app.use(createPinia()).use(router).mount("#app");
 
 window.axios = axios;

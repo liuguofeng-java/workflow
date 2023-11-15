@@ -110,6 +110,9 @@ const updateUserAssignProp = (key: UserAssigneeProp, value: string) => {
     userType.value.forEach((item) => {
       updateExModdleProp(scopedElement, moddleElement, item.value, "");
     });
+    // 重置变量
+    multipleUserList.value = [];
+    updateUserAssignProp("userNames", "");
   }
   // 更新组件
   updateExModdleProp(scopedElement, moddleElement, key, value);
@@ -138,8 +141,6 @@ const multipleUserOk = (list: any[]) => {
   const userNames = multipleUserList.value.map((item) => {
     return item.username;
   });
-  console.log(userNames);
-
   updateUserAssignProp("candidateUsers", userIds.join(","));
   updateUserAssignProp("userNames", userNames.join(","));
 };
@@ -165,6 +166,10 @@ EventBus.on("element-init", function () {
           username: userNames[i]
         });
       }
+    }
+    // 如果一个都没有选择
+    if (UAForm.value.userType === "") {
+      UAForm.value.userType = "assignee";
     }
   });
 });

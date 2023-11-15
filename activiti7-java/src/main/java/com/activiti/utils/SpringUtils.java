@@ -6,7 +6,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * token工具类
+ * spring 工具类
  *
  * @author liuguofeng
  * @date 2023/11/04 12:36
