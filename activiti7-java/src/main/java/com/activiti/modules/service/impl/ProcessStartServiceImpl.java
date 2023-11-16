@@ -1,18 +1,22 @@
 package com.activiti.modules.service.impl;
 
+import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
+import com.activiti.modules.entity.vo.workflow.HistoryRecordIdentityVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
 import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.modules.service.ProcessStartService;
+import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.constant.Constant;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
 import org.activiti.bpmn.model.SequenceFlow;
@@ -20,10 +24,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricProcessInstanceQuery;
-import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 流程启动
@@ -57,6 +59,9 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
     @Autowired
     private ProcessDefinitionService processDefinitionService;
+
+    @Autowired
+    private SysDeptService deptService;
 
     @Autowired
     private SysUserService userService;
@@ -159,7 +164,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
-                .orderByHistoricActivityInstanceEndTime().asc()
+                .orderByHistoricActivityInstanceStartTime().asc()
                 .list();
         for (HistoricActivityInstance item : executedList) {
             // 过滤掉没有名称的节点
@@ -175,10 +180,14 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                     .findAny()
                     .ifPresent(t -> vo.setComment(t.getFullMessage()));
             // 审批人
-            SysUserEntity user = userService.getById(item.getAssignee());
-            if (user != null) {
-                vo.setUserName(user.getUsername());
+            if (StringUtils.isNotEmpty(item.getAssignee())) {
+                SysUserEntity user = userService.getById(item.getAssignee());
+                if (user != null) {
+                    vo.setUserName(user.getUsername());
+                }
             }
+            // 获取获选人 或 候选组信息
+            vo.setIdentity(getCandidateInfo(item.getTaskId()));
             vo.setStatus(1);
             resultList.add(vo);
         }
@@ -192,10 +201,14 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
             // 审批人
-            SysUserEntity user = userService.getById(item.getAssignee());
-            if (user != null) {
-                vo.setUserName(user.getUsername());
+            if (StringUtils.isNotEmpty(item.getAssignee())) {
+                SysUserEntity user = userService.getById(item.getAssignee());
+                if (user != null) {
+                    vo.setUserName(user.getUsername());
+                }
             }
+            // 获取获选人 或 候选组信息
+            vo.setIdentity(getCandidateInfo(item.getTaskId()));
             vo.setStatus(2);
             resultList.add(vo);
         }
@@ -277,6 +290,41 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         runtimeService.deleteProcessInstance(instanceId, null);
         // 删除历史流程实例
         historyService.deleteHistoricProcessInstance(instanceId);
+    }
+
+    /**
+     * 获取获选人 或 候选组
+     *
+     * @param taskId 任务id
+     * @return 获选人 或 候选组信息
+     */
+    public HistoryRecordIdentityVo getCandidateInfo(String taskId) {
+        HistoryRecordIdentityVo vo = new HistoryRecordIdentityVo();
+        // 如果没有taskId直接返回
+        if (StringUtils.isEmpty(taskId)) return vo;
+        List<HistoricIdentityLink> identityLinks = historyService.getHistoricIdentityLinksForTask(taskId);
+        // 候选组ids
+        List<String> groupIds = identityLinks.stream()
+                .map(HistoricIdentityLink::getGroupId)
+                .filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+        // 查询数据库找到候选组名称(部门名称)
+        if (groupIds.size() != 0) {
+            List<String> groupNames = deptService.list(new LambdaQueryWrapper<SysDeptEntity>()
+                            .in(SysDeptEntity::getDeptId, groupIds))
+                    .stream().map(SysDeptEntity::getDeptName).collect(Collectors.toList());
+            vo.setGroupNames(groupNames);
+        }
+        // 候选人ids
+        List<String> userIds = identityLinks.stream()
+                .map(HistoricIdentityLink::getUserId)
+                .filter(StringUtils::isNotEmpty).collect(Collectors.toList());
+        if (userIds.size() != 0) {
+            List<String> userNames = userService.list(new LambdaQueryWrapper<SysUserEntity>()
+                            .in(SysUserEntity::getUserId, userIds))
+                    .stream().map(SysUserEntity::getUsername).collect(Collectors.toList());
+            vo.setUserNames(userNames);
+        }
+        return vo;
     }
 
     /**

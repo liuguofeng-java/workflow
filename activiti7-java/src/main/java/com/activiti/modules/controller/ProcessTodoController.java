@@ -32,6 +32,7 @@ public class ProcessTodoController {
     public TableDataInfo list(TodoListDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
+        dto.setDeptId(user.getDeptId());
         return processTodoService.queryPage(dto);
     }
 
@@ -44,6 +45,7 @@ public class ProcessTodoController {
     public R<String> approval(@RequestBody TodoApprovalDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
+        dto.setDeptId(user.getDeptId());
         processTodoService.approval(dto);
         return R.ok();
     }

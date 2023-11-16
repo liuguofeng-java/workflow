@@ -16,6 +16,11 @@ public class TodoApprovalDto {
     private String userId;
 
     /**
+     * 部门id(组id)
+     */
+    private String deptId;
+
+    /**
      * 流程实例id
      */
     private String processInstanceId;

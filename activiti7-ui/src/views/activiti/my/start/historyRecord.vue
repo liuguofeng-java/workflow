@@ -10,7 +10,15 @@
           <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
             <el-card>
               <el-descriptions :column="1">
-                <el-descriptions-item v-if="item.status === 1" label="时间">{{ item.startTime }} 到 {{ item.endTime }}</el-descriptions-item>
+                <el-descriptions-item label="候选人" v-if="item.identity.userNames">
+                  <el-tag v-for="(userName, index) in item.identity.userNames" :key="index">{{ userName }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item label="候选组" v-if="item.identity.groupNames">
+                  <el-tag v-for="(groupName, index) in item.identity.groupNames" :key="index">{{ groupName }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item v-if="item.status === 1" label="时间">
+                  <span>{{ item.startTime }} 到 {{ item.endTime }}</span>
+                </el-descriptions-item>
                 <el-descriptions-item label="节点名称">{{ item.nodeName }}</el-descriptions-item>
                 <el-descriptions-item v-if="item.userName" label="审批人">{{ item.userName }}</el-descriptions-item>
                 <el-descriptions-item v-if="item.comment" label="审批意见">{{ item.comment }}</el-descriptions-item>
@@ -157,13 +165,20 @@ defineExpose({
 :deep(.el-tabs__content) {
   height: 100% !important;
 }
-:deep(.el-tab-pane) {
-  height: 100% !important;
-}
 </style>
 
 <style>
+.el-drawer__body {
+  overflow: hidden;
+}
 .el-tabs--border-card {
   height: 100% !important;
+}
+.el-tab-pane {
+  height: 100% !important;
+  overflow: auto;
+}
+.el-timeline {
+  overflow: auto;
 }
 </style>

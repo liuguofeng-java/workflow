@@ -119,7 +119,9 @@ const updateUserAssignProp = (key: UserAssigneeProp, value: string) => {
       updateExModdleProp(scopedElement, moddleElement, item.value, "");
     });
     // 重置变量
+    singleUser.value = {};
     multipleUserList.value = [];
+    multipleDeptList.value = [];
     updateUserAssignProp("names", "");
   }
   // 更新组件
@@ -222,9 +224,15 @@ EventBus.on("element-init", function () {
     // 如果一个都没有选择
     if (UAForm.value.userType === "") {
       UAForm.value.userType = "assignee";
+      updateUserAssignProp("userType", "");
     }
   });
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+:deep(.el-tab-pane) {
+  height: 100% !important;
+  overflow: auto;
+}
+</style>

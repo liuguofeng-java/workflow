@@ -15,6 +15,11 @@ public class TodoListDto {
     private String userId;
 
     /**
+     * 部门id(组id)
+     */
+    private String deptId;
+
+    /**
      * 流程定义名称
      */
     private String definitionName;
