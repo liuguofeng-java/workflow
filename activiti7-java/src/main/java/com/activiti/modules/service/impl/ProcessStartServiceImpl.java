@@ -27,6 +27,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -303,8 +304,10 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 如果没有taskId直接返回
         if (StringUtils.isEmpty(taskId)) return vo;
         List<HistoricIdentityLink> identityLinks = historyService.getHistoricIdentityLinksForTask(taskId);
+
         // 候选组ids
         List<String> groupIds = identityLinks.stream()
+                .filter(t -> t.getType().equals(IdentityLinkType.CANDIDATE))
                 .map(HistoricIdentityLink::getGroupId)
                 .filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         // 查询数据库找到候选组名称(部门名称)
@@ -316,6 +319,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         }
         // 候选人ids
         List<String> userIds = identityLinks.stream()
+                .filter(t -> t.getType().equals(IdentityLinkType.CANDIDATE))
                 .map(HistoricIdentityLink::getUserId)
                 .filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         if (userIds.size() != 0) {

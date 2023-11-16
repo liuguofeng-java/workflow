@@ -1,37 +1,39 @@
 <template>
-  <el-drawer v-model="drawer" size="100%" destroy-on-close>
-    <el-tabs type="border-card" v-loading="loading" @tab-change="tabChange" v-model="tabsValue">
-      <el-tab-pane label="审批记录" name="1">
-        <div class="hint-container">
-          <div class="history">已审批节点记录</div>
-          <div class="next">活动的未审批节点</div>
-        </div>
-        <el-timeline>
-          <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
-            <el-card>
-              <el-descriptions :column="1">
-                <el-descriptions-item label="候选人" v-if="item.identity.userNames">
-                  <el-tag v-for="(userName, index) in item.identity.userNames" :key="index">{{ userName }}</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item label="候选组" v-if="item.identity.groupNames">
-                  <el-tag v-for="(groupName, index) in item.identity.groupNames" :key="index">{{ groupName }}</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item v-if="item.status === 1" label="时间">
-                  <span>{{ item.startTime }} 到 {{ item.endTime }}</span>
-                </el-descriptions-item>
-                <el-descriptions-item label="节点名称">{{ item.nodeName }}</el-descriptions-item>
-                <el-descriptions-item v-if="item.userName" label="审批人">{{ item.userName }}</el-descriptions-item>
-                <el-descriptions-item v-if="item.comment" label="审批意见">{{ item.comment }}</el-descriptions-item>
-              </el-descriptions>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </el-tab-pane>
-      <el-tab-pane label="流程节点" name="2">
-        <DesignerDetails :xml="highlightNode.xml" id="highlightNode" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
-      </el-tab-pane>
-    </el-tabs>
-  </el-drawer>
+  <div class="root">
+    <el-drawer v-model="drawer" size="100%" destroy-on-close>
+      <el-tabs type="border-card" v-loading="loading" @tab-change="tabChange" v-model="tabsValue">
+        <el-tab-pane label="审批记录" name="1">
+          <div class="hint-container">
+            <div class="history">已审批节点记录</div>
+            <div class="next">活动的未审批节点</div>
+          </div>
+          <el-timeline>
+            <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
+              <el-card>
+                <el-descriptions :column="1">
+                  <el-descriptions-item label="候选人" v-if="item.identity.userNames">
+                    <el-tag v-for="(userName, index) in item.identity.userNames" :key="index">{{ userName }}</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="候选组" v-if="item.identity.groupNames">
+                    <el-tag v-for="(groupName, index) in item.identity.groupNames" :key="index">{{ groupName }}</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item v-if="item.status === 1" label="时间">
+                    <span>{{ item.startTime }} 到 {{ item.endTime }}</span>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="节点名称">{{ item.nodeName }}</el-descriptions-item>
+                  <el-descriptions-item v-if="item.userName" label="审批人">{{ item.userName }}</el-descriptions-item>
+                  <el-descriptions-item v-if="item.comment" label="审批意见">{{ item.comment }}</el-descriptions-item>
+                </el-descriptions>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
+        </el-tab-pane>
+        <el-tab-pane label="流程节点" name="2">
+          <DesignerDetails :xml="highlightNode.xml" id="highlightNode" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
+        </el-tab-pane>
+      </el-tabs>
+    </el-drawer>
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
@@ -159,26 +161,25 @@ defineExpose({
   background-color: #e4e7ed !important;
 }
 
-:deep(.el-tabs--border-card) {
-  height: 100% !important;
-}
 :deep(.el-tabs__content) {
   height: 100% !important;
 }
-</style>
-
-<style>
-.el-drawer__body {
+.root :deep() .el-drawer__body {
   overflow: hidden;
 }
-.el-tabs--border-card {
+.root :deep() .el-tabs--border-card {
   height: 100% !important;
+  display: flex;
+  flex-direction: column;
 }
-.el-tab-pane {
+.root :deep() .el-tab-pane {
   height: 100% !important;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
-.el-timeline {
+.root :deep() .el-timeline {
   overflow: auto;
 }
 </style>
+
+<style scoped></style>
