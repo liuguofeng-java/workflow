@@ -71,7 +71,7 @@
       </el-menu>
     </div>
 
-    <dir class="rigth-container">
+    <div class="rigth-container">
       <div class="head-container">
         <span class="menu-name">欢迎登录！今天是{{ dateVal }}</span>
         <div class="head-user-container">
@@ -85,7 +85,7 @@
           <router-view />
         </div>
       </div>
-    </dir>
+    </div>
   </div>
 </template>
 

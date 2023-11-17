@@ -1,4 +1,4 @@
-import EmptyXML from "@/components/bpmnJs/utils//EmptyXML";
+import EmptyXML from "@/components/bpmnJs/utils/EmptyXML";
 import { EditorSettings } from "@/components/BpmnJs/types/editor/settings";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 
@@ -12,9 +12,7 @@ export const createNewDiagram = async function (newXml?: string, settings?: Edit
     const xmlString = newXml || EmptyXML(newId, newName, processEngine);
     const modeler = store.getModeler;
     const { warnings } = await modeler!.importXML(xmlString);
-    if (warnings && warnings.length) {
-      warnings.forEach((warn) => console.warn(warn));
-    }
+    console.log("bpmb warnings->", warnings);
   } catch (e) {
     console.error(`[Process Designer Warn]: ${typeof e === "string" ? e : (e as Error)?.message}`);
   }

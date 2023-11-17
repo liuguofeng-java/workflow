@@ -1,34 +1,36 @@
 <template>
-  <el-collapse-item title="扩展属性" name="Property">
-    <el-table :data="extensions" style="width: 100%">
-      <el-table-column type="index" label="序号" />
-      <el-table-column prop="name" label="Name" />
-      <el-table-column prop="value" label="Value" />
-      <el-table-column label="操作">
-        <template #default="scope">
-          <el-button link type="primary" @click="removeProperty(scope.row.index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-button type="primary" @click="openPropertyModel">添加</el-button>
-  </el-collapse-item>
+  <div>
+    <el-collapse-item title="扩展属性" name="Property">
+      <el-table :data="extensions" style="width: 100%">
+        <el-table-column type="index" label="序号" />
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="value" label="Value" />
+        <el-table-column label="操作">
+          <template #default="scope">
+            <el-button link type="primary" @click="removeProperty(scope.row.index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button type="primary" @click="openPropertyModel">添加</el-button>
+    </el-collapse-item>
 
-  <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
-    <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">
-      <el-form-item label="name" prop="name">
-        <el-input v-model="newProperty.name" @keydown.enter.prevent />
-      </el-form-item>
-      <el-form-item label="value" prop="value">
-        <el-input v-model="newProperty.value" @keydown.enter.prevent />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button type="primary" @click="addProperty">确 定</el-button>
-        <el-button @click="modelVisible = false">取 消</el-button>
-      </div>
-    </template>
-  </el-dialog>
+    <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
+      <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">
+        <el-form-item label="name" prop="name">
+          <el-input v-model="newProperty.name" @keydown.enter.prevent />
+        </el-form-item>
+        <el-form-item label="value" prop="value">
+          <el-input v-model="newProperty.value" @keydown.enter.prevent />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="addProperty">确 定</el-button>
+          <el-button @click="modelVisible = false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <script lang="ts">
