@@ -1,6 +1,6 @@
 import { type Ref, toRaw } from "vue";
 import type { ModuleDeclaration } from "didi";
-import type { EditorSettings } from "types/editor/settings";
+import type { EditorSettings } from "@/components/BpmnJs/types/editor/settings";
 
 // ** 官方流程模拟 module
 import TokenSimulationModule from "bpmn-js-token-simulation";
@@ -45,8 +45,6 @@ import bpmnlint from "@/components/BpmnJs/additional-modules/Lint/bpmnlint";
 // 小地图
 import minimapModule from "diagram-js-minimap";
 
-import BpmnColorPickerModule from "bpmn-js-color-picker";
-
 import GridLineModule from "diagram-js-grid-bg";
 
 // 外置 label
@@ -67,13 +65,27 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
   settings.value.paletteMode === "enhancement" && modules.push(EnhancementPalette);
   settings.value.paletteMode === "rewrite" && modules.push(RewritePalette);
   settings.value.paletteMode === "custom" &&
-    modules.push({ paletteProvider: ["type", function () {}] });
+    modules.push({
+      paletteProvider: [
+        "type",
+        function () {
+          return {};
+        }
+      ]
+    });
 
   // 配置 contextPad (可覆盖 contextPadProvider 取消原生上下文菜单)
   settings.value.contextPadMode === "enhancement" && modules.push(EnhancementContextPad);
   settings.value.contextPadMode === "rewrite" && modules.push(RewriteContextPad);
   settings.value.contextPadMode === "custom" &&
-    modules.push({ contextPadProvider: ["type", function () {}] });
+    modules.push({
+      contextPadProvider: [
+        "type",
+        function () {
+          return {};
+        }
+      ]
+    });
 
   // 配置 自定义渲染
   settings.value.rendererMode === "enhancement" && modules.push(EnhancementRenderer);
@@ -81,6 +93,17 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
     modules.push(RewriteRenderer);
     options["bpmnRenderer"] = { ...toRaw(settings.value).customTheme };
   }
+
+  // 是否双击编辑
+  !settings.value.isLabelEditingProvider &&
+    modules.push({
+      labelEditingProvider: [
+        "type",
+        function () {
+          return {};
+        }
+      ]
+    });
 
   // 配置模板选择弹窗（会影响默认 popupmenu）
   if (settings.value.templateChooser || settings.value.penalMode !== "custom") {
@@ -123,11 +146,7 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
 
     modules.push(TokenSimulationModule);
 
-    modules.push(BpmnColorPickerModule);
-
     modules.push(GridLineModule);
-
-    // modules.push(ExternalLabelModule)
 
     // 设置键盘事件绑定
     options["keyboard"] = {

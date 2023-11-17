@@ -18,5 +18,6 @@ export const defaultSettings: EditorSettings = {
   otherModule: true,
   templateChooser: true,
   useLint: false,
-  customTheme: {}
+  customTheme: {},
+  isLabelEditingProvider: true
 };

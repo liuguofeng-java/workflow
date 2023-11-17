@@ -212,7 +212,8 @@ class RewriteContextPadProvider extends ContextPadProvider {
           "append.receive-task": appendAction(
             "bpmn:ReceiveTask",
             "bpmn-icon-receive-task",
-            translate("Append ReceiveTask")
+            translate("Append ReceiveTask"),
+            undefined
           ),
           "append.message-intermediate-event": appendAction(
             "bpmn:IntermediateCatchEvent",
@@ -262,17 +263,20 @@ class RewriteContextPadProvider extends ContextPadProvider {
           "append.append-user-task": appendAction(
             "bpmn:UserTask",
             "bpmn-icon-user-task",
-            translate("Create User Task")
+            translate("Create User Task"),
+            undefined
           ),
           "append.end-event": appendAction(
             "bpmn:EndEvent",
             "bpmn-icon-end-event-none",
-            translate("Append EndEvent")
+            translate("Append EndEvent"),
+            undefined
           ),
           "append.gateway": appendAction(
             "bpmn:ExclusiveGateway",
             "bpmn-icon-gateway-none",
-            translate("Append Gateway")
+            translate("Append Gateway"),
+            undefined
           )
         });
       }
@@ -333,7 +337,12 @@ class RewriteContextPadProvider extends ContextPadProvider {
 
     if (is(businessObject, "bpmn:Group")) {
       assign(actions, {
-        "append.text-annotation": appendAction("bpmn:TextAnnotation", "bpmn-icon-text-annotation")
+        "append.text-annotation": appendAction(
+          "bpmn:TextAnnotation",
+          "bpmn-icon-text-annotation",
+          undefined,
+          undefined
+        )
       });
     }
 

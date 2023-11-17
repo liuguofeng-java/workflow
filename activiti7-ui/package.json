@@ -43,7 +43,6 @@
     "@bpmn-io/properties-panel": "2.2.1",
     "bpmn-js": "13.2.0",
     "bpmn-js-bpmnlint": "0.21.0",
-    "bpmn-js-color-picker": "0.6.0",
     "bpmn-js-connectors-extension": "^0.4.6",
     "bpmn-js-external-label-modeling": "^1.0.3",
     "bpmn-js-properties-panel": "2.1.0",

@@ -16,9 +16,10 @@ export function customTranslate(template: string, replacements?: Record<string, 
   // Translate
   template = translations.elements[template] || template;
 
+  if (!template) return replacements;
   // Replace
   return template.replace(/{([^}]+)}/g, function (_, key) {
-    return replacements![key] || "{" + key + "}";
+    return replacements ? replacements[key] : "{" + key + "}";
   });
 }
 

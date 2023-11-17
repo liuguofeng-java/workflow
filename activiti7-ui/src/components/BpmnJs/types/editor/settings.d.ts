@@ -19,6 +19,7 @@ export interface EditorSettings {
   templateChooser: boolean;
   useLint: boolean;
   customTheme: Record<string, string | number>;
+  isLabelEditingProvider: boolean;
 }
 
 export type ModelerOptions<E extends Element> = ViewerOptions<E> & {
