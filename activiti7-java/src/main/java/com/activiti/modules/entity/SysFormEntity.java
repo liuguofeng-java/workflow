@@ -35,6 +35,12 @@ public class SysFormEntity implements Serializable {
      * 表单数据
      */
     private String formData;
+
+    /**
+     * 是否是系统内置,1:是,0:否
+     */
+    private Integer isSys;
+
     /**
      * 创建时间
      */

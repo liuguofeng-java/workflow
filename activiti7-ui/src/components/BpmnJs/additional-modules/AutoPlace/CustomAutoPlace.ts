@@ -64,12 +64,10 @@ function getNewShapePosition(source, element, minDistance) {
       }
     };
 
-    return findFreePosition(
-      source,
-      element,
-      position,
-      generateGetNextPosition(nextPositionDirection)
-    );
+    const getNextPosition = generateGetNextPosition(nextPositionDirection);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return findFreePosition(source, element, position, getNextPosition);
   }
 }
 

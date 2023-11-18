@@ -35,8 +35,7 @@ class EnhancementPaletteProvider extends PaletteProvider {
       lassoTool,
       handTool,
       globalConnect,
-      translate,
-      2000
+      translate
     );
     this._palette = palette;
     this._create = create;
@@ -58,7 +57,7 @@ class EnhancementPaletteProvider extends PaletteProvider {
       group: string,
       className: string,
       title: string,
-      options?: Object
+      options?: object
     ) {
       function createListener(event) {
         const shape = elementFactory.createShape(assign({ type: type }, options));
@@ -68,7 +67,7 @@ class EnhancementPaletteProvider extends PaletteProvider {
           shape.businessObject.di.isExpanded = (options as { [key: string]: any }).isExpanded;
         }
 
-        create.start(event, shape);
+        create.start(event, shape, undefined);
       }
 
       const shortType = type.replace(/^bpmn:/, "");
@@ -86,7 +85,7 @@ class EnhancementPaletteProvider extends PaletteProvider {
 
     function createSqlTask(event) {
       const sqlTask = elementFactory.createShape({ type: "miyue:SqlTask" });
-      create.start(event, sqlTask);
+      create.start(event, sqlTask, undefined);
     }
 
     assign(actions, {

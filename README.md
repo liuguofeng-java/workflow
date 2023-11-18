@@ -2,11 +2,22 @@
 
 #### 介绍
 
-兴趣使然，想开发一套自己认为的工作流，
+兴趣使然，想开发一套自己认为的工作流
 
 项目使用 `vue3` + `elementui-plus`+ `ts` + `Activit7` + `SpringBoot` + `MySql` ，项目从零搭建 可移植性高，无依赖多余框架
 
-码农不易，欢迎 **star**
+#### Git 仓库地址 (欢迎 Star⭐)
+
+- Gitee：https://gitee.com/liu_guo_feng/spring-boot-activiti7
+- Github：https://github.com/liuguofeng-java/spring-boot-activiti7
+
+#### 在线体验地址
+
+[工作流体验地址(宽度小请耐心等待)](http://119.3.177.255/)
+
+账户:admin
+
+密码:123
 
 #### 已完成功能
 
@@ -24,6 +35,10 @@
   - [x] 用户节点 选择用户(进行中)
   - [ ] 动态表单整合bpmb(进行中)
   - [ ] 整合执行监听器(进行中)
+
+
+
+- 
 
 ####  预览
 

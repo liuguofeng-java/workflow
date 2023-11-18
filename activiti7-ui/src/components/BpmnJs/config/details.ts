@@ -1,7 +1,6 @@
 import { EditorSettings } from "@/components/BpmnJs/types/editor/settings";
 import { defaultLang } from "@/components/BpmnJs/i18n";
 
-undefined;
 export const defaultSettings: EditorSettings = {
   language: defaultLang,
   processId: `Process_${new Date().getTime()}`,
@@ -20,5 +19,6 @@ export const defaultSettings: EditorSettings = {
   templateChooser: false,
   useLint: false,
   customTheme: {},
-  isLabelEditingProvider: false
+  isLabelEditingProvider: false,
+  isMove: false
 };

@@ -47,8 +47,7 @@ class EnhancementContextPadProvider extends ContextPadProvider {
       popupMenu,
       canvas,
       rules,
-      translate,
-      2000
+      translate
     );
 
     this._contextPad = contextPad;

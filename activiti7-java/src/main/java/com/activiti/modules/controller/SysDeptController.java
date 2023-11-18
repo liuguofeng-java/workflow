@@ -3,6 +3,7 @@ package com.activiti.modules.controller;
 import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.service.SysDeptService;
 import com.activiti.utils.R;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +57,12 @@ public class SysDeptController {
      */
     @PostMapping("save")
     public R<String> info(@RequestBody SysDeptEntity model) {
+        if (StringUtils.isNotEmpty(model.getDeptId())) {
+            SysDeptEntity dept = deptService.getById(model.getDeptId());
+            if (dept == null) throw new AException("未知数据");
+            if (dept.getIsSys() == 1) throw new AException("系统内置不能修改!");
+        }
+
         Date date = new Date();
         if (StringUtils.isEmpty(model.getDeptId())) {
             model.setCreateTime(date);
@@ -72,6 +79,11 @@ public class SysDeptController {
      */
     @DeleteMapping("delete")
     public R<String> delete(@RequestBody String id) {
+
+        SysDeptEntity dept = deptService.getById(id);
+        if(dept == null) throw new AException("未知数据");
+        if(dept.getIsSys() == 1) throw new AException("系统内置不能删除!");
+
         deptService.removeById(id);
         return R.ok();
     }

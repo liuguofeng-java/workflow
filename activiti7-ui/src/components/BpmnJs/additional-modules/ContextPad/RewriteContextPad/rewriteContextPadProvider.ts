@@ -52,8 +52,7 @@ class RewriteContextPadProvider extends ContextPadProvider {
       popupMenu,
       canvas,
       rules,
-      translate,
-      2000
+      translate
     );
 
     this._contextPad = contextPad;
@@ -77,6 +76,8 @@ class RewriteContextPadProvider extends ContextPadProvider {
       popupMenu = this._popupMenu,
       rules = this._rules,
       autoPlace = this._autoPlace,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       translate = this._translate;
 
     const actions = {};

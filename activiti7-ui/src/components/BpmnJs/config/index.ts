@@ -19,5 +19,6 @@ export const defaultSettings: EditorSettings = {
   templateChooser: true,
   useLint: false,
   customTheme: {},
-  isLabelEditingProvider: true
+  isLabelEditingProvider: true,
+  isMove: true
 };

@@ -7,7 +7,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submit">审批</el-button>
-          <el-button>取消</el-button>
+          <el-button @click="open = false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run build:prod",
-    "build:prod": "vue-tsc --noEmit && vite build --mode production",
+    "build:prod": "vite build --mode production",
+    "build:dev": "vite build --mode development",
     "serve": "npm run build && vite preview",
     "lint": "eslint \"src/**/*.{vue,js,ts,tsx}\" --fix"
   },

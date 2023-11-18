@@ -65,7 +65,8 @@ http.interceptors.response.use(
       505: "HTTP版本不受支持"
     };
     if (error && error.response) {
-      console.error("请求错误", error.response.data);
+      ElMessage.error(`请求错误:${error.message}`);
+      console.error("请求错误", error.response);
     }
     if (status === 401) {
       redirectLogin();

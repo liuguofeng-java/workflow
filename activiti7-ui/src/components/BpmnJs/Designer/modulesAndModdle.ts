@@ -105,6 +105,23 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
       ]
     });
 
+  // 是否禁止拖动
+  !settings.value.isMove &&
+    modules.push({
+      move: [
+        "type",
+        function () {
+          return {};
+        }
+      ],
+      bendpoints: [
+        "type",
+        function () {
+          return {};
+        }
+      ]
+    });
+
   // 配置模板选择弹窗（会影响默认 popupmenu）
   if (settings.value.templateChooser || settings.value.penalMode !== "custom") {
     modules.push(

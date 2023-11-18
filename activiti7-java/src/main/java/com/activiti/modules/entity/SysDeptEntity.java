@@ -44,6 +44,10 @@ public class SysDeptEntity implements Serializable {
      */
     private String email;
     /**
+     * 是否是系统内置,1:是,0:否
+     */
+    private Integer isSys;
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")

@@ -36,3 +36,12 @@ mybatis-plus:
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+
+# 日志配置
+logging:
+  level:
+    com.media: debug
+    org.springframework: warn

@@ -6,6 +6,7 @@ import com.activiti.modules.entity.dto.SysUserListDto;
 import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.R;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -70,6 +71,12 @@ public class SysUserController {
      */
     @PostMapping("save")
     public R<String> info(@RequestBody SysUserEntity model) {
+        if (StringUtils.isNotEmpty(model.getUserId())) {
+            SysUserEntity user = userService.getById(model.getUserId());
+            if (user == null) throw new AException("未知数据");
+            if (user.getIsSys() == 1) throw new AException("系统内置不能修改!");
+        }
+
         Date date = new Date();
         if (StringUtils.isEmpty(model.getUserId())) {
             model.setCreateTime(date);
@@ -86,6 +93,11 @@ public class SysUserController {
      */
     @DeleteMapping("delete")
     public R<String> delete(@RequestBody String id) {
+
+        SysUserEntity user = userService.getById(id);
+        if (user == null) throw new AException("未知数据");
+        if (user.getIsSys() == 1) throw new AException("系统内置不能删除!");
+
         userService.removeById(id);
         return R.ok();
     }
