@@ -27,7 +27,7 @@ export default (config: UserConfig): UserConfigExport => {
         iconDirs: [
           resolve(__dirname, "src/assets/icons/svg"),
           resolve(process.cwd(), "src/components/FormDesigner/svg"),
-          resolve(process.cwd(), "src/bpmn-icons")
+          resolve(process.cwd(), "src/components/BpmnJs/bpmn-icons")
         ],
         symbolId: "icon-[dir]-[name]"
       })

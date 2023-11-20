@@ -68,7 +68,7 @@ declare module "bpmn-js-bpmnlint" {
     _addEntry($ul: Element, state: State, entry: Entry): void;
     _clearOverlays(): void;
     _clearIssues(): void;
-    _setButtonState(state: ButtonState, errors: Object, warnings: Object): void;
+    _setButtonState(state: ButtonState, errors: object, warnings: object): void;
     _updateButton(): void;
     _createButton(): void;
 

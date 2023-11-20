@@ -1,13 +1,8 @@
 import { defineComponent, Component, markRaw, onMounted, ref } from "vue";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Translate } from "diagram-js/lib/i18n/translate";
 import debounce from "lodash.debounce";
-
 import EventBus from "@/components/BpmnJs/utils/EventBus";
 import modelerStore from "@/components/BpmnJs/store/modeler";
-import Logger from "@/components/BpmnJs/utils/Logger";
 
 import getBpmnIconType from "@/components/BpmnJs/bpmn-icons/getIconType";
 import bpmnIcons from "@/components/BpmnJs/bpmn-icons";
@@ -28,6 +23,7 @@ import ElementExtensionProperties from "./components/ElementExtensionProperties.
 import ElementAsyncContinuations from "./components/ElementAsyncContinuations.vue";
 import ElementJobExecution from "./components/ElementJobExecution.vue";
 import ElementStartInitiator from "./components/ElementStartInitiator.vue";
+import ElementForm from "./components/ElementForm.vue";
 
 import UserAssignment from "./components/UserAssignment.vue";
 
@@ -42,10 +38,8 @@ const Panel = defineComponent({
     const currentElementId = ref<string | undefined>(undefined);
     const currentElementType = ref<string | undefined>(undefined);
 
-    const penalTitle = ref<string | undefined>("属性配置");
     const bpmnIconName = ref<string>("Process");
     const bpmnElementName = ref<string>("Process");
-
     const renderComponents = markRaw<Component[]>([]);
 
     const activeNames = ref("NormalInfo");
@@ -62,6 +56,7 @@ const Panel = defineComponent({
       isAsynchronous(element) && renderComponents.push(ElementAsyncContinuations);
       isStartInitializable(element) && renderComponents.push(ElementStartInitiator);
       isUserAssignmentSupported(element) && renderComponents.push(UserAssignment);
+      isUserAssignmentSupported(element) && renderComponents.push(ElementForm);
     };
 
     // 记录前一个节点id
@@ -84,7 +79,7 @@ const Panel = defineComponent({
           modeler.getElRegistry?.find((el) => el.type === "bpmn:Collaboration");
 
         if (!activatedElement) {
-          return Logger.prettyError("No Element found!");
+          return console.log("No Element found!");
         }
       }
       activatedElementTypeName = getBpmnIconType(activatedElement);
@@ -93,7 +88,6 @@ const Panel = defineComponent({
       currentElementId.value = activatedElement.id;
       currentElementType.value = activatedElement.type.split(":")[1];
 
-      penalTitle.value = modeler.getModeler?.get<Translate>("translate")(currentElementType.value);
       bpmnIconName.value = bpmnIcons[activatedElementTypeName];
       bpmnElementName.value = activatedElementTypeName;
 
@@ -125,7 +119,7 @@ const Panel = defineComponent({
       });
       // 点击节点触发
       // modeler.on("element.click", (event) => {
-      //   Logger.prettyInfo("Element Click", event);
+      //   console.log("Element Click", event);
       // });
     });
 
@@ -135,6 +129,7 @@ const Panel = defineComponent({
       <div ref={panel} class="panel">
         <div class="panel-header">
           <p>{bpmnElementName.value}</p>
+          <br />
           <p>{customTranslate(currentElementType.value || "Process")}</p>
         </div>
 

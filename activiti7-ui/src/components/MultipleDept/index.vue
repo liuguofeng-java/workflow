@@ -1,4 +1,3 @@
-<!-- 多选用户组件 -->
 <template>
   <div class="select-container">
     <div class="tag-input">
@@ -10,7 +9,7 @@
       <el-icon> <Edit /> </el-icon>选择
     </el-button>
   </div>
-  <el-dialog v-model="open" title="选择人" width="1200px" append-to-body :before-close="submit">
+  <el-dialog v-model="open" title="选择部门" width="1200px" append-to-body :before-close="submit">
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
       <el-form-item label="部门名称">
         <el-input v-model="queryForm.deptName" placeholder="部门名称" clearable />

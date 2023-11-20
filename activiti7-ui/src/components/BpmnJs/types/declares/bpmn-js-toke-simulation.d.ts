@@ -123,7 +123,7 @@ declare module "bpmn-js-token-simulation/lib/features/context-pads/ContextPads" 
       canvas: Canvas,
       processInstances: ProcessInstances
     );
-    registerHandler(type: string, handler: Object): void;
+    registerHandler(type: string, handler: object): void;
     openContextPads(element: any): void;
     openElementContextPads(parent: any): void;
     closeContextPads(parent: any): void;
