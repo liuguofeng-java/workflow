@@ -11,6 +11,7 @@ import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
+import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constant;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 流程启动
@@ -168,8 +170,8 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 .orderByHistoricActivityInstanceStartTime().asc()
                 .list();
         for (HistoricActivityInstance item : executedList) {
-            // 过滤掉没有名称的节点
-            if (StringUtils.isEmpty(item.getActivityName())) continue;
+            // 除了用户节点以外的节点都过滤掉
+            if (!ActivityType.USER_TASK.equals(item.getActivityType())) continue;
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
             vo.setStartTime(item.getStartTime());
@@ -242,6 +244,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
+                .orderByHistoricActivityInstanceEndTime().asc()
                 .list();
         executedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
@@ -342,7 +345,13 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                                                      List<HistoricActivityInstance> executedList,
                                                      List<HistoricActivityInstance> unfinishedList) {
         List<HighlightNodeInfoVo> resultList = new ArrayList<>();
-        // 获取已经流转的线-------------
+        //todo 流程图显示还有些问题
+        // 假设只有开始和结束和三条线，每一条线上有流程变量 a=1，a<1, a>1,如果满足其中a=1,程序则在流程图高亮显示，三条线都高亮
+
+        // -------------                           ------------
+        // |绿色已审批节点| ------绿色已审批线------>  |绿色已审批节点|
+        // -------------                           ------------
+        // 获取'绿色已审批线'-------------
         // 先找到流入到 ‘已审批审批节点’ 的线
         for (HistoricActivityInstance item : executedList) {
             List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
@@ -358,9 +367,13 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 }
             });
         }
-        // 获取已经流转的线-------------
+        // 获取'绿色已审批线'-------------
 
-        // 活动待审批节点的线-------------
+
+        // -------------                           ------------
+        // |绿色已审批节点| ------黄色待审批线------>  |黄色待审批节点|
+        // -------------                           ------------
+        // 获取'黄色待审批线'-------------
         for (HistoricActivityInstance item : unfinishedList) {
             List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
             sequenceFlows.forEach(flow -> {
@@ -375,7 +388,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 }
             });
         }
-        // 活动待审批节点的线-------------
+        // 获取'黄色待审批线'-------------
         return resultList;
     }
 
