@@ -1,7 +1,11 @@
 <template>
   <div>
     <el-dialog v-model="open" title="审批" width="1200px" append-to-body>
-      <el-form :model="form" ref="formRef" :rules="rules" label-width="120px">
+      <!-- 节点动态表单 -->
+      <VFormRender ref="preForm" :form-json="formJson" :form-data="formData" :preview-state="true"> </VFormRender>
+
+      <!-- 审批意见 -->
+      <el-form :model="form" label-width="80px">
         <el-form-item label="处理意见">
           <el-input v-model="form.comment" type="textarea" />
         </el-form-item>
@@ -14,38 +18,57 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, toRef } from "vue";
+import { ref, reactive, toRef, onMounted } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
+import VFormRender from "@/components/FormDesigner/form-render/index.vue";
 
 // 是否打开弹出框
 const open = ref(false);
-// 表单实例
-const formRef = ref();
 // 提交表单数据
 let form = toRef(
   reactive({
     processInstanceId: "",
-    comment: ""
+    comment: "",
+    variables: {
+      formJson: {},
+      formData: {}
+    }
   })
 );
-// 表单验证
-const rules = ref({});
+
+// 动态表单实例
+const preForm = ref();
+// 动态表单数据
+const formJson = ref<object>({});
+// 动态回显数据
+const formData = ref<object>({});
 
 /**
  * 初始化
  * @param instanceId 流程实例id
+ * @param taskId 任务id
  */
-const init = (instanceId: string) => {
+const init = (instanceId: string, taskId: string) => {
   form.value.processInstanceId = instanceId;
-  open.value = true;
+  // 获取动态表单
+  baseService.get(`/processTodo/getNodeForm/${taskId}`).then((res) => {
+    if (res.code === 200 && res.data !== "") {
+      formJson.value = JSON.parse(res.data);
+    }
+    open.value = true;
+  });
 };
 
 /**
  * 提交
  */
-function submit() {
+async function submit() {
+  const formData = await preForm.value.getFormData();
+
   ElMessageBox.confirm("是否要提交?", "提示").then(() => {
+    form.value.variables.formJson = formJson;
+    form.value.variables.formData = formData;
     baseService.post(`/processTodo/approval`, form.value).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
@@ -65,6 +88,8 @@ const emit = defineEmits<{
 defineExpose({
   init
 });
+
+onMounted(() => {});
 </script>
 
 <style scoped></style>

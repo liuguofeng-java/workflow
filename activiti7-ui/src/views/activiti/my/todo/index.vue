@@ -22,7 +22,7 @@
       <el-table-column label="发起人" align="center" prop="startUserName" />
       <el-table-column>
         <template #default="scope">
-          <el-button link type="primary" icon="Pointer" @click="handleApproval(scope.row.processInstanceId)">审批</el-button>
+          <el-button link type="primary" icon="Pointer" @click="handleApproval(scope.row)">审批</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,10 +86,10 @@ function handleQuery() {
 
 /**
  * 审批流程实例
- * @param instanceId 流程实例id
+ * @param row 当前行数据
  */
-function handleApproval(instanceId: string) {
-  approvalRef.value.init(instanceId);
+function handleApproval(row: any) {
+  approvalRef.value.init(row.processInstanceId, row.taskId);
 }
 
 getList();

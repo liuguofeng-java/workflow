@@ -37,6 +37,17 @@ public class ProcessTodoController {
     }
 
     /**
+     * 获取节点表单
+     * @param taskId 任务id
+     * @return 表单数据
+     */
+    @GetMapping("getNodeForm/{taskId}")
+    public R<String> getNodeForm(@PathVariable String taskId){
+        String nodeForm = processTodoService.getNodeForm(taskId);
+        return R.ok(nodeForm);
+    }
+
+    /**
      * 审批节点
      *
      * @param dto 参数

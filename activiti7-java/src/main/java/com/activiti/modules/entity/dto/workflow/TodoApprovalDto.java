@@ -2,6 +2,8 @@ package com.activiti.modules.entity.dto.workflow;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * 审批节点
  *
@@ -29,4 +31,11 @@ public class TodoApprovalDto {
      * 处理意见
      */
     private String comment;
+
+    /**
+     * 流程变量
+     */
+    private Map<String, Object> variables;
+
+
 }

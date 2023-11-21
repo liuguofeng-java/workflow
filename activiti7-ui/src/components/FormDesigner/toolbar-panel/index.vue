@@ -178,7 +178,6 @@
 <script>
 import VFormRender from "@/components/FormDesigner/form-render/index.vue";
 import CodeEditor from "@/components/FormDesigner/code-editor/index";
-import Clipboard from "clipboard";
 import { deepClone, copyToClipboard, generateId, getQueryParam, traverseAllWidgets, addWindowResizeHandler } from "@/components/FormDesigner/utils/util";
 import i18n from "@/components/FormDesigner/utils/i18n";
 import { generateCode } from "@/components/FormDesigner/utils/code-generator";
@@ -194,7 +193,6 @@ export default {
   components: {
     VFormRender,
     CodeEditor,
-    Clipboard,
     SvgIcon
   },
   props: {

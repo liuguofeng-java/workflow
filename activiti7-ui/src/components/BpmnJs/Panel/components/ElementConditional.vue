@@ -17,7 +17,7 @@
       </el-form-item>
 
       <el-form-item label="条件内容" v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
-        <el-input v-model="conditionData.expression" maxlength="32" @change="setConditionExpression" />
+        <el-input v-model="conditionData.expression" maxlength="100" @change="setConditionExpression" />
       </el-form-item>
 
       <template v-if="conditionData.conditionType && conditionData.conditionType === 'script'">
