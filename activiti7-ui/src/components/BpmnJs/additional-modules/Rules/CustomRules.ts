@@ -16,7 +16,6 @@ class CustomRules extends RuleProvider {
   }
 }
 
-// @ts-ignore
 CustomRules.$inject = ["eventBus"];
 
 export default CustomRules;

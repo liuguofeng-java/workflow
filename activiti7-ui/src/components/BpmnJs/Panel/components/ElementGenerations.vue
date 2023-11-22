@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="常规信息" name="NormalInfo">
-    <el-form label-width="100px">
+    <el-form label-width="80px">
       <el-form-item label="ID">
         <el-input v-model="elementId" maxlength="32" @change="updateElementId" />
       </el-form-item>

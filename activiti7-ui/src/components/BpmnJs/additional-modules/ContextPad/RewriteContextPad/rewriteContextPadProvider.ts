@@ -11,7 +11,7 @@ import Canvas from "diagram-js/lib/core/Canvas";
 import Rules from "diagram-js/lib/features/rules/Rules";
 import { Translate } from "diagram-js/lib/i18n/translate";
 import { Element } from "diagram-js/lib/model/Types";
-import { assign, forEach, isArray, every } from "min-dash";
+import { assign, forEach, isArray } from "min-dash";
 import { is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { isEventSubProcess, isExpanded } from "bpmn-js/lib/util/DiUtil";
 import { getChildLanes } from "bpmn-js/lib/features/modeling/util/LaneUtil";

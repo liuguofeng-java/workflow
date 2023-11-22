@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="执行作业" name="ExecuteJob">
-    <el-form label-width="100px">
+    <el-form label-width="80px">
       <el-form-item label="异步前">
         <el-switch v-model="acBefore" @change="updateElementACBefore" />
       </el-form-item>

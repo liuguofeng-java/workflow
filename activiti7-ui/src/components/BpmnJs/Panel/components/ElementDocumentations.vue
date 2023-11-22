@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="文档设置" name="Document">
-    <el-form label-width="100px">
+    <el-form label-width="80px">
       <el-form-item label="ID">
         <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
       </el-form-item>

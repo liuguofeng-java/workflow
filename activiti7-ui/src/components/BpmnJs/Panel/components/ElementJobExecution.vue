@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="执行作业" name="ExecuteJob">
-    <el-form label-width="100px">
+    <el-form label-width="80px">
       <div class="element-external-task">
         <el-form-item label="任务优先级" v-if="tpVisible">
           <el-input v-model="taskPriority" maxlength="32" @change="setExternalTaskPriority" />

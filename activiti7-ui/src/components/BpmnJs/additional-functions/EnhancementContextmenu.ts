@@ -1,7 +1,7 @@
 // 右键扩展
 import editor from "@/components/BpmnJs/store/editor";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
-import { isAppendAction } from "@/components/bpmnJs/utils//BpmnDesignerUtils";
+import { isAppendAction } from "@/components/BpmnJs/utils/BpmnDesignerUtils";
 
 import type Modeler from "bpmn-js/lib/Modeler";
 import type PopupMenu from "diagram-js/lib/features/popup-menu/PopupMenu";

@@ -7,7 +7,7 @@ export function createAction(
   group: string,
   className: string,
   title: string,
-  options?: Object
+  options?: object
 ) {
   function createListener(event) {
     const shape = elementFactory.createShape(assign({ type: type }, options));

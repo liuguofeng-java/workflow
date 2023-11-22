@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-collapse-item title="动态表单" name="ElementForm">
-      <el-form label-width="100px">
+      <el-form label-width="80px">
         <el-form-item label="表单" class="disabled-color">
           <el-input v-model="form.formName" disabled>
             <template #append>

@@ -1,6 +1,6 @@
 <template>
   <el-collapse-item title="用户分配" name="User">
-    <el-form label-width="100px">
+    <el-form label-width="80px">
       <el-form-item label="类型">
         <el-select v-model="UAForm.userType" @change="updateUserAssignProp('userType', $event)">
           <el-option v-for="item in userType" :key="item.value" :label="item.label" :value="item.value" />
