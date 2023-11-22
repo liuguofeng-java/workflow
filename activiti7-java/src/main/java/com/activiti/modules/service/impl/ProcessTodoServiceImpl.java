@@ -16,11 +16,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.UserTask;
+import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -145,25 +145,31 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      */
     @Override
     public void approval(TodoApprovalDto dto) {
-        List<String> usersGroups = new ArrayList<>();
-        usersGroups.add(dto.getDeptId());
-        TaskQuery query = taskService.createTaskQuery()
-                .active()
-                .includeProcessVariables()
-                .processInstanceId(dto.getProcessInstanceId())
-                .taskCandidateOrAssigned(dto.getUserId(), usersGroups)
-                .orderByTaskCreateTime()
-                .desc();
-        List<Task> list = query.list();
-        if (list.size() == 0) throw new AException("未找到审批节点!");
-        Task task = list.get(0);
+        try {
+            List<String> usersGroups = new ArrayList<>();
+            usersGroups.add(dto.getDeptId());
+            TaskQuery query = taskService.createTaskQuery()
+                    .active()
+                    .includeProcessVariables()
+                    .processInstanceId(dto.getProcessInstanceId())
+                    .taskCandidateOrAssigned(dto.getUserId(), usersGroups)
+                    .orderByTaskCreateTime()
+                    .desc();
+            List<Task> list = query.list();
+            if (list.size() == 0) throw new AException("未找到审批节点!");
+            Task task = list.get(0);
 
-        // 如果没有代理人就拾取任务进行办理
-        if (StringUtils.isEmpty(task.getAssignee())) {
-            taskService.claim(task.getId(), dto.getUserId());
+            // 如果没有代理人就拾取任务进行办理
+            if (StringUtils.isEmpty(task.getAssignee())) {
+                taskService.claim(task.getId(), dto.getUserId());
+            }
+
+            taskService.addComment(task.getId(), task.getProcessInstanceId(), dto.getComment());
+            taskService.complete(task.getId(), dto.getVariables());
+        } catch (ActivitiException ex) {
+            throw new AException("Activiti流程异常:" + ex.getMessage());
+        } catch (Exception ex) {
+            throw new AException("流程提交未知异常!");
         }
-
-        taskService.addComment(task.getId(), task.getProcessInstanceId(), dto.getComment());
-        taskService.complete(task.getId(), dto.getVariables());
     }
 }

@@ -18,7 +18,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, toRef, onMounted } from "vue";
+import { ref, reactive, toRef } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
 import VFormRender from "@/components/FormDesigner/form-render/index.vue";
@@ -30,10 +30,7 @@ let form = toRef(
   reactive({
     processInstanceId: "",
     comment: "",
-    variables: {
-      formJson: {},
-      formData: {}
-    }
+    variables: {}
   })
 );
 
@@ -44,13 +41,18 @@ const formJson = ref<object>({});
 // 动态回显数据
 const formData = ref<object>({});
 
+// 当前节点id
+let activityId = "";
+
 /**
  * 初始化
  * @param instanceId 流程实例id
  * @param taskId 任务id
+ * @param taskDefinitionKey 节点id
  */
-const init = (instanceId: string, taskId: string) => {
+const init = (instanceId: string, taskId: string, taskDefinitionKey: string) => {
   form.value.processInstanceId = instanceId;
+  activityId = taskDefinitionKey;
   // 获取动态表单
   baseService.get(`/processTodo/getNodeForm/${taskId}`).then((res) => {
     if (res.code === 200 && res.data !== "") {
@@ -64,11 +66,18 @@ const init = (instanceId: string, taskId: string) => {
  * 提交
  */
 async function submit() {
+  // 获取动态表单数据
   const formData = await preForm.value.getFormData();
 
   ElMessageBox.confirm("是否要提交?", "提示").then(() => {
-    form.value.variables.formJson = formJson;
-    form.value.variables.formData = formData;
+    // 在流程节点局部变量设置值, 可以方便使用 `${}` 直接设置流程变量
+    var variables = JSON.parse(JSON.stringify(formData));
+
+    // 在流程节点局部变量设置表单的结构和值方便以后回显使用
+    variables[`${activityId}formJson`] = formJson;
+    variables[`${activityId}formData`] = JSON.parse(JSON.stringify(formData));
+    form.value.variables = variables;
+
     baseService.post(`/processTodo/approval`, form.value).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
@@ -88,8 +97,6 @@ const emit = defineEmits<{
 defineExpose({
   init
 });
-
-onMounted(() => {});
 </script>
 
 <style scoped></style>

@@ -1,9 +1,11 @@
 package com.activiti.modules.entity.vo.workflow;
 
 import lombok.Data;
+import com.activiti.utils.constant.HighlightNodeStatus;
 
 /**
  * 高亮节点信息
+ *
  * @author liuguofeng
  * @date 2023/11/06 13:53
  **/
@@ -15,7 +17,7 @@ public class HighlightNodeInfoVo {
     private String activityId;
 
     /**
-     * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点)
+     * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点), 参考 {@link HighlightNodeStatus}
      */
     private Integer status;
 }

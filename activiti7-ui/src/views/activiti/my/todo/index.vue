@@ -89,7 +89,7 @@ function handleQuery() {
  * @param row 当前行数据
  */
 function handleApproval(row: any) {
-  approvalRef.value.init(row.processInstanceId, row.taskId);
+  approvalRef.value.init(row.processInstanceId, row.taskId, row.taskDefinitionKey);
 }
 
 getList();

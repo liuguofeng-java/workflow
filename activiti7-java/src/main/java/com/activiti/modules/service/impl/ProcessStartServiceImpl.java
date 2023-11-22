@@ -13,6 +13,7 @@ import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constant;
+import com.activiti.utils.constant.HighlightNodeStatus;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
@@ -249,7 +250,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         executedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setStatus(1);
+                setStatus(HighlightNodeStatus.EXECUTED);
             }});
         });
 
@@ -261,7 +262,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         unfinishedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setStatus(2);
+                setStatus(HighlightNodeStatus.UNFINISHED);
             }});
         });
 
@@ -362,7 +363,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 if (count != 0) {
                     resultList.add(new HighlightNodeInfoVo() {{
                         setActivityId(flow.getId());
-                        setStatus(1);
+                        setStatus(HighlightNodeStatus.EXECUTED);
                     }});
                 }
             });
@@ -383,7 +384,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 if (count != 0) {
                     resultList.add(new HighlightNodeInfoVo() {{
                         setActivityId(flow.getId());
-                        setStatus(2);
+                        setStatus(HighlightNodeStatus.UNFINISHED);
                     }});
                 }
             });
