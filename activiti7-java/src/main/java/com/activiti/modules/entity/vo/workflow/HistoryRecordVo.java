@@ -1,9 +1,11 @@
 package com.activiti.modules.entity.vo.workflow;
 
+import com.activiti.utils.constant.NodeStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 流程记录
@@ -41,7 +43,7 @@ public class HistoryRecordVo {
     private String userName;
 
     /**
-     * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点)
+     * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点) 参考{@link NodeStatus}
      */
     private Integer status;
 
@@ -54,4 +56,14 @@ public class HistoryRecordVo {
      * 流程记录身份信息
      */
     private HistoryRecordIdentityVo identity;
+
+    /**
+     * 动态表单结构数据
+     */
+    private Object formJson;
+
+    /**
+     * 动态表单数据
+     */
+    private Object formData;
 }

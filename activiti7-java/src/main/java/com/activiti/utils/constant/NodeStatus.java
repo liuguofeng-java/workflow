@@ -1,12 +1,12 @@
 package com.activiti.utils.constant;
 
 /**
- * 高亮节点状态
+ * 节点状态
  *
  * @author liuguofeng
  * @date 2023/11/22 09:01
  **/
-public class HighlightNodeStatus {
+public class NodeStatus {
     /**
      * 已完成的节点
      */

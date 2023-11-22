@@ -36,7 +36,7 @@ let form = toRef(
 
 // 动态表单实例
 const preForm = ref();
-// 动态表单数据
+// 动态表单结构数据
 const formJson = ref<object>({});
 // 动态回显数据
 const formData = ref<object>({});
@@ -74,8 +74,8 @@ async function submit() {
     var variables = JSON.parse(JSON.stringify(formData));
 
     // 在流程节点局部变量设置表单的结构和值方便以后回显使用
-    variables[`${activityId}formJson`] = formJson;
-    variables[`${activityId}formData`] = JSON.parse(JSON.stringify(formData));
+    variables[`${activityId}_formJson`] = formJson;
+    variables[`${activityId}_formData`] = JSON.parse(JSON.stringify(formData));
     form.value.variables = variables;
 
     baseService.post(`/processTodo/approval`, form.value).then((res) => {

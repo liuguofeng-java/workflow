@@ -24,6 +24,8 @@
                   <el-descriptions-item v-if="item.userName" label="审批人">{{ item.userName }}</el-descriptions-item>
                   <el-descriptions-item v-if="item.comment" label="审批意见">{{ item.comment }}</el-descriptions-item>
                 </el-descriptions>
+                <!-- 用户节点填写的表单 -->
+                <NodeVFormRender :form-json="item.formJson" :form-data="item.formData" />
               </el-card>
             </el-timeline-item>
           </el-timeline>
@@ -39,6 +41,8 @@
 import { ref, onMounted } from "vue";
 import baseService from "@/service/baseService";
 import DesignerDetails from "@/components/BpmnJs/Designer/details";
+import NodeVFormRender from "./nodeVFormRender.vue";
+import { nextTick } from "vue";
 
 // 是否打开弹出框
 const drawer = ref(false);
@@ -53,6 +57,11 @@ let instanceId = ref("");
 const loading = ref(false);
 // tab 选择的值
 const tabsValue = ref("1");
+
+const preFormOpen = ref(false);
+
+// 动态表单实例
+const preFormRef = ref();
 
 /**
  * 初始化
@@ -118,6 +127,25 @@ const tabChange = (name: string) => {
       highlightNodeInfo();
       break;
   }
+};
+
+/**
+ * 打开vFormRender
+ */
+const vFormRenderShow = () => {
+  preFormOpen.value = true;
+  nextTick(() => {
+    console.log(preFormRef.value);
+
+    preFormRef.value.disableForm();
+  });
+};
+
+/**
+ * 隐藏vFormRender
+ */
+const vFormRenderHide = () => {
+  preFormOpen.value = false;
 };
 
 onMounted(() => {

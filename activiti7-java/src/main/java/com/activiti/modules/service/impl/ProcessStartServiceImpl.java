@@ -13,7 +13,7 @@ import com.activiti.modules.service.SysDeptService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constant;
-import com.activiti.utils.constant.HighlightNodeStatus;
+import com.activiti.utils.constant.NodeStatus;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
@@ -35,10 +35,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 流程启动
@@ -163,6 +161,11 @@ public class ProcessStartServiceImpl implements ProcessStartService {
     public List<HistoryRecordVo> getHistoryRecord(String instanceId) {
         if (StringUtils.isEmpty(instanceId)) throw new AException("instanceId不能为空!");
         List<HistoryRecordVo> resultList = new ArrayList<>();
+        // 当前流程的流程变量
+        List<HistoricVariableInstance> historicVariables = historyService.createHistoricVariableInstanceQuery()
+                .processInstanceId(instanceId)
+                .list();
+
         // 已审批审批节点
         List<HistoricActivityInstance> executedList = historyService
                 .createHistoricActivityInstanceQuery()
@@ -192,7 +195,21 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             }
             // 获取获选人 或 候选组信息
             vo.setIdentity(getCandidateInfo(item.getTaskId()));
-            vo.setStatus(1);
+            vo.setStatus(NodeStatus.EXECUTED);
+
+            // 设置流程变量,根据activityId回显动态表单(用户提交的数据),因为前端赋值是这样的:
+            // variables[`${activityId}_formJson`] = formJson;
+            // variables[`${activityId}_formData`] = JSON.parse(JSON.stringify(formData));
+            historicVariables.stream()
+                    .filter(t -> t.getVariableName().equals(String.format("%s_formJson", item.getActivityId())))
+                    .findAny()
+                    .ifPresent(t -> vo.setFormJson(t.getValue()));
+
+            historicVariables.stream()
+                    .filter(t -> t.getVariableName().equals(String.format("%s_formData", item.getActivityId())))
+                    .findAny()
+                    .ifPresent(t -> vo.setFormData(t.getValue()));
+
             resultList.add(vo);
         }
 
@@ -213,7 +230,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             }
             // 获取获选人 或 候选组信息
             vo.setIdentity(getCandidateInfo(item.getTaskId()));
-            vo.setStatus(2);
+            vo.setStatus(NodeStatus.UNFINISHED);
             resultList.add(vo);
         }
         return resultList;
@@ -250,7 +267,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         executedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setStatus(HighlightNodeStatus.EXECUTED);
+                setStatus(NodeStatus.EXECUTED);
             }});
         });
 
@@ -262,7 +279,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         unfinishedList.forEach(item -> {
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
-                setStatus(HighlightNodeStatus.UNFINISHED);
+                setStatus(NodeStatus.UNFINISHED);
             }});
         });
 
@@ -363,7 +380,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 if (count != 0) {
                     resultList.add(new HighlightNodeInfoVo() {{
                         setActivityId(flow.getId());
-                        setStatus(HighlightNodeStatus.EXECUTED);
+                        setStatus(NodeStatus.EXECUTED);
                     }});
                 }
             });
@@ -384,7 +401,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 if (count != 0) {
                     resultList.add(new HighlightNodeInfoVo() {{
                         setActivityId(flow.getId());
-                        setStatus(HighlightNodeStatus.UNFINISHED);
+                        setStatus(NodeStatus.UNFINISHED);
                     }});
                 }
             });
