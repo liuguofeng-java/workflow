@@ -1,4 +1,3 @@
-import "@/assets/icons/iconfont/iconfont.js";
 import ElementPlus from "element-plus";
 import "element-plus/theme-chalk/display.css";
 import "element-plus/theme-chalk/index.css";
@@ -29,7 +28,6 @@ import "@/components/FormDesigner/styles/index.scss";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Draggable from "@/../lib/vuedraggable/dist/vuedraggable.umd.js";
-import "virtual:svg-icons-register";
 import { registerIcon } from "@/components/FormDesigner/utils/el-icons";
 
 import ContainerWidgets from "@/components/FormDesigner/form-widget/container-widget/index";
@@ -51,7 +49,6 @@ loadExtension(app);
 
 // bpmn.js 相关-------------------------------------------------
 import "@/components/BpmnJs/styles/index.scss";
-import "virtual:svg-icons-register";
 import i18n from "@/components/BpmnJs/i18n";
 app.use(i18n);
 // bpmn.js 相关-------------------------------------------------

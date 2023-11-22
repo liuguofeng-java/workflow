@@ -1,6 +1,7 @@
 export default {
   StartEvent: "Start Event",
   EndEvent: "End Event",
+  SequenceFlow: "Sequence Flow",
   IntermediateThrowEvent: "IntermediateThrowEvent",
   IntermediateCatchEvent: "IntermediateCatchEvent",
   "Message Start Event": "Message Start Event",

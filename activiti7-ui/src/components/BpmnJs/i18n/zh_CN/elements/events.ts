@@ -1,6 +1,7 @@
 export default {
   StartEvent: "开始事件",
   EndEvent: "结束事件",
+  SequenceFlow: "连接线",
   IntermediateThrowEvent: "中间抛出事件",
   IntermediateCatchEvent: "中间捕获事件",
   "Message Start Event": "消息开始事件",

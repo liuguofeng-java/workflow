@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import DesignerDetails from "@/components/BpmnJs/Designer/details";
+import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
 import baseService from "@/service/baseService";
 
 // 是否加载抽屉

@@ -7,19 +7,19 @@
             <el-form :model="optionModel" size="small" label-position="left" label-width="120px" class="setting-form" @submit.prevent>
               <el-collapse v-model="widgetActiveCollapseNames" class="setting-collapse">
                 <el-collapse-item name="1" v-if="showCollapse(commonProps)" :title="i18nt('designer.setting.commonSetting')">
-                  <template v-for="(editorName, propName) in commonProps">
+                  <template v-for="(editorName, propName) in commonProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
 
                 <el-collapse-item name="2" v-if="showCollapse(advProps)" :title="i18nt('designer.setting.advancedSetting')">
-                  <template v-for="(editorName, propName) in advProps">
+                  <template v-for="(editorName, propName) in advProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
 
                 <el-collapse-item name="3" v-if="showEventCollapse() && showCollapse(eventProps)" :title="i18nt('designer.setting.eventSetting')">
-                  <template v-for="(editorName, propName) in eventProps">
+                  <template v-for="(editorName, propName) in eventProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
@@ -31,19 +31,19 @@
             <el-form :model="optionModel" size="small" label-position="left" label-width="120px" class="setting-form" @submit.prevent>
               <el-collapse v-model="widgetActiveCollapseNames" class="setting-collapse">
                 <el-collapse-item name="1" v-if="showCollapse(commonProps)" :title="i18nt('designer.setting.commonSetting')">
-                  <template v-for="(editorName, propName) in commonProps">
+                  <template v-for="(editorName, propName) in commonProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
 
                 <el-collapse-item name="2" v-if="showCollapse(advProps)" :title="i18nt('designer.setting.advancedSetting')">
-                  <template v-for="(editorName, propName) in advProps">
+                  <template v-for="(editorName, propName) in advProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
 
                 <el-collapse-item name="3" v-if="showEventCollapse() && showCollapse(eventProps)" :title="i18nt('designer.setting.eventSetting')">
-                  <template v-for="(editorName, propName) in eventProps">
+                  <template v-for="(editorName, propName) in eventProps" :key="propName">
                     <component v-if="hasPropEditor(propName, editorName)" :is="getPropEditor(propName, editorName)" :designer="designer" :selected-widget="selectedWidget" :option-model="optionModel"></component>
                   </template>
                 </el-collapse-item>
@@ -83,7 +83,6 @@ import FormSetting from "./form-setting";
 import WidgetProperties from "./propertyRegister";
 import { addWindowResizeHandler } from "@/components/FormDesigner/utils/util";
 import i18n from "@/components/FormDesigner/utils/i18n";
-import eventBus from "@/components/FormDesigner/utils/event-bus";
 import emitter from "@/components/FormDesigner/utils/emitter";
 import { propertyRegistered } from "@/components/FormDesigner/setting-panel/propertyRegister";
 
@@ -137,6 +136,7 @@ export default {
       },
 
       set(newValue) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.selectedWidget.options = newValue;
       }
     }
@@ -144,7 +144,9 @@ export default {
   watch: {
     "designer.selectedWidget": {
       handler(val) {
-        if (val) {
+        if (Object.keys(val).length === 0) {
+          this.activeTab = "2";
+        } else {
           this.activeTab = "1";
         }
       }
@@ -233,6 +235,7 @@ export default {
       let result = false;
 
       for (let propName in propsObj) {
+        // eslint-disable-next-line no-prototype-builtins
         if (!propsObj.hasOwnProperty(propName)) {
           continue;
         }
@@ -277,6 +280,7 @@ export default {
         }
       }
 
+      // eslint-disable-next-line vue/no-mutating-props
       this.selectedWidget.options[this.curEventName] = this.eventHandlerCode;
       this.showWidgetEventDialogFlag = false;
     }

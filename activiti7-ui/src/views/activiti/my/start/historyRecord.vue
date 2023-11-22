@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import baseService from "@/service/baseService";
-import DesignerDetails from "@/components/BpmnJs/Designer/details";
+import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
 import NodeForm from "./nodeForm.vue";
 
 // 是否打开弹出框
