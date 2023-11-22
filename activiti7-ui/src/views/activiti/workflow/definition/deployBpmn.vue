@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import Aligns from "@/components/BpmnJs/Toolbar/components/Aligns";
 import Scales from "@/components/BpmnJs/Toolbar/components/Scales";
 import Commands from "@/components/BpmnJs/Toolbar/components/Commands";
@@ -75,12 +75,6 @@ const deployment = async () => {
     }
   });
 };
-
-onMounted(() => {
-  document.body.addEventListener("contextmenu", function (ev) {
-    ev.preventDefault();
-  });
-});
 
 const emit = defineEmits<{
   (event: "ok"): void;

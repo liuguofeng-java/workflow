@@ -17,7 +17,6 @@ import {
 
 import ElementGenerations from "./components/ElementGenerations.vue";
 import ElementConditional from "./components/ElementConditional.vue";
-import ElementDocumentations from "./components/ElementDocumentations.vue";
 import ElementExecutionListeners from "./components/ElementExecutionListeners.vue";
 import ElementExtensionProperties from "./components/ElementExtensionProperties.vue";
 import ElementAsyncContinuations from "./components/ElementAsyncContinuations.vue";
@@ -48,7 +47,6 @@ const Panel = defineComponent({
       // 清空
       renderComponents.splice(0, renderComponents.length);
       renderComponents.push(ElementGenerations);
-      renderComponents.push(ElementDocumentations);
       isCanbeConditional(element) && renderComponents.push(ElementConditional);
       isJobExecutable(element) && renderComponents.push(ElementJobExecution);
       renderComponents.push(ElementExtensionProperties);

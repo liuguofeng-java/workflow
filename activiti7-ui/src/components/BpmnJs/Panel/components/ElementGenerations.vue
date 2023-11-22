@@ -7,14 +7,9 @@
       <el-form-item label="流程名称">
         <el-input v-model="elementName" maxlength="20" @change="updateElementName" />
       </el-form-item>
-      <!-- <template v-if="isProcess">
-        <el-form-item label="版本号" key="version">
-          <el-input v-model="elementVersion" maxlength="20" @change="updateElementVersion" />
-        </el-form-item>
-        <el-form-item label="可执行" key="executable">
-          <el-switch v-model="elementExecutable" @change="updateElementExecutable" />
-        </el-form-item>
-      </template> -->
+      <el-form-item label="介绍">
+        <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
+      </el-form-item>
     </el-form>
   </el-collapse-item>
 </template>
@@ -26,8 +21,7 @@ import modelerStore from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
 import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUtil";
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
-import { getProcessExecutable, getProcessVersionTag, setProcessExecutable, setProcessVersionTag } from "@/components/BpmnJs/bo-utils/processUtil";
-import { ElMessage } from "element-plus";
+import { getDocumentValue, setDocumentValue } from "@/components/BpmnJs/bo-utils/documentationUtil";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
 
 export default defineComponent({
@@ -36,10 +30,16 @@ export default defineComponent({
     return {
       elementId: "",
       elementName: "",
-      elementVersion: "",
-      elementExecutable: true,
-      isProcess: false
+      elementDoc: ""
     };
+  },
+  watch: {
+    getActiveId: {
+      immediate: true,
+      handler() {
+        this.elementDoc = getDocumentValue(this.getActive as Element) || "";
+      }
+    }
   },
   computed: {
     ...mapState(modelerStore, ["getActive", "getActiveId"])
@@ -50,13 +50,9 @@ export default defineComponent({
   },
   methods: {
     reloadGenerationData() {
-      this.isProcess = !!this.getActive && this.getActive.type === "bpmn:Process";
       this.elementId = this.getActiveId as string;
       this.elementName = getNameValue(this.getActive as Element) || "";
-      if (this.isProcess) {
-        this.elementExecutable = getProcessExecutable(this.getActive as Element);
-        this.elementVersion = getProcessVersionTag(this.getActive as Element) || "";
-      }
+      this.elementDoc = getDocumentValue(this.getActive as Element) || "";
     },
     updateElementName(value: string) {
       setNameValue(this.getActive as Element, value);
@@ -64,16 +60,8 @@ export default defineComponent({
     updateElementId(value: string) {
       setIdValue(this.getActive as Element, value);
     },
-    updateElementVersion(value: string) {
-      const reg = /((\d|([1-9](\d*))).){2}(\d|([1-9](\d*)))/;
-      if (reg.test(value)) {
-        setProcessVersionTag(this.getActive as Element, value);
-      } else {
-        ElMessage.error("版本号必须符合语义化版本2.0.0 要点");
-      }
-    },
-    updateElementExecutable(value: boolean) {
-      setProcessExecutable(this.getActive as Element, value);
+    updateElementDoc(value) {
+      setDocumentValue(this.getActive as Element, value);
     }
   }
 });

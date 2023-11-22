@@ -55,7 +55,7 @@ export default defineComponent({
   name: "ElementConditional",
   setup() {
     const modelerStore = modeler();
-    const getActive = computed<Element | null>(() => modelerStore.getActive!);
+    const getActive = computed<Element | null>(() => modelerStore.getActive);
 
     // 变量配置部分
     const varVisible = ref<boolean>(false);

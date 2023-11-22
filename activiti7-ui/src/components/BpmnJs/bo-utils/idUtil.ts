@@ -1,6 +1,6 @@
 import { Element } from "diagram-js/lib/model/Types";
 import modelerStore from "@/components/BpmnJs/store/modeler";
-import { isIdValid } from "@/components/bpmnJs/utils//BpmnValidator";
+import { isIdValid } from "@/components/BpmnJs/utils/BpmnValidator";
 import { ElMessage } from "element-plus";
 
 export function getIdValue(element: Element): string {

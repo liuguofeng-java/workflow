@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import DesignerDetails from "@/components/BpmnJs/Designer/details";
 import baseService from "@/service/baseService";
 
@@ -29,12 +29,6 @@ const open = (deploymentId) => {
       }
     });
 };
-
-onMounted(() => {
-  document.body.addEventListener("contextmenu", function (ev) {
-    ev.preventDefault();
-  });
-});
 
 defineExpose({
   open

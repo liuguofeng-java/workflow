@@ -1,6 +1,6 @@
 <template>
   <!-- 用户节点填写的表单 -->
-  <el-popover placement="right" :width="400" trigger="hover" v-if="formJson" @show="vFormRenderShow">
+  <el-popover placement="right" :width="400" trigger="hover" v-if="Object.keys(formJson).length !== 0" @show="vFormRenderShow">
     <template #reference>
       <el-link type="primary">表单详情</el-link>
     </template>
@@ -16,7 +16,7 @@ defineProps({
   formJson: {
     type: Object,
     default: () => {
-      return null;
+      return {};
     }
   },
   formData: {
