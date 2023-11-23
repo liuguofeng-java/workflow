@@ -17,32 +17,32 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: "主页" },
     children: [
       {
-        path: "/sys/user",
+        path: "sys/user",
         name: "sysUser", // 用户信息
         component: () => import("@/views/system/user/index.vue")
       },
       {
-        path: "/sys/dept",
+        path: "sys/dept",
         name: "sysDept", // 部门信息
         component: () => import("@/views/system/dept/index.vue")
       },
       {
-        path: "/workflow/definition",
+        path: "workflow/definition",
         name: "definition", // 流程定义
         component: () => import("@/views/activiti/workflow/definition/index.vue")
       },
       {
-        path: "/workflow/vform",
+        path: "workflow/vform",
         name: "vform", // 流程定义
         component: () => import("@/views/activiti/workflow/vform/index.vue")
       },
       {
-        path: "/my/start",
+        path: "my/start",
         name: "start", // 我发起的
         component: () => import("@/views/activiti/my/start/index.vue")
       },
       {
-        path: "/my/todo",
+        path: "my/todo",
         name: "todo", // 我的代办
         component: () => import("@/views/activiti/my/todo/index.vue")
       }

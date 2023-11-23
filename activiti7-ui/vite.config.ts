@@ -9,7 +9,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 export default (config: UserConfig): UserConfigExport => {
   const mode = config.mode as string;
   return defineConfig({
-    base: "./",
+    base: "/",
     plugins: [
       vue(),
       vueJsx({}),

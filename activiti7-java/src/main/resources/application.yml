@@ -22,26 +22,22 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml
   #扫包
-  typeAliasesPackage: com.activiti.modules.*.entity
+  typeAliasesPackage: com.activiti.modules.entity
   global-config:
     db-config:
       #全局id类型
       id-type: ASSIGN_UUID
-      logic-delete-value: -1
-      logic-not-delete-value: 0
-    banner: false
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
 
 # 日志配置
 logging:
+  config: classpath:logback.xml
   level:
-    com.media: debug
+    com.activiti: debug
     org.springframework: warn

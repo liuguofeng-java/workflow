@@ -12,7 +12,6 @@
 @import "toolbar";
 @import "designer";
 @import "palette";
-@import "context-pad";
 @import "panel";
 @import "camunda-penal";
 @import "contextmenu";
@@ -31,7 +30,6 @@ html,
   position: relative;
   &.designer-with-image > .main-content .designer {
     background-repeat: no-repeat !important;
-    background-image: url("/04.jpg") !important;
     background-size: cover;
   }
   .main-content {
