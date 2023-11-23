@@ -3,6 +3,7 @@ package com.activiti.modules.service.impl;
 import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordIdentityVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
@@ -139,16 +140,16 @@ public class ProcessStartServiceImpl implements ProcessStartService {
     /**
      * 启动流程
      *
-     * @param definitionId 流程定义id
-     * @param userId       当前用户登录id
+     * @param dto    启动流程参数
+     * @param userId 当前用户登录id
      */
     @Override
-    public void startProcess(String definitionId, String userId) {
+    public void startProcess(StartProcessDto dto, String userId) {
         // 设置流程发起人用户Id
         Authentication.setAuthenticatedUserId(userId);
-        Map<String, Object> variables = new HashMap<>();
+        Map<String, Object> variables = dto.getVariables();
         variables.put(Constant.PROCESS_INITIATOR, userId);
-        runtimeService.startProcessInstanceById(definitionId, variables);
+        runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
     }
 
     /**
@@ -289,6 +290,43 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         nodeInfo.addAll(getFlowsStatus(bpmnModel, executedList, unfinishedList));
 
         result.put("nodeInfo", nodeInfo);
+        return result;
+    }
+
+    /**
+     * 获取主表单信息
+     *
+     * @param instanceId 流程实例id
+     * @return 主表单数据
+     */
+    @Override
+    public Map<String, Object> getMainFormInfo(String instanceId) {
+        HistoricProcessInstance historicInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(instanceId).singleResult();
+        if (historicInstance == null) {
+            throw new AException("未知流程");
+        }
+        Map<String, Object> result = new HashMap<>();
+
+        // 当前流程的流程变量
+        List<HistoricVariableInstance> historicVariables = historyService.createHistoricVariableInstanceQuery()
+                .processInstanceId(instanceId)
+                .list();
+        // 业务key
+        String businessKey = historicInstance.getBusinessKey();
+        // 设置流程变量,根据businessKey回显主表单,因为前端赋值是这样的:
+        // variables[`${form.value.businessKey}formData`] = JSON.parse(JSON.stringify(formData));
+        // variables[`${form.value.businessKey}formJson`] = form.value.formJson;
+        historicVariables.stream()
+                .filter(t -> t.getVariableName().equals(String.format("%s_formJson", businessKey)))
+                .findAny()
+                .ifPresent(t -> result.put("formJson", t.getValue()));
+
+        historicVariables.stream()
+                .filter(t -> t.getVariableName().equals(String.format("%s_formData", businessKey)))
+                .findAny()
+                .ifPresent(t -> result.put("formData", t.getValue()));
+
         return result;
     }
 

@@ -2,6 +2,7 @@ package com.activiti.modules.controller;
 
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.utils.R;
@@ -10,7 +11,6 @@ import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +41,13 @@ public class ProcessStartController {
     /**
      * 根据流程定义id 启动流程
      *
-     * @param definitionId 流程定义id
+     * @param dto 启动流程参数
      * @return 结果
      */
-    @GetMapping("start")
-    public R<String> start(String definitionId) {
+    @PostMapping("start")
+    public R<String> start(@RequestBody StartProcessDto dto) {
         SysUserEntity user = TokenUtils.getUser();
-        processStartService.startProcess(definitionId, user.getUserId());
+        processStartService.startProcess(dto, user.getUserId());
         return R.ok();
     }
 
@@ -73,6 +73,18 @@ public class ProcessStartController {
     public R<Map<String, Object>> getHighlightNodeInfo(String instanceId) {
         Map<String, Object> result = processStartService.getHighlightNodeInfo(instanceId);
         return R.ok(result);
+    }
+
+    /**
+     * 获取主表单信息
+     *
+     * @param instanceId 流程实例id
+     * @return 主表单数据
+     */
+    @GetMapping("getMainFormInfo")
+    public R<Map<String,Object>> getMainFormInfo(String instanceId) {
+        Map<String,Object> list = processStartService.getMainFormInfo(instanceId);
+        return R.ok(list);
     }
 
     /**

@@ -96,7 +96,7 @@ function handleQuery() {
  */
 function handleCurrentChange(val: any) {
   currentRow.value = val;
-  emit("ok", { formId: val.formId, formName: val.formName });
+  emit("ok", { formId: val.formId, formName: val.formName, formData: val.formData });
   open.value = false;
 }
 

@@ -1,97 +1,159 @@
 <template>
   <div>
-    <el-dialog v-model="open" title="发起流程" width="1200px" append-to-body>
-      <el-form :inline="true" :model="queryForm" class="demo-form-inline">
-        <el-form-item label="流程名称">
-          <el-input v-model="queryForm.definitionName" placeholder="流程名称" clearable />
+    <el-drawer v-model="open" title="发起流程" size="600px" append-to-body>
+      <el-alert title="需要注意的事项" type="success" :closable="false">
+        <template v-slot:title>
+          <div>1.业务key businessKey的作用:可以提供businessKey来将流程实例与具有明确业务含义的某个标识符关联起来。例如，在订单流程中，业务键可以是订单id。然后可以使用该业务键轻松地查找流程实例.</div>
+          <div>2.当然一个订单业务可以有多个流程实例,多个流程实例绑定一个businessKey,假设一个流程实例在某一个节点结束了,但是这个实例没有通过审核,那我们可以重新起一个流程实例,查询历史记录时可以根据businessKey来查找</div>
+          <div>3.主表单 比如:张三要请5天假,那么张三就要填写:请假天数、请假类型、请假理由等信息,那么这里的主表单就要选择请假相关表单和流程,在流程定义中可以设置成流程条件</div>
+        </template>
+      </el-alert>
+      <br />
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="业务key" prop="businessKey">
+          <el-input v-model="form.businessKey" placeholder="businessKey就是业务key" />
         </el-form-item>
-        <el-form-item label="流程key">
-          <el-input v-model="queryForm.definitionKey" placeholder="流程key" clearable />
+
+        <el-form-item label="选择流程" prop="definitionId" class="disabled-color">
+          <el-input v-model="form.definitionName" disabled>
+            <template #append>
+              <el-button :icon="Search" @click="selectProcess.init()" />
+            </template>
+          </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
+
+        <el-form-item label="主表单" class="disabled-color">
+          <el-input v-model="form.formName" disabled>
+            <template #append>
+              <el-button :icon="Search" @click="selectForm.handleOpen()" />
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
 
-      <el-table v-loading="loading" :data="list">
-        <el-table-column label="流程id" align="center" prop="id" width="300" />
-        <el-table-column label="流程名称" align="center" prop="name" />
-        <el-table-column label="流程key" align="center" prop="key" />
-        <el-table-column label="版本" align="center" prop="version" />
-        <el-table-column>
-          <template #default="scope">
-            <el-button link type="primary" @click="handleSelect(scope.row.id)">选择</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
-    </el-dialog>
+      <el-card class="box-card" v-if="Object.keys(form.formJson).length !== 0">
+        <template #header>
+          <div class="card-header">
+            <span>主表单</span>
+          </div>
+        </template>
+        <!-- 节点动态表单 -->
+        <VFormRender ref="preForm" :preview-state="true" />
+      </el-card>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="open = false">取 消</el-button>
+        </div>
+      </template>
+    </el-drawer>
+    <SelectForm ref="selectForm" @ok="selectFormOk" />
+    <SelectProcess ref="selectProcess" @ok="selectProcessOk" />
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, toRef, nextTick } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
+import SelectForm from "@/components/SelectForm/index.vue";
+import SelectProcess from "./selectProcess.vue";
+import VFormRender from "@/components/FormDesigner/form-render/index.vue";
 
-// 查询参数
-const queryForm = reactive({
-  definitionName: "",
-  definitionKey: "",
-  pageNo: 1,
-  pageSize: 10
-});
-// 列表内容数量
-const total = ref(0);
-// 列表是否加载
-const loading = ref(true);
-// 列表返回值
-const list = ref<any[]>([]);
+import { Search } from "@element-plus/icons-vue";
 
 // 是否打开弹出框
 const open = ref(false);
 
+// 选择表单
+const selectForm = ref();
+// 选择流程
+const selectProcess = ref();
+
+// 动态表单实例
+const preForm = ref();
+
+// 表单实例
+const formRef = ref();
+// 提交表单数据
+let form = toRef(
+  reactive({
+    businessKey: "",
+    formId: "",
+    formName: "",
+    formJson: {},
+    definitionId: "",
+    definitionName: ""
+  })
+);
+// 表单验证
+const rules = ref({
+  businessKey: [{ required: true, message: "业务key不能为空", trigger: "blur" }],
+  definitionId: [{ required: true, message: "流程必须选择", trigger: "blur" }]
+});
+
 // 初始化
 const init = () => {
-  getList();
   open.value = true;
+  formRef.value?.resetFields();
+  form.value = {
+    businessKey: "",
+    formId: "",
+    formName: "",
+    formJson: {},
+    definitionId: "",
+    definitionName: ""
+  };
+  nextTick(() => {
+    preForm.value?.setFormJson({});
+  });
 };
 
 /**
- * 查询列表
+ * 选择表单返回数据
+ * @param data 表单数据
  */
-const getList = () => {
-  loading.value = true;
-  baseService
-    .get("/processDefinition/list", queryForm)
-    .then((res) => {
-      loading.value = false;
-      if (res.code === 200) {
-        list.value = res.rows;
-        total.value = res.total;
-      } else {
-        list.value = [];
-      }
-    })
-    .catch(() => {
-      loading.value = false;
-    });
+const selectFormOk = (data: any) => {
+  form.value.formId = data.formId;
+  form.value.formName = data.formName;
+  form.value.formJson = JSON.parse(data.formData);
+  nextTick(() => {
+    preForm.value.setFormJson(data.formData);
+  });
 };
 
 /**
- * 搜索按钮操作
+ * 选择流程返回数据
+ * @param data 表单数据
  */
-function handleQuery() {
-  queryForm.pageNo = 1;
-  getList();
-}
+const selectProcessOk = (data: any) => {
+  form.value.definitionId = data.definitionId;
+  form.value.definitionName = data.definitionName;
+};
 
 /**
- * 选择流程
- * @param definitionId 流程定义id
+ * 提交按钮
  */
-function handleSelect(definitionId: any) {
-  ElMessageBox.confirm("是否要发起流程?", "提示").then(() => {
-    baseService.get(`/processStart/start?definitionId=${definitionId}`).then((res) => {
+function submitForm() {
+  // 验证表单
+  formRef.value.validate(async (valid: boolean) => {
+    // 获取动态表单数据
+    const formData = await preForm.value.getFormData();
+    if (!valid) return;
+
+    // 真实要提交的数据
+    const subForm = {
+      businessKey: form.value.businessKey,
+      definitionId: form.value.definitionId,
+      variables: {}
+    };
+    // 设置流程变量
+    subForm.variables = JSON.parse(JSON.stringify(formData));
+
+    // 由于回显使用
+    subForm.variables[`${form.value.businessKey}_formData`] = JSON.parse(JSON.stringify(formData));
+    subForm.variables[`${form.value.businessKey}_formJson`] = form.value.formJson;
+    baseService.post(`/processStart/start`, subForm).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         open.value = false;
@@ -112,4 +174,11 @@ defineExpose({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.disabled-color :deep() .is-disabled > .el-input__wrapper {
+  background-color: var(--el-input-bg-color) !important;
+}
+.disabled-color :deep() .is-disabled > .el-input__wrapper > input {
+  -webkit-text-fill-color: var(--el-input-text-color) !important;
+}
+</style>

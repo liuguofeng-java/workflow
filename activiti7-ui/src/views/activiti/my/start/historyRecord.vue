@@ -33,6 +33,9 @@
         <el-tab-pane label="流程节点" name="2">
           <DesignerDetails :xml="highlightNode.xml" id="highlightNode" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
         </el-tab-pane>
+        <el-tab-pane label="主表单" name="3">
+          <MainForm ref="mainForm" :form-json="mainFormInfo.formJson" :form-data="mainFormInfo.formData" />
+        </el-tab-pane>
       </el-tabs>
     </el-drawer>
   </div>
@@ -42,6 +45,7 @@ import { ref } from "vue";
 import baseService from "@/service/baseService";
 import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
 import NodeForm from "./nodeForm.vue";
+import MainForm from "./mainForm.vue";
 
 // 是否打开弹出框
 const drawer = ref(false);
@@ -49,6 +53,8 @@ const drawer = ref(false);
 const historyRecordList = ref<any[]>([]);
 // 流程图高亮信息
 const highlightNode = ref<any>();
+// 主表单信息
+const mainFormInfo = ref<any>({});
 // 流程实例id
 let instanceId = ref("");
 
@@ -109,6 +115,20 @@ const highlightNodeInfo = () => {
 };
 
 /**
+ * 获取主表单
+ */
+const getMainFormInfo = () => {
+  historyRecordList.value = [];
+  loading.value = true;
+  baseService.get(`/processStart/getMainFormInfo?instanceId=${instanceId.value}`).then((res) => {
+    if (res.code === 200) {
+      mainFormInfo.value = res.data;
+      loading.value = false;
+    }
+  });
+};
+
+/**
  * 切换tab
  * @param name tab的item name的名称
  */
@@ -119,6 +139,9 @@ const tabChange = (name: string) => {
       break;
     case "2":
       highlightNodeInfo();
+      break;
+    case "3":
+      getMainFormInfo();
       break;
   }
 };

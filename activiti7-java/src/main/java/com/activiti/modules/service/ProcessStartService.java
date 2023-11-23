@@ -2,6 +2,7 @@ package com.activiti.modules.service;
 
 
 import com.activiti.modules.entity.dto.workflow.StartListDto;
+import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.utils.page.TableDataInfo;
 
@@ -28,10 +29,10 @@ public interface ProcessStartService {
     /**
      * 启动流程
      *
-     * @param definitionId 流程定义id
-     * @param userId       当前用户登录id
+     * @param dto    启动流程参数
+     * @param userId 当前用户登录id
      */
-    void startProcess(String definitionId, String userId);
+    void startProcess(StartProcessDto dto, String userId);
 
     /**
      * 查询审批进度
@@ -48,6 +49,14 @@ public interface ProcessStartService {
      * @return 流程图信息
      */
     Map<String, Object> getHighlightNodeInfo(String instanceId);
+
+    /**
+     * 获取主表单信息
+     *
+     * @param instanceId 流程实例id
+     * @return 主表单数据
+     */
+    Map<String, Object> getMainFormInfo(String instanceId);
 
     /**
      * 删除流程实例
