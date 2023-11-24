@@ -25,11 +25,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -170,6 +168,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
+                .orderByHistoricActivityInstanceStartTime().asc()
                 .orderByHistoricActivityInstanceEndTime().asc()
                 .list();
         executedList.forEach(item -> {
@@ -286,8 +285,10 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                                                      List<HistoricActivityInstance> executedList,
                                                      List<HistoricActivityInstance> unfinishedList) {
         List<HighlightNodeInfoVo> resultList = new ArrayList<>();
+
         //todo 流程图显示还有些问题
         // 假设只有开始和结束和三条线，每一条线上有流程变量 a=1，a<1, a>1,如果满足其中a=1,程序则在流程图高亮显示，三条线都高亮
+        // 已解决待验证
 
         // -------------                           ------------
         // |绿色已审批节点| ------绿色已审批线------>  |绿色已审批节点|
@@ -308,6 +309,41 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 }
             });
         }
+
+        // 获取历史节点的互斥网关
+        List<HistoricActivityInstance> exclusiveGateways = executedList.stream()
+                .filter(t -> t.getActivityType().equals(ActivityType.EXCLUSIVE_GATEWAY))
+                .collect(Collectors.toList());
+        // 互斥网关去除没有不正确的连线
+        for (HistoricActivityInstance exclusiveGateway : exclusiveGateways) {
+            // 获取到当前节点
+            FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess()
+                    .getFlowElement(exclusiveGateway.getActivityId(), true);
+            // 获取输出的线
+            List<SequenceFlow> outFlows = flowNode.getOutgoingFlows();
+            for (SequenceFlow outFlow : outFlows) {
+                String sourceRef = outFlow.getSourceRef();
+                String targetRef = outFlow.getTargetRef();
+                // 获取互斥网关下标
+                int gatewayIndex = IntStream.range(0, executedList.size())
+                        .filter(i -> sourceRef.equals(executedList.get(i).getActivityId()))
+                        .findFirst()
+                        .orElse(-1);
+                if (gatewayIndex == -1 || executedList.size() <= gatewayIndex) continue;
+                HistoricActivityInstance next = executedList.get(gatewayIndex + 1);
+                // 因为executedList历史记录是按照正序排序的,互斥网关下一个节点只能有一个
+                // 如果这条线的targetRef不是查到的activityId,那么这条线应该被删除
+                if (next != null && !targetRef.equals(next.getActivityId())) {
+                    int targetIndex = IntStream.range(0, resultList.size())
+                            .filter(i -> outFlow.getId().equals(resultList.get(i).getActivityId()))
+                            .findFirst().orElse(-1);
+                    if (targetIndex == -1) continue;
+                    resultList.remove(targetIndex);
+                }
+            }
+
+        }
+
         // 获取'绿色已审批线'-------------
 
 
