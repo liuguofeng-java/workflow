@@ -47,6 +47,10 @@
 
 ![](images/bpmn.png)
 
+![](images/leaveMain.png)
+
+![](images/auditStatus.png)
+
 ![](images/start.png)
 
 ![](images/approve.png)
