@@ -4,6 +4,7 @@ import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
+import com.activiti.modules.service.ProcessHistoryService;
 import com.activiti.modules.service.ProcessStartService;
 import com.activiti.utils.R;
 import com.activiti.utils.TokenUtils;
@@ -26,6 +27,8 @@ public class ProcessStartController {
     @Autowired
     private ProcessStartService processStartService;
 
+    @Autowired
+    private ProcessHistoryService processHistoryService;
     /**
      * 我发起的任务列表
      *
@@ -59,7 +62,7 @@ public class ProcessStartController {
      */
     @GetMapping("getHistoryRecord")
     public R<List<HistoryRecordVo>> getHistoryRecord(String instanceId) {
-        List<HistoryRecordVo> list = processStartService.getHistoryRecord(instanceId);
+        List<HistoryRecordVo> list = processHistoryService.getHistoryRecord(instanceId);
         return R.ok(list);
     }
 
@@ -71,7 +74,7 @@ public class ProcessStartController {
      */
     @GetMapping("getHighlightNodeInfo")
     public R<Map<String, Object>> getHighlightNodeInfo(String instanceId) {
-        Map<String, Object> result = processStartService.getHighlightNodeInfo(instanceId);
+        Map<String, Object> result = processHistoryService.getHighlightNodeInfo(instanceId);
         return R.ok(result);
     }
 
@@ -83,7 +86,7 @@ public class ProcessStartController {
      */
     @GetMapping("getMainFormInfo")
     public R<Map<String,Object>> getMainFormInfo(String instanceId) {
-        Map<String,Object> list = processStartService.getMainFormInfo(instanceId);
+        Map<String,Object> list = processHistoryService.getMainFormInfo(instanceId);
         return R.ok(list);
     }
 

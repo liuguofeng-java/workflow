@@ -35,30 +35,6 @@ public interface ProcessStartService {
     void startProcess(StartProcessDto dto, String userId);
 
     /**
-     * 查询审批进度
-     *
-     * @param instanceId 流程实例id
-     * @return 审批记录
-     */
-    List<HistoryRecordVo> getHistoryRecord(String instanceId);
-
-    /**
-     * 查询流程图信息(高亮信息)
-     *
-     * @param instanceId 流程实例id
-     * @return 流程图信息
-     */
-    Map<String, Object> getHighlightNodeInfo(String instanceId);
-
-    /**
-     * 获取主表单信息
-     *
-     * @param instanceId 流程实例id
-     * @return 主表单数据
-     */
-    Map<String, Object> getMainFormInfo(String instanceId);
-
-    /**
      * 删除流程实例
      *
      * @param instanceId 流程实例id
