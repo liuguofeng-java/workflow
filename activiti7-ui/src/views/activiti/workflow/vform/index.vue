@@ -30,15 +30,15 @@
 
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
-    <!-- 表单弹出框 -->
-    <Form ref="formRef" @ok="getList" />
+    <!-- 添加表单弹出框 -->
+    <AddForm ref="formRef" @ok="getList" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
-import Form from "./form.vue";
+import AddForm from "./AddForm.vue";
 
 // 查询参数
 const queryForm = reactive({

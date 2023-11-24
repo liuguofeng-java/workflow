@@ -45,8 +45,8 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
-import DeployBpmn from "./deployBpmn.vue";
-import BpmnDetails from "./bpmnDetails.vue";
+import DeployBpmn from "./DeployBpmn.vue";
+import BpmnDetails from "./BpmnDetails.vue";
 
 // 查询参数
 const queryForm = reactive({
