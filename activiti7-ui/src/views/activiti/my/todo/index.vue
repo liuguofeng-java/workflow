@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
-import Approval from "./Approval.vue";
+import Approval from "./model/Approval.vue";
 
 // 查询参数
 const queryForm = reactive({

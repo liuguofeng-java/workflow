@@ -1,28 +1,13 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysDeptEntity;
-import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.dto.workflow.StartProcessDto;
-import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
-import com.activiti.modules.entity.vo.workflow.HistoryRecordIdentityVo;
-import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
-import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.modules.service.ProcessStartService;
-import com.activiti.modules.service.SysDeptService;
-import com.activiti.modules.service.SysUserService;
-import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constant;
-import com.activiti.utils.constant.NodeStatus;
-import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowNode;
-import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -30,14 +15,12 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 流程启动

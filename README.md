@@ -31,21 +31,28 @@
 - [x] 历史列表
 - [x] 流程图历史节点高亮
 - [x] 集成动态表单
+  - [x] 主表单集成与展示
+  - [x] 节点表单整合bpmb与展示
+
 - [x] 集成bpmn.js (带优化)
   - [x] 用户节点 选择用户
-  - [x] 动态表单整合bpmb
+  - [x] 整合流程变量(进行中)
   - [ ] 整合执行监听器(进行中)
 
 
 
-- 
+
 
 ####  预览
 
 ![](images/bpmn.png)
 
-![](images/todo.png)
+![](images/start.png)
+
+![](images/approve.png)
 
 ![](images/log.png)
 
 ![](images/flow.png)
+
+![](images/mainForm.png)

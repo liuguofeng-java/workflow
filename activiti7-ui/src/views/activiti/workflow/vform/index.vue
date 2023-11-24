@@ -38,7 +38,7 @@
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
-import AddForm from "./AddForm.vue";
+import AddForm from "./model/AddForm.vue";
 
 // 查询参数
 const queryForm = reactive({

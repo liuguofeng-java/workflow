@@ -51,8 +51,8 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
-import StartProcess from "./StartProcess.vue";
-import HistoryRecord from "./HistoryRecord.vue";
+import StartProcess from "./model/StartProcess.vue";
+import HistoryRecord from "./model/HistoryRecord.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
