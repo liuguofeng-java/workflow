@@ -58,6 +58,10 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 .orderByProcessInstanceStartTime()
                 .desc();
 
+        // 根据业务key查询 注意是等于不是模糊查询
+        if (StringUtils.isNoneEmpty(dto.getBusinessKey())) {
+            query.processInstanceBusinessKey(dto.getBusinessKey());
+        }
         // 根据流程名称查询 注意是等于不是模糊查询
         if (StringUtils.isNoneEmpty(dto.getDefinitionName())) {
             query.processDefinitionName(dto.getDefinitionName());
@@ -74,6 +78,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             // 设置流程实例
             StartListVo vo = new StartListVo();
             vo.setId(item.getId());
+            vo.setBusinessKey(item.getBusinessKey());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());
 

@@ -341,11 +341,8 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                     resultList.remove(targetIndex);
                 }
             }
-
         }
-
         // 获取'绿色已审批线'-------------
-
 
         // -------------                           ------------
         // |绿色已审批节点| ------黄色待审批线------>  |黄色待审批节点|

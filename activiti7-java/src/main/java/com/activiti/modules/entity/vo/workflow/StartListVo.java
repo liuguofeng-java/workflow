@@ -18,6 +18,11 @@ public class StartListVo {
     private String id;
 
     /**
+     * 业务key
+     */
+    private String businessKey;
+
+    /**
      * 开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

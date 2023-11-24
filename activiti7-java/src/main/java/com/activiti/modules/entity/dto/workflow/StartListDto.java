@@ -15,6 +15,11 @@ public class StartListDto {
     private String userId;
 
     /**
+     * 业务key
+     */
+    private String businessKey;
+
+    /**
      * 流程定义名称
      */
     private String definitionName;

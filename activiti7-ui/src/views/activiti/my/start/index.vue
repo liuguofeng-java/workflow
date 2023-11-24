@@ -1,6 +1,9 @@
 <template>
   <div>
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
+      <el-form-item label="业务key">
+        <el-input v-model="queryForm.businessKey" placeholder="businessKey(不是模糊查询)" clearable />
+      </el-form-item>
       <el-form-item label="流程名称">
         <el-input v-model="queryForm.definitionName" placeholder="流程名称(不是模糊查询)" clearable />
       </el-form-item>
@@ -20,8 +23,9 @@
 
     <el-table v-loading="loading" :data="list">
       <el-table-column label="序号" type="index" width="100" />
+      <el-table-column label="业务key" align="center" prop="businessKey" />
       <el-table-column label="流程名称" align="center" prop="definitionName" />
-      <el-table-column label="key" align="center" prop="definitionKey" />
+      <el-table-column label="流程key" align="center" prop="definitionKey" />
       <el-table-column label="版本" align="center" prop="definitionVersion" />
       <el-table-column label="开始时间" align="center" prop="startTime" />
       <el-table-column label="结束时间" align="center" prop="endTime" />
@@ -57,6 +61,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
 const queryForm = reactive({
+  businessKey: "",
   definitionName: "",
   definitionKey: "",
   pageNo: 1,

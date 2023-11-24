@@ -25,7 +25,6 @@ export default (config: UserConfig): UserConfigExport => {
       tsconfigPaths(),
       createSvgIconsPlugin({
         iconDirs: [
-          resolve(__dirname, "src/assets/icons/svg"),
           resolve(process.cwd(), "src/components/FormDesigner/svg"),
           resolve(process.cwd(), "src/components/BpmnJs/bpmn-icons")
         ],

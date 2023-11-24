@@ -15,7 +15,7 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="序号" type="index" width="100" />
       <el-table-column label="流程名称" align="center" prop="definitionName" />
-      <el-table-column label="key" align="center" prop="definitionKey" />
+      <el-table-column label="流程key" align="center" prop="definitionKey" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
       <el-table-column label="当前节点" align="center" prop="taskName" />
       <el-table-column label="当前节点key" align="center" prop="taskDefinitionKey" />

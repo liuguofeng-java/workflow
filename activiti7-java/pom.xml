@@ -44,12 +44,6 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatisplus.version}</version>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.baomidou</groupId>-->
-<!--                    <artifactId>mybatis-plus-generator</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -80,12 +74,6 @@
                     <groupId>org.mybatis</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!--activiti可以绘制流程的的依赖-->
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-image-generator</artifactId>
-            <version>${activiti.version}</version>
         </dependency>
     </dependencies>
 
