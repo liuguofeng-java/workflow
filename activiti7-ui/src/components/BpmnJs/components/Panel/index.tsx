@@ -104,7 +104,7 @@ const Panel = defineComponent({
       modeler.on("selection.changed", ({ newSelection }) => {
         if (newSelection[0]) {
           setTimeout(() => {
-            EventBus.emit("element-init", newSelection);
+            EventBus.emit("element-init", modeler);
           }, 200);
         }
         setCurrentElement(newSelection[0] || null);

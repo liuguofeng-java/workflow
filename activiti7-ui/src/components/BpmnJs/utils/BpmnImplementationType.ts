@@ -3,7 +3,7 @@ import { find } from "min-dash";
 import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { Element } from "diagram-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
-import { getExtensionElementsList } from "@/components/bpmnJs/utils//BpmnExtensionElementsUtil";
+import { getExtensionElementsList } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 
 function getProcessPrefix() {
   return editor().getProcessEngine;

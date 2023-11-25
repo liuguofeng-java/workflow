@@ -329,7 +329,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                         .filter(i -> sourceRef.equals(executedList.get(i).getActivityId()))
                         .findFirst()
                         .orElse(-1);
-                if (gatewayIndex == -1 || executedList.size() <= gatewayIndex) continue;
+                if (gatewayIndex == -1 || executedList.size() <= gatewayIndex + 1) continue;
                 HistoricActivityInstance next = executedList.get(gatewayIndex + 1);
                 // 因为executedList历史记录是按照正序排序的,互斥网关下一个节点只能有一个
                 // 如果这条线的targetRef不是查到的activityId,那么这条线应该被删除

@@ -1,9 +1,9 @@
 import { Element, Connection } from "diagram-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
-import { getEventDefinition } from "@/components/bpmnJs/utils//BpmnImplementationType";
+import { getEventDefinition } from "@/components/BpmnJs/utils/BpmnImplementationType";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { createModdleElement } from "@/components/bpmnJs/utils//BpmnExtensionElementsUtil";
+import { createModdleElement } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 import editor from "@/components/BpmnJs/store/editor";
 
 ///////////////////////////////// 配置项可见性
@@ -16,8 +16,7 @@ const CONDITIONAL_SOURCES = [
 const defaultConditionTypeOptions: Record<string, string>[] = [
   { label: "无条件( None )", value: "none" },
   { label: "默认路径( Default )", value: "default" },
-  { label: "条件表达式( Expression )", value: "expression" },
-  { label: "条件脚本( Script )", value: "script" }
+  { label: "条件表达式( Expression )", value: "expression" }
 ];
 // 父节点符合条件的连线
 export function isConditionalSource(element) {
@@ -84,7 +83,6 @@ export function setConditionTypeValue(element: Element, value: string) {
     return setDefaultCondition(element as Connection, value === "default");
   }
   const attributes = {
-    // body: '',
     language: value === "script" ? "" : undefined
   };
   const parent = is(element, "bpmn:SequenceFlow")

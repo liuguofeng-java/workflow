@@ -19,130 +19,86 @@
       <el-form-item label="条件内容" v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
         <el-input v-model="conditionData.expression" maxlength="100" @change="setConditionExpression" />
       </el-form-item>
-
-      <template v-if="conditionData.conditionType && conditionData.conditionType === 'script'">
-        <el-form-item label="脚本类型">
-          <el-select v-model="conditionData.conditionType" @change="setElementConditionScriptType">
-            <el-option v-for="item in scriptTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="脚本语言">
-          <el-input v-model="conditionData.language" @change="setConditionScriptLanguage" />
-        </el-form-item>
-
-        <el-form-item v-show="conditionData.scriptType === 'inline'" label="脚本内容">
-          <el-input v-model="conditionData.body" @change="setConditionScriptBody" />
-        </el-form-item>
-
-        <el-form-item v-show="conditionData.scriptType === 'external'" label="资源地址">
-          <el-input v-model="conditionData.resource" @change="setConditionScriptResource" />
-        </el-form-item>
-      </template>
     </el-form>
   </el-collapse-item>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
-import modeler from "@/components/BpmnJs/store/modeler";
+<script lang="ts" setup>
+import { ref, onBeforeUnmount } from "vue";
 import { Element } from "diagram-js/lib/model/Types";
-import { scriptTypeOptions } from "@/components/BpmnJs/config/selectOptions";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
+import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 
-export default defineComponent({
-  name: "ElementConditional",
-  setup() {
-    const modelerStore = modeler();
-    const getActive = computed<Element | null>(() => modelerStore.getActive);
+// element The element.
+let scopedElement: Element;
 
-    // 变量配置部分
-    const varVisible = ref<boolean>(false);
-    const variableName = ref<string | undefined>(undefined);
-    const varEventVisible = ref<boolean>(false);
-    const variableEvents = ref<string | undefined>(undefined);
-    const getElementVariables = () => {
-      varVisible.value = CU.isConditionEventDefinition(getActive.value!);
-      variableName.value = CU.getVariableNameValue(getActive.value!);
-      if (varVisible.value) {
-        varEventVisible.value = !CU.isExtendStartEvent(getActive.value!);
-        variableEvents.value = CU.getVariableEventsValue(getActive.value!);
-      }
-    };
-    const setElementVariableName = (value: string | undefined) => {
-      CU.setVariableNameValue(getActive.value!, value);
-    };
-    const setElementVariableEvents = (value: string | undefined) => {
-      CU.setVariableEventsValue(getActive.value!, value);
-    };
+// 变量配置部分
+const varVisible = ref<boolean>(false);
+const variableName = ref<string | undefined>(undefined);
+const varEventVisible = ref<boolean>(false);
+const variableEvents = ref<string | undefined>(undefined);
 
-    // 条件类型配置部分
-    const conditionTypeOptions = ref<Record<string, string>[]>([]);
-    const conditionData = ref<ConditionalForm>({});
-    const getElementConditionType = () => {
-      conditionData.value.conditionType = CU.getConditionTypeValue(getActive.value!);
-      conditionData.value.conditionType === "expression" && getConditionExpression();
-      conditionData.value.conditionType === "script" && getConditionScript();
-    };
-    const setElementConditionType = (value: string) => {
-      CU.setConditionTypeValue(getActive.value!, value);
-    };
+// 条件类型配置部分
+const conditionTypeOptions = ref<Record<string, string>[]>([]);
+const conditionData = ref<any>({});
 
-    const getConditionExpression = () => {
-      conditionData.value.expression = CU.getConditionExpressionValue(getActive.value!);
-    };
-    const setConditionExpression = (value: string | undefined) => {
-      CU.setConditionExpressionValue(getActive.value!, value);
-    };
+/**
+ * 回显表单值
+ */
+const getElementData = () => {
+  conditionTypeOptions.value = CU.getConditionTypeOptions(scopedElement);
 
-    const getConditionScript = () => {
-      conditionData.value.language = CU.getConditionScriptLanguageValue(getActive.value!);
-      conditionData.value.scriptType = CU.getConditionScriptTypeValue(getActive.value!);
-      conditionData.value.body = CU.getConditionScriptBodyValue(getActive.value!);
-      conditionData.value.resource = CU.getConditionScriptResourceValue(getActive.value!);
-    };
-    const setConditionScriptLanguage = (value: string | undefined) => {
-      CU.setConditionScriptLanguageValue(getActive.value!, value);
-    };
-    const setElementConditionScriptType = (value: string | undefined) => {
-      CU.setConditionScriptTypeValue(getActive.value!, value);
-    };
-    const setConditionScriptBody = (value: string | undefined) => {
-      CU.setConditionScriptBodyValue(getActive.value!, value);
-    };
-    const setConditionScriptResource = (value: string | undefined) => {
-      CU.setConditionScriptResourceValue(getActive.value!, value);
-    };
-
-    onMounted(() => {
-      getElementVariables();
-      getElementConditionType();
-      conditionTypeOptions.value = CU.getConditionTypeOptions(getActive.value!);
-      EventBus.on("element-update", () => {
-        conditionTypeOptions.value = CU.getConditionTypeOptions(getActive.value!);
-        getElementVariables();
-        getElementConditionType();
-      });
-    });
-
-    return {
-      varVisible,
-      varEventVisible,
-      variableName,
-      variableEvents,
-      setElementVariableName,
-      setElementVariableEvents,
-      conditionTypeOptions,
-      conditionData,
-      scriptTypeOptions,
-      setElementConditionType,
-      setConditionExpression,
-      setConditionScriptLanguage,
-      setElementConditionScriptType,
-      setConditionScriptBody,
-      setConditionScriptResource
-    };
+  varVisible.value = CU.isConditionEventDefinition(scopedElement);
+  variableName.value = CU.getVariableNameValue(scopedElement);
+  if (varVisible.value) {
+    varEventVisible.value = !CU.isExtendStartEvent(scopedElement);
+    variableEvents.value = CU.getVariableEventsValue(scopedElement);
   }
+
+  conditionData.value.conditionType = CU.getConditionTypeValue(scopedElement);
+  if (conditionData.value.conditionType === "expression") {
+    conditionData.value.expression = CU.getConditionExpressionValue(scopedElement);
+  }
+};
+
+const setElementVariableName = (value: string | undefined) => {
+  CU.setVariableNameValue(scopedElement, value);
+};
+
+const setElementVariableEvents = (value: string | undefined) => {
+  CU.setVariableEventsValue(scopedElement, value);
+};
+
+const setElementConditionType = (value: string) => {
+  CU.setConditionTypeValue(scopedElement, value);
+};
+
+const setConditionExpression = (value: string | undefined) => {
+  CU.setConditionExpressionValue(scopedElement, value);
+};
+
+/**
+ * 初始化
+ */
+EventBus.on("element-init", function (modeler) {
+  catchUndefElement((element) => {
+    scopedElement = element;
+
+    getElementData();
+    let elementRegistry = modeler.get("elementRegistry");
+
+    let next = elementRegistry._elements.getPreviousSibling(element);
+    console.log("elements", elementRegistry._elements);
+    console.log("element", element);
+    console.log("next", next);
+  });
+});
+
+/**
+ * 销毁事件，防止重复触发
+ */
+onBeforeUnmount(async () => {
+  await EventBus.off("element-init");
 });
 </script>

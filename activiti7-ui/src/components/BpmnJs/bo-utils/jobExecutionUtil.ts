@@ -3,13 +3,13 @@ import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { getServiceTaskLikeBusinessObject } from "@/components/bpmnJs/utils//BpmnImplementationType";
-import { getTimerEventDefinition } from "@/components/bpmnJs/utils//BpmnEventDefinitionUtil";
-import { isAsync } from "@/components/bpmnJs/utils//BpmnAsyncElement";
+import { getServiceTaskLikeBusinessObject } from "@/components/BpmnJs/utils/BpmnImplementationType";
+import { getTimerEventDefinition } from "@/components/BpmnJs/utils/BpmnEventDefinitionUtil";
+import { isAsync } from "@/components/BpmnJs/utils/BpmnAsyncElement";
 import {
   createModdleElement,
   getExtensionElementsList
-} from "@/components/bpmnJs/utils//BpmnExtensionElementsUtil";
+} from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 
 //
 export function retryTimeCycleVisible(element: Element): boolean {

@@ -5,7 +5,7 @@ import {
   getExtensionElementsList,
   addExtensionElements,
   removeExtensionElements
-} from "@/components/bpmnJs/utils//BpmnExtensionElementsUtil";
+} from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { createScript } from "@/components/BpmnJs/bo-utils/scriptUtil";

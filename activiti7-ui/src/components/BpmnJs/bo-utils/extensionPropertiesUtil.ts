@@ -4,7 +4,7 @@ import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";
 import {
   createModdleElement,
   getExtensionElementsList
-} from "@/components/bpmnJs/utils//BpmnExtensionElementsUtil";
+} from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import editorStore from "@/components/BpmnJs/store/editor";
 import { without } from "min-dash";

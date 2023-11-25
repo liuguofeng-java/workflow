@@ -49,10 +49,10 @@ import EventBus from "@/components/BpmnJs/utils/EventBus";
 import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
 
 // element The element.
-let scopedElement: any = undefined;
+let scopedElement: Element;
 
 // moddleElement The model element.
-let moddleElement: ModdleElement = undefined;
+let moddleElement: ModdleElement;
 
 // 表单参数
 type UserAssigneeProp = "userType" | "assignee" | "candidateUsers" | "candidateGroups" | "identityLinkNames" | "dueDate" | "followUpDate" | "priority";
