@@ -88,10 +88,8 @@ EventBus.on("element-init", function (modeler) {
     getElementData();
     let elementRegistry = modeler.get("elementRegistry");
 
-    let next = elementRegistry._elements.getPreviousSibling(element);
     console.log("elements", elementRegistry._elements);
     console.log("element", element);
-    console.log("next", next);
   });
 });
 

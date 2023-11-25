@@ -3,6 +3,8 @@ package com.activiti.modules.entity.vo.workflow;
 import lombok.Data;
 import com.activiti.utils.constant.NodeStatus;
 
+import java.util.List;
+
 /**
  * 高亮节点信息
  *
@@ -20,4 +22,9 @@ public class HighlightNodeInfoVo {
      * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点), 参考 {@link NodeStatus}
      */
     private Integer status;
+
+    /**
+     * 历史审批记录
+     */
+    private List<HistoryRecordVo> historyRecordVo;
 }

@@ -21,6 +21,11 @@ public class HistoryRecordVo {
     private String nodeName;
 
     /**
+     * 节点id
+     */
+    private String activityId;
+
+    /**
      * 任务开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

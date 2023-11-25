@@ -1,40 +1,37 @@
 <template>
   <div class="root">
-    <el-drawer v-model="drawer" size="100%" destroy-on-close>
+    <el-drawer v-model="drawer" size="100%" :destroy-on-close="true">
       <el-tabs type="border-card" v-loading="loading" @tab-change="tabChange" v-model="tabsValue">
         <el-tab-pane label="审批记录" name="1">
-          <div class="hint-container">
-            <div class="history">已审批节点记录</div>
-            <div class="next">活动的未审批节点</div>
+          <div class="history-root">
+            <el-card class="box-card main-form" shadow="hover">
+              <template #header>
+                <div class="card-header">
+                  <span>主表单信息</span>
+                </div>
+              </template>
+              <MainForm ref="mainForm" :form-json="mainFormInfo.formJson" :form-data="mainFormInfo.formData" />
+            </el-card>
+            <el-card class="box-card history-container" shadow="hover">
+              <template #header>
+                <div class="card-header">
+                  <span>历史记录</span>
+                </div>
+              </template>
+              <div class="hint-container">
+                <div class="history">已审批节点记录</div>
+                <div class="next">活动的未审批节点</div>
+              </div>
+              <el-timeline>
+                <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
+                  <HistoryNodeInfo :node-item="item" />
+                </el-timeline-item>
+              </el-timeline>
+            </el-card>
           </div>
-          <el-timeline>
-            <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
-              <el-card>
-                <el-descriptions :column="1">
-                  <el-descriptions-item label="候选人" v-if="item.identity.userNames">
-                    <el-tag v-for="(userName, index) in item.identity.userNames" :key="index">{{ userName }}</el-tag>
-                  </el-descriptions-item>
-                  <el-descriptions-item label="候选组" v-if="item.identity.groupNames">
-                    <el-tag v-for="(groupName, index) in item.identity.groupNames" :key="index">{{ groupName }}</el-tag>
-                  </el-descriptions-item>
-                  <el-descriptions-item v-if="item.status === 1" label="时间">
-                    <span>{{ item.startTime }} 到 {{ item.endTime }}</span>
-                  </el-descriptions-item>
-                  <el-descriptions-item label="节点名称">{{ item.nodeName }}</el-descriptions-item>
-                  <el-descriptions-item v-if="item.userName" label="审批人">{{ item.userName }}</el-descriptions-item>
-                  <el-descriptions-item v-if="item.comment" label="审批意见">{{ item.comment }}</el-descriptions-item>
-                </el-descriptions>
-                <!-- 用户节点填写的表单 -->
-                <NodeForm :form-json="item.formJson" :form-data="item.formData" />
-              </el-card>
-            </el-timeline-item>
-          </el-timeline>
         </el-tab-pane>
         <el-tab-pane label="流程节点" name="2">
-          <DesignerDetails :xml="highlightNode.xml" id="highlightNode" style="height: 100%" v-if="tabsValue === '2' && highlightNode.xml" />
-        </el-tab-pane>
-        <el-tab-pane label="主表单" name="3">
-          <MainForm ref="mainForm" :form-json="mainFormInfo.formJson" :form-data="mainFormInfo.formData" />
+          <HighlightNode :highlightNode="highlightNode" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -43,9 +40,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import baseService from "@/service/baseService";
-import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
-import NodeForm from "./nodeForm.vue";
-import MainForm from "./mainForm.vue";
+import HistoryNodeInfo from "./HistoryNodeInfo.vue";
+import MainForm from "./MainForm.vue";
+import HighlightNode from "./HighlightNode.vue";
 
 // 是否打开弹出框
 const drawer = ref(false);
@@ -77,15 +74,20 @@ const init = (id: string) => {
 /**
  * 审批记录
  */
-const historyRecord = () => {
-  historyRecordList.value = [];
+const historyRecord = async () => {
   loading.value = true;
-  baseService.get(`/processStart/getHistoryRecord?instanceId=${instanceId.value}`).then((res) => {
-    if (res.code === 200) {
-      historyRecordList.value = res.data;
-      loading.value = false;
-    }
-  });
+  historyRecordList.value = [];
+  const historyRecordRes = await baseService.get(`/processStart/getHistoryRecord?instanceId=${instanceId.value}`);
+  if (historyRecordRes.code === 200) {
+    historyRecordList.value = historyRecordRes.data;
+  }
+
+  const mainFormInfoRes = await baseService.get(`/processStart/getMainFormInfo?instanceId=${instanceId.value}`);
+  if (mainFormInfoRes.code === 200) {
+    mainFormInfo.value = mainFormInfoRes.data;
+  }
+
+  loading.value = false;
 };
 
 /**
@@ -97,32 +99,6 @@ const highlightNodeInfo = () => {
   baseService.get(`/processStart/getHighlightNodeInfo?instanceId=${instanceId.value}`).then((res) => {
     if (res.code === 200) {
       highlightNode.value = res.data;
-      loading.value = false;
-
-      // 高亮流程图
-      // 因为渲染流程图需要时间,所以加延时
-      setTimeout(() => {
-        const nodeInfo = highlightNode.value.nodeInfo;
-        var svg = document.getElementById("highlightNode");
-
-        nodeInfo.forEach((item) => {
-          var node = svg?.querySelector(`[data-element-id='${item.activityId}']`);
-          node?.classList.add(item.status == 1 ? "executed" : "unfinished");
-        });
-      }, 10);
-    }
-  });
-};
-
-/**
- * 获取主表单
- */
-const getMainFormInfo = () => {
-  historyRecordList.value = [];
-  loading.value = true;
-  baseService.get(`/processStart/getMainFormInfo?instanceId=${instanceId.value}`).then((res) => {
-    if (res.code === 200) {
-      mainFormInfo.value = res.data;
       loading.value = false;
     }
   });
@@ -140,9 +116,6 @@ const tabChange = (name: string) => {
     case "2":
       highlightNodeInfo();
       break;
-    case "3":
-      getMainFormInfo();
-      break;
   }
 };
 
@@ -152,11 +125,27 @@ defineExpose({
 </script>
 
 <style scoped>
+.history-root {
+  display: flex;
+  height: 100%;
+}
+.history-container {
+  min-width: 500px;
+}
+.history-container :deep() .el-card__body {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 56px);
+}
+.main-form {
+  width: 100%;
+}
 .hint-container {
   display: flex;
   justify-content: center;
   margin: 30px 10px;
 }
+
 .hint-container > div {
   margin: 0 20px;
   font-size: 16px;
@@ -166,6 +155,7 @@ defineExpose({
   justify-content: center;
   align-items: baseline;
 }
+
 .hint-container > div::before {
   content: " ";
   height: 12px;
@@ -174,9 +164,11 @@ defineExpose({
   border-radius: 50%;
   margin-right: 8px;
 }
+
 .history::before {
   background-color: #0bbd87 !important;
 }
+
 .next::before {
   background-color: #e4e7ed !important;
 }
@@ -184,22 +176,24 @@ defineExpose({
 :deep(.el-tabs__content) {
   height: 100% !important;
 }
+
 .root :deep() .el-drawer__body {
   overflow: hidden;
 }
+
 .root :deep() .el-tabs--border-card {
   height: 100% !important;
   display: flex;
   flex-direction: column;
 }
+
 .root :deep() .el-tab-pane {
   height: 100% !important;
   display: flex;
   flex-direction: column;
 }
+
 .root :deep() .el-timeline {
   overflow: auto;
 }
 </style>
-
-<style scoped></style>

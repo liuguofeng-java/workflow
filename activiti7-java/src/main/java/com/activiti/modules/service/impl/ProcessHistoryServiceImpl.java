@@ -84,6 +84,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             if (!ActivityType.USER_TASK.equals(item.getActivityType())) continue;
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
+            vo.setActivityId(item.getActivityId());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());
             vo.setUserId(item.getAssignee());
@@ -127,6 +128,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         for (HistoricActivityInstance item : unfinishedList) {
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
+            vo.setActivityId(item.getActivityId());
             // 审批人
             if (StringUtils.isNotEmpty(item.getAssignee())) {
                 SysUserEntity user = userService.getById(item.getAssignee());
@@ -161,6 +163,9 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         String xml = processDefinitionService.getDefinitionXml(historicInstance.getDeploymentId());
         result.put("xml", xml);
 
+        // 历史审批记录
+        List<HistoryRecordVo> historyList = getHistoryRecord(instanceId);
+
         // 高亮节点信息
         List<HighlightNodeInfoVo> nodeInfo = new ArrayList<>();
         // 已审批审批节点
@@ -172,9 +177,13 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 .orderByHistoricActivityInstanceEndTime().asc()
                 .list();
         executedList.forEach(item -> {
+            List<HistoryRecordVo> nodeHistory = historyList.stream()
+                    .filter(t -> t.getActivityId().equals(item.getActivityId()))
+                    .collect(Collectors.toList());
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
                 setStatus(NodeStatus.EXECUTED);
+                setHistoryRecordVo(nodeHistory);
             }});
         });
 
