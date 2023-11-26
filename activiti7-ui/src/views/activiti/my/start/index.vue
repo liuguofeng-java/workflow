@@ -36,10 +36,10 @@
           <span v-if="scope.row.status === 2">已完成</span>
         </template>
       </el-table-column>
-      <el-table-column>
+      <el-table-column width="200">
         <template #default="scope">
-          <el-button link type="primary" icon="Pointer" @click="handleHistoryRecord(scope.row.id)">审批记录</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.id)">删除</el-button>
+          <el-button link type="primary" icon="Pointer" @click="handleHistoryRecord(scope.row.id)">审批记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +56,7 @@
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import StartProcess from "./model/StartProcess.vue";
-import HistoryRecord from "./model/HistoryRecord.vue";
+import HistoryRecord from "@/components/HistoryRecord/index.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 // 查询参数
@@ -121,7 +121,7 @@ function handleAdd() {
  * @param instanceId 流程实例id
  */
 function handleHistoryRecord(instanceId: string) {
-  historyRecordRef.value.init(instanceId);
+  historyRecordRef.value.open(instanceId);
 }
 
 /**

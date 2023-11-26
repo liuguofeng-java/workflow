@@ -59,4 +59,3 @@
 
 ![](images/flow.png)
 
-![](images/mainForm.png)

@@ -23,6 +23,7 @@
       <el-table-column>
         <template #default="scope">
           <el-button link type="primary" icon="Pointer" @click="handleApproval(scope.row)">审批</el-button>
+          <el-button link type="primary" icon="Pointer" @click="handleHistoryRecord(scope.row.processInstanceId)">审批记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,12 +32,16 @@
 
     <!-- 审批 -->
     <Approval ref="approvalRef" @ok="getList" />
+
+    <!-- 审批记录 -->
+    <HistoryRecord ref="historyRecordRef" />
   </div>
 </template>
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import baseService from "@/service/baseService";
 import Approval from "./model/Approval.vue";
+import HistoryRecord from "@/components/HistoryRecord/index.vue";
 
 // 查询参数
 const queryForm = reactive({
@@ -54,6 +59,8 @@ const list = ref<any[]>([]);
 
 // 发起流程弹出框
 const approvalRef = ref();
+// 审批记录弹出框
+const historyRecordRef = ref();
 
 /**
  * 查询列表
@@ -89,7 +96,15 @@ function handleQuery() {
  * @param row 当前行数据
  */
 function handleApproval(row: any) {
-  approvalRef.value.init(row.processInstanceId, row.taskId, row.taskDefinitionKey);
+  approvalRef.value.handleOpen(row.processInstanceId, row.taskId, row.taskDefinitionKey);
+}
+
+/**
+ * 审批记录
+ * @param instanceId 流程实例id
+ */
+function handleHistoryRecord(instanceId: string) {
+  historyRecordRef.value.open(instanceId);
 }
 
 getList();

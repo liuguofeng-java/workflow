@@ -13,6 +13,7 @@ import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import de.odysseus.el.tree.TreeBuilderException;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.UserTask;
@@ -168,6 +169,8 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
             taskService.complete(task.getId(), dto.getVariables());
         } catch (ActivitiException ex) {
             throw new AException("Activiti流程异常:" + ex.getMessage());
+        } catch (TreeBuilderException ex) {
+            throw new AException("流程条件错误" + ex.getMessage());
         } catch (Exception ex) {
             throw new AException("流程提交未知异常!");
         }

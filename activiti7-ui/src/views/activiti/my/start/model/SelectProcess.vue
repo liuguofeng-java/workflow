@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog v-model="open" title="发起流程" width="1200px" append-to-body>
+    <el-dialog v-model="open" title="选择流程" width="1200px" append-to-body>
       <el-form :inline="true" :model="queryForm" class="demo-form-inline">
         <el-form-item label="流程名称">
           <el-input v-model="queryForm.definitionName" placeholder="流程名称" clearable />

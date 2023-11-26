@@ -19,8 +19,8 @@
                 </div>
               </template>
               <div class="hint-container">
-                <div class="history">已审批节点记录</div>
-                <div class="next">活动的未审批节点</div>
+                <div class="history">已审批</div>
+                <div class="next">待审批</div>
               </div>
               <el-timeline>
                 <el-timeline-item v-for="(item, index) in historyRecordList" :key="index" :color="item.status === 1 ? '#0bbd87' : '#e4e7ed'">
@@ -40,9 +40,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import baseService from "@/service/baseService";
-import HistoryNodeInfo from "./HistoryNodeInfo.vue";
-import MainForm from "./MainForm.vue";
-import HighlightNode from "./HighlightNode.vue";
+import HistoryNodeInfo from "./components/HistoryNodeInfo.vue";
+import MainForm from "./components/MainForm.vue";
+import HighlightNode from "./components/HighlightNode.vue";
 
 // 是否打开弹出框
 const drawer = ref(false);
@@ -64,7 +64,7 @@ const tabsValue = ref("1");
  * 初始化
  * @param id 流程实例id
  */
-const init = (id: string) => {
+const open = (id: string) => {
   drawer.value = true;
   instanceId.value = id;
   tabsValue.value = "1";
@@ -120,7 +120,7 @@ const tabChange = (name: string) => {
 };
 
 defineExpose({
-  init
+  open
 });
 </script>
 
@@ -135,6 +135,7 @@ defineExpose({
 .history-container :deep() .el-card__body {
   display: flex;
   flex-direction: column;
+  align-items: baseline;
   height: calc(100% - 56px);
 }
 .main-form {
@@ -144,6 +145,7 @@ defineExpose({
   display: flex;
   justify-content: center;
   margin: 30px 10px;
+  padding: 0 20px;
 }
 
 .hint-container > div {

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-dialog v-model="open" title="审批" width="1200px" append-to-body>
+    <el-dialog v-model="open" title="审批" width="1200px">
       <!-- 节点动态表单 -->
-      <VFormRender ref="preForm" :form-json="formJson" :form-data="formData" :preview-state="true"> </VFormRender>
+      <VFormRender ref="preForm" :form-json="formJson" :preview-state="true" />
 
       <!-- 审批意见 -->
       <el-form :model="form" label-width="80px">
@@ -18,7 +18,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, toRef } from "vue";
+import { ref, reactive, toRef, nextTick } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox } from "element-plus";
 import VFormRender from "@/components/FormDesigner/form-render/index.vue";
@@ -38,8 +38,6 @@ let form = toRef(
 const preForm = ref();
 // 动态表单结构数据
 const formJson = ref<object>({});
-// 动态回显数据
-const formData = ref<object>({});
 
 // 当前节点id
 let activityId = "";
@@ -50,15 +48,20 @@ let activityId = "";
  * @param taskId 任务id
  * @param taskDefinitionKey 节点id
  */
-const init = (instanceId: string, taskId: string, taskDefinitionKey: string) => {
+const handleOpen = (instanceId: string, taskId: string, taskDefinitionKey: string) => {
   form.value.processInstanceId = instanceId;
   activityId = taskDefinitionKey;
   // 获取动态表单
   baseService.get(`/processTodo/getNodeForm/${taskId}`).then((res) => {
     if (res.code === 200 && res.data !== "") {
       formJson.value = JSON.parse(res.data);
+      open.value = true;
+      nextTick(() => {
+        preForm.value?.resetForm();
+        preForm.value?.setFormJson(JSON.parse(res.data));
+        form.value.comment = "";
+      });
     }
-    open.value = true;
   });
 };
 
@@ -95,7 +98,7 @@ const emit = defineEmits<{
 }>();
 
 defineExpose({
-  init
+  handleOpen
 });
 </script>
 

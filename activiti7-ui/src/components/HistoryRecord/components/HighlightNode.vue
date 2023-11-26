@@ -1,7 +1,7 @@
 <template>
   <div v-if="Object.keys(highlightNode).length !== 0" class="root">
     <DesignerDetails :xml="highlightNode.xml" id="highlightNode" v-if="highlightNode.xml" />
-    <el-card class="box-card" id="nodeInfo">
+    <el-card class="box-card" id="nodeInfo" v-show="open">
       <div v-for="(item, index) in nodeInfoItem" :key="index">
         <HistoryNodeInfo :nodeItem="item" />
       </div>
@@ -15,7 +15,10 @@ import EventBus from "@/components/BpmnJs/utils/EventBus";
 import Popper from "popper.js";
 import HistoryNodeInfo from "./HistoryNodeInfo.vue";
 
+// 弹框实例
 let popper: Popper;
+// 是否显示
+let open = ref<boolean>(false);
 // 选择的历史审批记录
 const nodeInfoItem = ref<any[]>([]);
 
@@ -57,6 +60,7 @@ const showNodeInfo = (elementId: string) => {
 
   const element = document.querySelector(`[data-element-id='${elementId}']`) as HTMLElement;
   const nodeInfo = document.querySelector(`#nodeInfo`) as HTMLElement;
+  open.value = true;
   popper = new Popper(element, nodeInfo, {
     placement: "right"
   });
@@ -72,6 +76,7 @@ EventBus.on("modeler-init", (modeler) => {
     // 移出时摧毁上一个
     if (elementId && event.element.id != elementId) {
       popper?.destroy();
+      open.value = false;
     }
     // 移入的如果是用户节点，就弹出框
     if (event.element.type === "bpmn:UserTask") {
