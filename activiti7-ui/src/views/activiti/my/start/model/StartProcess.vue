@@ -95,7 +95,6 @@ const rules = ref({
 // 初始化
 const init = () => {
   open.value = true;
-  formRef.value?.resetFields();
   form.value = {
     businessKey: "",
     formId: "",
@@ -106,6 +105,7 @@ const init = () => {
   };
   nextTick(() => {
     preForm.value?.setFormJson({});
+    formRef.value?.resetFields();
   });
 };
 

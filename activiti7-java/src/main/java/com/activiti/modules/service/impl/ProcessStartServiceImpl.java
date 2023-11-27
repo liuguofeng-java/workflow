@@ -127,6 +127,8 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 设置流程发起人用户Id
         Authentication.setAuthenticatedUserId(userId);
         Map<String, Object> variables = dto.getVariables();
+        // 设置发起人用户id
+        // 如果节点审批人,设置的是发起人,则审批节点的 assignee="${initiator}"
         variables.put(Constant.PROCESS_INITIATOR, userId);
         runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
     }

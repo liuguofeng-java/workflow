@@ -167,10 +167,10 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
 
             taskService.addComment(task.getId(), task.getProcessInstanceId(), dto.getComment());
             taskService.complete(task.getId(), dto.getVariables());
+        } catch (TreeBuilderException ex) {
+            throw new AException("流程条件表达式错误:" + ex.getMessage());
         } catch (ActivitiException ex) {
             throw new AException("Activiti流程异常:" + ex.getMessage());
-        } catch (TreeBuilderException ex) {
-            throw new AException("流程条件错误" + ex.getMessage());
         } catch (Exception ex) {
             throw new AException("流程提交未知异常!");
         }

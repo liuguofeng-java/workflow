@@ -2,9 +2,9 @@
   <el-collapse-item title="用户分配" name="User">
     <el-form label-width="80px">
       <el-form-item label="类型">
-        <el-select v-model="UAForm.userType" @change="updateUserAssignProp('userType', $event)">
-          <el-option v-for="item in userType" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
+        <el-radio-group v-model="UAForm.userType">
+          <el-radio-button v-for="item in userType" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item label="代理人" v-if="UAForm.userType === 'assignee'">
@@ -64,6 +64,10 @@ const UAForm = ref(EmptyUAForm as Record<UserAssigneeProp, string>);
 
 // 用户类型
 const userType = ref<any>([
+  {
+    label: "发起人",
+    value: "initiator"
+  },
   {
     label: "代理人",
     value: "assignee"
@@ -201,8 +205,9 @@ EventBus.on("element-init", function () {
 
     // 如果一个都没有选择
     if (UAForm.value.userType === "") {
-      UAForm.value.userType = "assignee";
-      updateUserAssignProp("userType", "");
+      UAForm.value.userType = "initiator";
+      updateUserAssignProp("userType", "initiator");
+      updateUserAssignProp("assignee", "${initiator}");
     }
   });
 });

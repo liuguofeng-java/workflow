@@ -42,7 +42,7 @@ public class ProcessStartController {
     }
 
     /**
-     * 根据流程定义id 启动流程
+     * 启动流程
      *
      * @param dto 启动流程参数
      * @return 结果
