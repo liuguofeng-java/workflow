@@ -1,11 +1,9 @@
 import { defineComponent, ref } from "vue";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { useI18n } from "vue-i18n";
 
 const Imports = defineComponent({
   name: "Imports",
   setup() {
-    const { t } = useI18n();
     const modelerStore = modeler();
     const importRef = ref<HTMLInputElement | null>(null);
 

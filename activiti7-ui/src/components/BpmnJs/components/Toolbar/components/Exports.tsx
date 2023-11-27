@@ -1,12 +1,10 @@
 import { defineComponent } from "vue";
 import { downloadFile, setEncoded } from "@/components/BpmnJs/utils/files";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { useI18n } from "vue-i18n";
 
 const Exports = defineComponent({
   name: "ExportTools",
   setup() {
-    const { t } = useI18n();
     const modelerStore = modeler();
     // 下载流程图到本地
     /**

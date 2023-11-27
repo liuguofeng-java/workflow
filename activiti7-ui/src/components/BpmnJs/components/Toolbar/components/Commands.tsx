@@ -3,6 +3,7 @@ import EventBus from "@/components/BpmnJs/utils/EventBus";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type CommandStack from "diagram-js/lib/command/CommandStack";
 import { createNewDiagram } from "src/components/BpmnJs/utils";
+import { ElMessageBox } from "element-plus";
 
 const Commands = defineComponent({
   name: "Commands",
@@ -21,7 +22,8 @@ const Commands = defineComponent({
       command && command.canRedo() && command.redo();
     };
 
-    const restart = () => {
+    const restart = async () => {
+      await ElMessageBox.confirm("确定要擦除重做吗?", "提示");
       command && command.clear();
       createNewDiagram();
     };

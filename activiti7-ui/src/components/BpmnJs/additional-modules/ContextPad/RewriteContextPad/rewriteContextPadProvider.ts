@@ -267,6 +267,12 @@ class RewriteContextPadProvider extends ContextPadProvider {
             translate("Create User Task"),
             undefined
           ),
+          // "append.append-service-task": appendAction(
+          //   "bpmn:ServiceTask",
+          //   "bpmn-icon-service-task",
+          //   translate("Service Task"),
+          //   undefined
+          // ),
           "append.end-event": appendAction(
             "bpmn:EndEvent",
             "bpmn-icon-end-event-none",

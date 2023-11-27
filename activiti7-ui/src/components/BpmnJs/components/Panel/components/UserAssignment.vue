@@ -108,6 +108,11 @@ const updateUserAssignProp = (key: UserAssigneeProp, value: string) => {
     multipleUserList.value = [];
     multipleDeptList.value = [];
     updateUserAssignProp("identityLinkNames", "");
+
+    // 如果设置的是发起人
+    if (value === "initiator") {
+      updateUserAssignProp("assignee", "${initiator}");
+    }
   }
   // 更新组件
   updateExModdleProp(scopedElement, moddleElement, key, value);
@@ -167,8 +172,6 @@ const multipleDeptOk = (list: any[]) => {
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
-  console.log("---=-=>");
-
   catchUndefElement((element) => {
     scopedElement = element;
     moddleElement = getBusinessObject(element);
@@ -178,12 +181,6 @@ EventBus.on("element-init", function () {
     singleUser.value = {};
     multipleUserList.value = [];
     multipleDeptList.value = [];
-
-    // // 还原代理人选择项
-    // if (UAForm.value.userType === "initiator" && UAForm.value.assignee !== "") {
-    //   singleUser.value.assignee = UAForm.value.assignee;
-    //   singleUser.value.username = UAForm.value.identityLinkNames;
-    // }
 
     // 还原代理人选择项
     if (UAForm.value.userType === "assignee" && UAForm.value.assignee !== "") {

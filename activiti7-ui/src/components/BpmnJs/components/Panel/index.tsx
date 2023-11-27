@@ -42,8 +42,6 @@ const Panel = defineComponent({
     const bpmnElementName = ref<string>("Process");
     const renderComponents = markRaw<Component[]>([]);
 
-    const activeNames = ref("NormalInfo");
-
     const setCurrentComponents = (element: BpmnElement) => {
       // 清空
       renderComponents.splice(0, renderComponents.length);
@@ -58,19 +56,10 @@ const Panel = defineComponent({
       isExecutable(element) && renderComponents.push(ElementExecutionListeners);
     };
 
-    // 记录前一个节点id
-    let activatedId = null;
     // 设置选中元素，更新 store
     const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
       let activatedElementTypeName = "";
-
-      // 如果切换节点,就收起 el-collapse
-      if (activatedElement) {
-        if (activatedId != null && activatedId != activatedElement.id) {
-          activeNames.value = "NormalInfo";
-        }
-      }
 
       if (!activatedElement) {
         activatedElement =
@@ -92,7 +81,6 @@ const Panel = defineComponent({
 
       setCurrentComponents(activatedElement);
       EventBus.emit("element-update", activatedElement);
-      activatedId = activatedElement.id;
     }, 100);
 
     EventBus.on("modeler-init", (modeler) => {
@@ -134,11 +122,11 @@ const Panel = defineComponent({
           </div>
         </div>
 
-        <el-collapse v-model={activeNames.value}>
+        <div>
           {renderComponents.map((component) => (
             <component is={component}></component>
           ))}
-        </el-collapse>
+        </div>
       </div>
     );
   }
