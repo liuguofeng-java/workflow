@@ -1,16 +1,15 @@
 <template>
   <div>
-    <el-collapse-item title="动态表单" name="ElementForm">
-      <el-form label-width="80px">
-        <el-form-item label="表单" class="disabled-color">
-          <el-input v-model="form.formName" disabled>
-            <template #append>
-              <el-button :icon="Search" @click="selectForm.handleOpen()" />
-            </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-    </el-collapse-item>
+    <el-divider content-position="left">动态表单</el-divider>
+    <el-form label-width="80px">
+      <el-form-item label="表单" class="disabled-color">
+        <el-input v-model="form.formName" disabled>
+          <template #append>
+            <el-button :icon="Search" @click="selectForm.handleOpen()" />
+          </template>
+        </el-input>
+      </el-form-item>
+    </el-form>
     <SelectForm ref="selectForm" @ok="selectFormOk" />
   </div>
 </template>

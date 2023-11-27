@@ -1,18 +1,17 @@
 <template>
-  <div>
-    <el-collapse-item title="扩展属性" name="Property" v-if="false">
-      <el-table :data="extensions" style="width: 100%">
-        <el-table-column type="index" label="序号" />
-        <el-table-column prop="name" label="Name" />
-        <el-table-column prop="value" label="Value" />
-        <el-table-column label="操作">
-          <template #default="scope">
-            <el-button link type="primary" @click="removeProperty(scope.row.index)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-button type="primary" @click="openPropertyModel">添加</el-button>
-    </el-collapse-item>
+  <div v-if="false">
+    <el-divider content-position="left">扩展属性</el-divider>
+    <el-table :data="extensions" style="width: 100%">
+      <el-table-column type="index" label="序号" />
+      <el-table-column prop="name" label="Name" />
+      <el-table-column prop="value" label="Value" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button link type="primary" @click="removeProperty(scope.row.index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button type="primary" @click="openPropertyModel">添加</el-button>
 
     <el-dialog v-model="modelVisible" title="添加" width="500px" append-to-body>
       <el-form ref="formRef" :model="newProperty" :rules="rules" label-width="80px">

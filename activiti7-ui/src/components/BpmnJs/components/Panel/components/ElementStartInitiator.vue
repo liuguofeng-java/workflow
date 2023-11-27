@@ -1,11 +1,12 @@
 <template>
-  <el-collapse-item title="启动器配置" name="Initiator">
+  <div v-if="false">
+    <el-divider content-position="left">启动器配置</el-divider>
     <el-form label-width="80px">
       <el-form-item label="异步前">
         <el-input v-model="initiator" @change="setElementInitiator" />
       </el-form-item>
     </el-form>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script lang="ts">

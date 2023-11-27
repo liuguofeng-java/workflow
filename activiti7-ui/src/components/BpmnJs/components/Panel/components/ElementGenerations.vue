@@ -1,5 +1,6 @@
 <template>
-  <el-collapse-item title="常规信息" name="NormalInfo">
+  <div>
+    <el-divider content-position="left">常规信息</el-divider>
     <el-form label-width="80px">
       <el-form-item label="ID">
         <el-input v-model="elementId" maxlength="32" @change="updateElementId" />
@@ -11,7 +12,7 @@
         <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
       </el-form-item>
     </el-form>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script lang="ts">

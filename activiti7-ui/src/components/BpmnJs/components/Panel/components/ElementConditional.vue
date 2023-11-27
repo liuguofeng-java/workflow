@@ -1,5 +1,6 @@
 <template>
-  <el-collapse-item title="条件设置" name="conditionalSettings">
+  <div>
+    <el-divider content-position="left">条件设置</el-divider>
     <el-form label-width="80px">
       <template v-if="varVisible">
         <el-form-item label="变量名称">
@@ -20,7 +21,7 @@
         <el-input v-model="conditionData.expression" maxlength="100" @change="setConditionExpression" />
       </el-form-item>
     </el-form>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -1,8 +1,9 @@
 <template>
-  <el-collapse-item title="用户分配" name="User">
+  <div>
+    <el-divider content-position="left">用户分配</el-divider>
     <el-form label-width="80px">
       <el-form-item label="类型">
-        <el-radio-group v-model="UAForm.userType">
+        <el-radio-group v-model="UAForm.userType" @change="updateUserAssignProp('userType', $event)">
           <el-radio-button v-for="item in userType" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
@@ -35,7 +36,7 @@
         <el-input v-model="UAForm.priority" @change="updateUserAssignProp('priority', $event)" />
       </el-form-item> -->
     </el-form>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -166,6 +167,8 @@ const multipleDeptOk = (list: any[]) => {
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
+  console.log("---=-=>");
+
   catchUndefElement((element) => {
     scopedElement = element;
     moddleElement = getBusinessObject(element);
@@ -175,6 +178,13 @@ EventBus.on("element-init", function () {
     singleUser.value = {};
     multipleUserList.value = [];
     multipleDeptList.value = [];
+
+    // // 还原代理人选择项
+    // if (UAForm.value.userType === "initiator" && UAForm.value.assignee !== "") {
+    //   singleUser.value.assignee = UAForm.value.assignee;
+    //   singleUser.value.username = UAForm.value.identityLinkNames;
+    // }
+
     // 还原代理人选择项
     if (UAForm.value.userType === "assignee" && UAForm.value.assignee !== "") {
       singleUser.value.assignee = UAForm.value.assignee;

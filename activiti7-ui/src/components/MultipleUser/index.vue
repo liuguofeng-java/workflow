@@ -227,7 +227,7 @@ const emit = defineEmits<{
 }
 .tag-input {
   margin-right: 10px;
-  min-height: 30px;
+  min-height: 32px;
   width: 100%;
   border-radius: 5px;
   padding: 2px 10px;

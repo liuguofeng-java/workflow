@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <el-collapse-item title="执行监听器" name="Listener">
-      <el-table :data="listeners" style="width: 100%">
-        <el-table-column type="index" label="序号" />
-        <el-table-column prop="event" label="事件类型" />
-        <el-table-column prop="type" label="监听器类型" />
-        <el-table-column label="操作">
-          <template #default="scope">
-            <el-button link type="primary" @click="openListenerModel(scope.$index, scope.row)">修改</el-button>
-            <el-button link type="primary" @click="removeListener(scope.$index)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-button type="primary" @click="openListenerModel(-1, null)">添加</el-button>
-    </el-collapse-item>
+  <div v-if="false">
+    <el-divider content-position="left">执行监听器</el-divider>
+    <el-table :data="listeners" style="width: 100%">
+      <el-table-column type="index" label="序号" />
+      <el-table-column prop="event" label="事件类型" />
+      <el-table-column prop="type" label="监听器类型" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button link type="primary" @click="openListenerModel(scope.$index, scope.row)">修改</el-button>
+          <el-button link type="primary" @click="removeListener(scope.$index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button type="primary" @click="openListenerModel(-1, null)">添加</el-button>
 
     <el-dialog v-model="modelVisible" title="添加" width="500px">
       <el-form ref="formRef" :model="newListener" :rules="formRules" label-width="80px">

@@ -1,5 +1,6 @@
 <template>
-  <el-collapse-item title="执行作业" name="ExecuteJob" v-if="false">
+  <div v-if="false">
+    <el-divider content-position="left">执行作业</el-divider>
     <el-form label-width="80px">
       <div class="element-external-task">
         <el-form-item label="任务优先级" v-if="tpVisible">
@@ -10,7 +11,7 @@
         </el-form-item>
       </div>
     </el-form>
-  </el-collapse-item>
+  </div>
 </template>
 
 <script lang="ts">
