@@ -177,6 +177,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 .orderByHistoricActivityInstanceEndTime().asc()
                 .list();
         executedList.forEach(item -> {
+            // 节点详情
             List<HistoryRecordVo> nodeHistory = historyList.stream()
                     .filter(t -> t.getActivityId().equals(item.getActivityId()))
                     .collect(Collectors.toList());
@@ -193,9 +194,14 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 .unfinished()
                 .list();
         unfinishedList.forEach(item -> {
+            // 节点详情
+            List<HistoryRecordVo> nodeHistory = historyList.stream()
+                    .filter(t -> t.getActivityId().equals(item.getActivityId()))
+                    .collect(Collectors.toList());
             nodeInfo.add(new HighlightNodeInfoVo() {{
                 setActivityId(item.getActivityId());
                 setStatus(NodeStatus.UNFINISHED);
+                setHistoryRecordVo(nodeHistory);
             }});
         });
 

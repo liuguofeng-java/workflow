@@ -1,5 +1,5 @@
 <template>
-  <el-card v-if="nodeItem && Object.keys(nodeItem).length !== 0">
+  <el-card v-if="nodeItem && Object.keys(nodeItem).length !== 0" class="item-node">
     <el-descriptions :column="1">
       <el-descriptions-item label="候选人" v-if="nodeItem.identity.userNames">
         <el-tag v-for="(userName, index) in nodeItem.identity.userNames" :key="index">{{ userName }}</el-tag>
@@ -33,6 +33,8 @@ defineProps({
 });
 </script>
 
-<style scoped></style>
-
-<style scoped></style>
+<style scoped lang="scss">
+.item-node {
+  width: 350px;
+}
+</style>

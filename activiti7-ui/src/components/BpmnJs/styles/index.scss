@@ -45,23 +45,48 @@ html,
 
 // 流程图高亮样式
 // 已完成节点高亮颜色
-.executed > .djs-visual * {
-  stroke: #058105 !important;
-  fill: #9fbda0 !important;
+.executed.djs-connection > .djs-visual > path {
+  stroke: #2ecc71 !important;
+  fill-opacity: 0.2 !important;
 }
-.executed.djs-element.djs-connection > .djs-visual * {
-  stroke: #058105 !important;
-  fill: none !important;
+.executed.djs-shape .djs-visual > :nth-child(1) {
+  fill: #2ecc71 !important;
+  stroke: #2ecc71 !important;
+  fill-opacity: 0.2 !important;
+}
+
+.executed.djs-connection > .djs-visual > path {
+  stroke: #2ecc71 !important;
+  fill-opacity: 0.2 !important;
+}
+.executed.djs-shape .djs-visual > :nth-child(1) {
+  fill: #2ecc71 !important;
+  stroke: #2ecc71 !important;
+  fill-opacity: 0.2 !important;
 }
 
 // 流程图高亮样式
 // 活动待审核节点高亮颜色
-.unfinished > .djs-visual * {
-  stroke: #ffa500 !important;
-  fill: #ffff3d !important;
+.unfinished.djs-connection > .djs-visual > path {
+  stroke: #e67e22 !important;
+  stroke-dasharray: 4px !important;
+  fill-opacity: 0.2 !important;
+}
+.unfinished.djs-shape .djs-visual > :nth-child(1) {
+  fill: #e67e22 !important;
+  stroke: #e67e22 !important;
+  stroke-dasharray: 4px !important;
+  fill-opacity: 0.2 !important;
 }
 
-.unfinished.djs-element.djs-connection > .djs-visual * {
-  stroke: #ffa500 !important;
-  fill: none !important;
+.unfinished.djs-connection > .djs-visual > path {
+  stroke: #e67e22 !important;
+  stroke-dasharray: 4px !important;
+  fill-opacity: 0.2 !important;
+}
+.unfinished.djs-shape .djs-visual > :nth-child(1) {
+  fill: #e67e22 !important;
+  stroke: #e67e22 !important;
+  stroke-dasharray: 4px !important;
+  fill-opacity: 0.2 !important;
 }

@@ -37,7 +37,7 @@ watch(
 );
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .msg {
   font-size: 20px;
   font-weight: 600;

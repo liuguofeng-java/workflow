@@ -1,6 +1,6 @@
 <template>
   <div v-if="Object.keys(highlightNode).length !== 0" class="root">
-    <DesignerDetails :xml="highlightNode.xml" id="highlightNode" v-if="highlightNode.xml" />
+    <DesignerDetails :xml="highlightNode.xml" id="highlightNode" />
     <el-card class="box-card" id="nodeInfo" v-show="open">
       <div v-for="(item, index) in nodeInfoItem" :key="index">
         <HistoryNodeInfo :nodeItem="item" />
@@ -14,7 +14,12 @@ import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
 import EventBus from "@/components/BpmnJs/utils/EventBus";
 import Popper from "popper.js";
 import HistoryNodeInfo from "./HistoryNodeInfo.vue";
+import type Modeler from "bpmn-js/lib/Modeler";
+import Canvas from "diagram-js/lib/core/Canvas";
+import { nextTick } from "vue";
 
+// 弹框实例
+let bpmnModeler: Modeler;
 // 弹框实例
 let popper: Popper;
 // 是否显示
@@ -36,16 +41,15 @@ watch(
   () => pops.highlightNode,
   async () => {
     // 高亮流程图
-    // 因为渲染流程图需要时间,所以加延时
     setTimeout(() => {
+      const canvas: Canvas = bpmnModeler?.get("canvas");
       if (Object.keys(pops.highlightNode).length === 0) return;
-      var svg = document.getElementById("highlightNode");
-
-      pops.highlightNode.nodeInfo.forEach((item) => {
-        var node = svg?.querySelector(`[data-element-id='${item.activityId}']`);
-        node?.classList.add(item.status == 1 ? "executed" : "unfinished");
+      nextTick(() => {
+        pops.highlightNode.nodeInfo.forEach((item) => {
+          canvas.addMarker(item.activityId, item.status == 1 ? "executed" : "unfinished");
+        });
       });
-    }, 10);
+    }, 50);
   },
   { deep: true, immediate: true }
 );
@@ -70,6 +74,7 @@ const showNodeInfo = (elementId: string) => {
  * 获取bpmn事件
  */
 EventBus.on("modeler-init", (modeler) => {
+  bpmnModeler = modeler;
   // 移入移出节点
   let elementId: string;
   modeler.on("element.hover", (event) => {

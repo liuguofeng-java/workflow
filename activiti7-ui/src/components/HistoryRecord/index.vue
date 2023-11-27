@@ -49,7 +49,7 @@ const drawer = ref(false);
 // 审批历史记录列表数据
 const historyRecordList = ref<any[]>([]);
 // 流程图高亮信息
-const highlightNode = ref<any>();
+const highlightNode = ref<any>({});
 // 主表单信息
 const mainFormInfo = ref<any>({});
 // 流程实例id
@@ -124,7 +124,7 @@ defineExpose({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .history-root {
   display: flex;
   height: 100%;
