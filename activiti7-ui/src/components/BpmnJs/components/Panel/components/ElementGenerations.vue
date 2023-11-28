@@ -23,7 +23,7 @@ import { Element } from "diagram-js/lib/model/Types";
 import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUtil";
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
 import { getDocumentValue, setDocumentValue } from "@/components/BpmnJs/bo-utils/documentationUtil";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 
 export default defineComponent({
   name: "ElementGenerations",

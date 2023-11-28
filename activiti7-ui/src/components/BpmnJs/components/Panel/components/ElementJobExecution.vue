@@ -19,33 +19,33 @@ import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { getExternalTaskValue, getRetryTimeCycleValue, retryTimeCycleVisible, setExternalTaskValue, setRetryTimeCycleValue, taskPriorityVisible } from "@/components/BpmnJs/bo-utils/jobExecutionUtil";
 import { Element } from "diagram-js/lib/model/Types";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 
 export default defineComponent({
   name: "ElementJobExecution",
   setup() {
     const modelerStore = modeler();
-    const getActive = computed<Element | null>(() => modelerStore.getActive!);
+    const getActive = computed<Element>(() => modelerStore.getActive);
     const getActiveId = computed<string>(() => modelerStore.getActiveId!);
 
     const retryTimeCycle = ref<string | undefined>(undefined);
     const rtVisible = ref<boolean>(false);
     const getRetryTimeCycle = () => {
-      rtVisible.value = retryTimeCycleVisible(getActive.value!);
-      retryTimeCycle.value = getRetryTimeCycleValue(getActive.value!) || "";
+      rtVisible.value = retryTimeCycleVisible(getActive.value);
+      retryTimeCycle.value = getRetryTimeCycleValue(getActive.value) || "";
     };
     const setRetryTimeCycle = (value: string | undefined) => {
-      setRetryTimeCycleValue(getActive.value!, value);
+      setRetryTimeCycleValue(getActive.value, value);
     };
 
     const taskPriority = ref<string | undefined>(undefined);
     const tpVisible = ref<boolean>(false);
     const getExternalTaskPriority = () => {
-      tpVisible.value = taskPriorityVisible(getActive.value!);
-      taskPriority.value = getExternalTaskValue(getActive.value!) || "";
+      tpVisible.value = taskPriorityVisible(getActive.value);
+      taskPriority.value = getExternalTaskValue(getActive.value) || "";
     };
     const setExternalTaskPriority = (value: string | undefined) => {
-      setExternalTaskValue(getActive.value!, value);
+      setExternalTaskValue(getActive.value, value);
     };
 
     watch(

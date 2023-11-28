@@ -77,7 +77,7 @@ export function createModdleElement(
   properties: Record<string, any>,
   parent?: Element | ModdleElement
 ): ModdleElement {
-  const moddle = modeler().getModdle!;
+  const moddle = modeler().getModdle;
   const element = moddle.create(elementType, properties);
   parent && (element.$parent = parent);
   return element;

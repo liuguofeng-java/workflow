@@ -11,9 +11,10 @@ type ModelerStore = {
   activeElementId: string | undefined;
   modeler: Modeler | undefined;
   moddle: Moddle | undefined;
-  modeling: Modeling | undefined;
+  modeling: any | undefined;
   canvas: Canvas | undefined;
   elementRegistry: ElementRegistry | undefined;
+  formJson: object | undefined;
 };
 
 const defaultState: ModelerStore = {
@@ -23,19 +24,24 @@ const defaultState: ModelerStore = {
   moddle: undefined,
   modeling: undefined,
   canvas: undefined,
-  elementRegistry: undefined
+  elementRegistry: undefined,
+  formJson: {}
 };
 
 export default defineStore("modeler", {
-  state: (): ModelerStore => defaultState,
+  // state: (): ModelerStore => defaultState,
+  state: () => {
+    return defaultState;
+  },
   getters: {
     getActive: (state) => toRaw(state.activeElement),
     getActiveId: (state) => state.activeElementId,
     getModeler: (state) => toRaw(state.modeler),
     getModdle: (state) => toRaw(state.moddle),
-    getModeling: (state): Modeling | undefined => toRaw(state.modeling),
+    getModeling: (state): Modeling => toRaw(state.modeling),
     getCanvas: (state): Canvas | undefined => toRaw(state.canvas),
-    getElRegistry: (state) => toRaw(state.elementRegistry)
+    getElRegistry: (state) => toRaw(state.elementRegistry),
+    getFormJson: (state) => toRaw(state.formJson)
   },
   actions: {
     setModeler(modeler: Modeler | undefined) {
@@ -52,6 +58,9 @@ export default defineStore("modeler", {
     setElement(element: BpmnElement | undefined) {
       this.activeElement = element;
       this.activeElementId = element?.id;
+    },
+    setFormJson(formJson: object | undefined) {
+      this.formJson = formJson;
     }
   }
 });

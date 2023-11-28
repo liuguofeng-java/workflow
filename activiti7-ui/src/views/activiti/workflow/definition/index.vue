@@ -45,7 +45,7 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
-import DeployBpmn from "./model/DeployBpmn.vue";
+import DeployBpmn from "@/components/DeployBpmn/index.vue";
 import BpmnDetails from "./model/BpmnDetails.vue";
 
 // 查询参数

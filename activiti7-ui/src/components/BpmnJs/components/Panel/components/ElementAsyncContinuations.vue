@@ -21,7 +21,7 @@ import { mapState } from "pinia";
 import { Element } from "diagram-js/lib/model/Types";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { getACAfter, getACBefore, getACExclusive, setACAfter, setACBefore, setACExclusive } from "@/components/BpmnJs/bo-utils/asynchronousContinuationsUtil";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 
 export default defineComponent({
   name: "ElementAsyncContinuations",

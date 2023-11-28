@@ -2,7 +2,7 @@ import { defineComponent, ref } from "vue";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type Canvas from "diagram-js/lib/core/Canvas";
 import { CanvasEvent } from "diagram-js/lib/core/EventBus";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 
 const Scales = defineComponent({
   name: "Scales",

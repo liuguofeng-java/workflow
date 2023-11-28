@@ -31,7 +31,7 @@ import Designer from "src/components/BpmnJs/components/Designer";
 import Panel from "src/components/BpmnJs/components/Panel";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import Modeler from "bpmn-js/lib/Modeler";
 
 // 是否加载抽屉

@@ -46,7 +46,7 @@ import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import SingleUser from "@/components/SingleUser/index.vue";
 import MultipleUser from "@/components/MultipleUser/index.vue";
 import MultipleDept from "@/components/MultipleDept/index.vue";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
 
 // element The element.

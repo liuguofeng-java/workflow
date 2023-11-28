@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref, watch, onBeforeUnmount } from "vue";
 import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import Popper from "popper.js";
 import HistoryNodeInfo from "./HistoryNodeInfo.vue";
 import type Modeler from "bpmn-js/lib/Modeler";

@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type CommandStack from "diagram-js/lib/command/CommandStack";
 import { createNewDiagram } from "src/components/BpmnJs/utils";

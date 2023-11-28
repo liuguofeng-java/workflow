@@ -14,7 +14,7 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import { getInitiatorValue, setInitiatorValue } from "@/components/BpmnJs/bo-utils/initiatorUtil";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { Element } from "diagram-js/lib/model/Types";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 
 export default defineComponent({
   name: "ElementStartInitiator",

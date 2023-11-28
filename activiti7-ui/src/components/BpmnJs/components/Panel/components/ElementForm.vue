@@ -17,11 +17,14 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, ref } from "vue";
 import { getBusinessObject, type ModdleElement, type Element } from "bpmn-js/lib/util/ModelUtil";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import SelectForm from "@/components/SelectForm/index.vue";
 import { Search } from "@element-plus/icons-vue";
+import modelerStore from "@/components/BpmnJs/store/modeler";
+
+const modeler = modelerStore();
 
 // element The element.
 let scopedElement: Element = undefined;
@@ -71,6 +74,9 @@ EventBus.on("element-init", function () {
     scopedElement = element;
     moddleElement = getBusinessObject(element);
     getElementData();
+
+    var formJson = modeler.getFormJson;
+    console.log("formJson=---===>", formJson);
   });
 });
 

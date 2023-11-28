@@ -19,7 +19,7 @@
  * @date 2022/7/11
  */
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import { Element } from "diagram-js/lib/model/Types";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 import BpmnReplaceOptions from "@/components/BpmnJs/utils/BpmnReplaceOptions";

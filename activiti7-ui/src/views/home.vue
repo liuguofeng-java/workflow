@@ -6,27 +6,6 @@
         <span class="title-text">工作流引擎</span>
       </div>
       <el-menu background-color="#343844" class="el-menu-container" :default-active="defaultActive" text-color="#fff" @select="handleSelect" unique-opened>
-        <el-sub-menu index="/sys">
-          <template #title>
-            <el-icon>
-              <SetUp />
-            </el-icon>
-            <span>基本设置</span>
-          </template>
-          <el-menu-item index="/sys/user">
-            <el-icon>
-              <User />
-            </el-icon>
-            <span>账号信息</span>
-          </el-menu-item>
-          <el-menu-item index="/sys/dept">
-            <el-icon>
-              <Operation />
-            </el-icon>
-            <span>部门信息</span>
-          </el-menu-item>
-        </el-sub-menu>
-
         <el-sub-menu index="/workflow">
           <template #title>
             <el-icon>
@@ -66,6 +45,27 @@
               <ChatLineRound />
             </el-icon>
             <span>我的代办</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="/sys">
+          <template #title>
+            <el-icon>
+              <SetUp />
+            </el-icon>
+            <span>基本设置</span>
+          </template>
+          <el-menu-item index="/sys/user">
+            <el-icon>
+              <User />
+            </el-icon>
+            <span>账号信息</span>
+          </el-menu-item>
+          <el-menu-item index="/sys/dept">
+            <el-icon>
+              <Operation />
+            </el-icon>
+            <span>部门信息</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>

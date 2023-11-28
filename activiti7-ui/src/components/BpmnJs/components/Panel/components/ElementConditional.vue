@@ -28,7 +28,7 @@
 import { ref, onBeforeUnmount } from "vue";
 import { Element } from "diagram-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 
 // element The element.

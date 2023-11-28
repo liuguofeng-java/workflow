@@ -1,7 +1,7 @@
 import { defineComponent, Component, markRaw, onMounted, ref } from "vue";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
-import EventBus from "@/components/BpmnJs/utils/EventBus";
+import EventBus from "@/utils/EventBus";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 
 import getBpmnIconType from "@/components/BpmnJs/bpmn-icons/getIconType";
