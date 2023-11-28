@@ -12,9 +12,9 @@ declare module "moddle" {
   }
 
   export class ModdleElement extends Element {
-    constructor(attrs: Object);
+    constructor(attrs: object);
     readonly $type: string;
-    $attrs: Object | {};
+    $attrs: object;
     $parent: any;
     [field: string]: any;
 
@@ -81,7 +81,7 @@ declare module "moddle" {
     properties: Property[];
     superClass?: string[];
     extends?: string[];
-    meta?: Object | {};
+    meta?: object;
   };
   type Descriptor = {
     ns: ParsedName;
@@ -155,11 +155,11 @@ declare module "moddle" {
      * calling iterator with (type, inherited) for all elements in
      * the inheritance chain.
      *
-     * @param {Object} nsName
-     * @param {Function} iterator
+     * @param {object} nsName
+     * @param {function} iterator
      * @param {Boolean} [trait=false]
      */
-    mapTypes(nsName: Object, iterator: Function, trait?: boolean);
+    mapTypes(nsName: object, iterator: function, trait?: boolean);
 
     /**
      * Returns the effective descriptor for a type.

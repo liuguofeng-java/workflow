@@ -4,6 +4,7 @@ import BpmnFactory from "bpmn-js/lib/features/modeling/BpmnFactory";
 import BpmnModdle from "bpmn-moddle";
 import { Dimensions } from "diagram-js/lib/util/Types";
 import { getBusinessObject, getDi, is } from "bpmn-js/lib/util/ModelUtil";
+// import {  } from "bpmn-js/lib/util/ModelUtil";
 
 type ElementConfig = Record<string, Dimensions>;
 

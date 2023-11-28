@@ -1,4 +1,4 @@
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { isDifferentType } from "bpmn-js/lib/features/popup-menu/util/TypeUtil";
 import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";
 import * as replaceOptions from "bpmn-js/lib/features/replace/ReplaceOptions";

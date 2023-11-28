@@ -1,4 +1,4 @@
-import { Element, Connection } from "diagram-js/lib/model/Types";
+import { Element, Connection } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { getEventDefinition } from "@/components/BpmnJs/utils/BpmnImplementationType";
@@ -199,5 +199,7 @@ function updateCondition(element: Element, condition?: string | ModdleElement) {
 //
 function setDefaultCondition(element: Connection, isDefault: boolean) {
   const modeling = modeler().getModeling;
-  modeling.updateProperties(element.source, { default: isDefault ? element : undefined });
+  modeling.updateProperties(element.source as Element, {
+    default: isDefault ? element : undefined
+  });
 }

@@ -9,8 +9,7 @@ import Create from "diagram-js/lib/features/create/Create";
 import PopupMenu from "diagram-js/lib/features/popup-menu/PopupMenu";
 import Canvas from "diagram-js/lib/core/Canvas";
 import Rules from "diagram-js/lib/features/rules/Rules";
-import { Translate } from "diagram-js/lib/i18n/translate";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { assign, forEach, isArray } from "min-dash";
 import { is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { isEventSubProcess, isExpanded } from "bpmn-js/lib/util/DiUtil";
@@ -38,7 +37,7 @@ class RewriteContextPadProvider extends ContextPadProvider {
     popupMenu: PopupMenu,
     canvas: Canvas,
     rules: Rules,
-    translate: Translate
+    translate: any
   ) {
     super(
       config,

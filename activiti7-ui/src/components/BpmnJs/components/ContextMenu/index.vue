@@ -20,7 +20,7 @@
  */
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import EventBus from "@/utils/EventBus";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 import BpmnReplaceOptions from "@/components/BpmnJs/utils/BpmnReplaceOptions";
 import { isAppendAction } from "@/components/BpmnJs/utils/BpmnDesignerUtils";

@@ -29,7 +29,9 @@ const cache = {};
  *
  * @param {Object} cache
  */
-function Resolver() {}
+function Resolver() {
+  return;
+}
 
 Resolver.prototype.resolveRule = function (pkg, ruleName) {
   const rule = cache[pkg + "/" + ruleName];

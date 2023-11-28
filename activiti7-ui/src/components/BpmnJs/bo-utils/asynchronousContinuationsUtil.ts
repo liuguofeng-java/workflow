@@ -1,4 +1,4 @@
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";

@@ -5,7 +5,7 @@ declare module "bpmn-moddle" {
 
   type ParseResult = {
     rootElement: ModdleElement;
-    references: Object[];
+    references: object[];
     warnings: Error[];
     elementsById: { [key: string]: ModdleElement };
   };
@@ -18,7 +18,7 @@ declare module "bpmn-moddle" {
   };
 
   // bpmn.json 原始类型
-  export interface RootElement extends BaseElement {}
+  // export interface RootElement extends BaseElement {}
   export interface BaseElement extends ModdleElement {
     id?: string;
     documentation?: Documentation;
@@ -37,13 +37,13 @@ declare module "bpmn-moddle" {
     errorRef?: Error[];
     implementationRef?: string;
   }
-  export interface EndPoint extends RootElement {}
-  export interface Auditing extends BaseElement {}
+  // export interface EndPoint extends RootElement {}
+  // export interface Auditing extends BaseElement {}
   export interface GlobalTask extends CallableElement {
     resources?: ResourceRole[];
   }
-  export interface Monitoring extends BaseElement {}
-  export interface Performer extends ResourceRole {}
+  // export interface Monitoring extends BaseElement {}
+  // export interface Performer extends ResourceRole {}
   export interface Process extends FlowElementsContainer, CallableElement {
     processType?: ProcessType;
     isClosed?: boolean;
@@ -70,15 +70,15 @@ declare module "bpmn-moddle" {
     lanes?: Lane[];
     name?: string;
   }
-  export interface GlobalManualTask extends GlobalTask {}
-  export interface ManualTask extends Task {}
+  // export interface GlobalManualTask extends GlobalTask {}
+  // export interface ManualTask extends Task {}
   export interface UserTask extends Task {
     renderings?: Rendering[];
     implementation?: string;
   }
-  export interface Rendering extends BaseElement {}
-  export interface HumanPerformer extends Performer {}
-  export interface PotentialOwner extends HumanPerformer {}
+  // export interface Rendering extends BaseElement {}
+  // export interface HumanPerformer extends Performer {}
+  // export interface PotentialOwner extends HumanPerformer {}
   export interface GlobalUserTask extends GlobalTask {
     implementation?: string;
     renderings?: Rendering[];
@@ -100,7 +100,7 @@ declare module "bpmn-moddle" {
   export interface InclusiveGateway extends Gateway {
     default?: SequenceFlow;
   }
-  export interface ParallelGateway extends Gateway {}
+  // export interface ParallelGateway extends Gateway {}
   export interface Relationship extends BaseElement {
     type?: string;
     direction?: RelationshipDirection;
@@ -134,9 +134,9 @@ declare module "bpmn-moddle" {
   export interface Event extends FlowNode, InteractionNode {
     properties?: Property[];
   }
-  export interface IntermediateCatchEvent extends CatchEvent {}
-  export interface IntermediateThrowEvent extends ThrowEvent {}
-  export interface EndEvent extends ThrowEvent {}
+  // export interface IntermediateCatchEvent extends CatchEvent {}
+  // export interface IntermediateThrowEvent extends ThrowEvent {}
+  // export interface EndEvent extends ThrowEvent {}
   export interface StartEvent extends CatchEvent {
     isInterrupting: boolean;
   }
@@ -159,12 +159,12 @@ declare module "bpmn-moddle" {
     cancelActivity: boolean;
     attachedToRef?: Activity;
   }
-  export interface EventDefinition extends RootElement {}
-  export interface CancelEventDefinition extends EventDefinition {}
+  // export interface EventDefinition extends RootElement {}
+  // export interface CancelEventDefinition extends EventDefinition {}
   export interface ErrorEventDefinition extends EventDefinition {
     errorRef?: Error;
   }
-  export interface TerminateEventDefinition extends EventDefinition {}
+  // export interface TerminateEventDefinition extends EventDefinition {}
   export interface EscalationEventDefinition extends EventDefinition {
     escalationRef?: Escalation;
   }
@@ -201,7 +201,7 @@ declare module "bpmn-moddle" {
     name?: string;
     structureRef?: ItemDefinition;
   }
-  export interface ImplicitThrowEvent extends ThrowEvent {}
+  // export interface ImplicitThrowEvent extends ThrowEvent {}
   export interface DataState extends BaseElement {
     name?: string;
   }
@@ -246,8 +246,8 @@ declare module "bpmn-moddle" {
   export interface Property extends ItemAwareElement {
     name?: string;
   }
-  export interface DataInputAssociation extends DataAssociation {}
-  export interface DataOutputAssociation extends DataAssociation {}
+  // export interface DataInputAssociation extends DataAssociation {}
+  // export interface DataOutputAssociation extends DataAssociation {}
   export interface InputOutputSpecification extends BaseElement {
     dataInputs?: DataInput[];
     dataOutputs?: DataOutput[];
@@ -301,7 +301,7 @@ declare module "bpmn-moddle" {
     calledCollaborationRef?: Collaboration;
     participantAssociations?: ParticipantAssociation[];
   }
-  export interface Conversation extends ConversationNode {}
+  // export interface Conversation extends ConversationNode {}
   export interface SubConversation extends ConversationNode {
     conversationNodes?: ConversationNode[];
   }
@@ -311,7 +311,7 @@ declare module "bpmn-moddle" {
     messageFlowRefs?: MessageFlow[];
     correlationKeys?: CorrelationKey[];
   }
-  export interface GlobalConversation extends Collaboration {}
+  // export interface GlobalConversation extends Collaboration {}
   export interface PartnerEntity extends RootElement {
     name?: string;
     participantRef?: Participant[];
@@ -475,7 +475,7 @@ declare module "bpmn-moddle" {
     categoryValue?: CategoryValue[];
     name?: string;
   }
-  export interface Artifact extends BaseElement {}
+  // export interface Artifact extends BaseElement {}
   export interface CategoryValue extends BaseElement {
     categorizedFlowElements?: FlowElement[];
     value?: string;
@@ -501,7 +501,7 @@ declare module "bpmn-moddle" {
     triggeredByEvent: boolean;
     artifacts?: Artifact[];
   }
-  export interface LoopCharacteristics extends BaseElement {}
+  // export interface LoopCharacteristics extends BaseElement {}
   export interface MultiInstanceLoopCharacteristics extends LoopCharacteristics {
     isSequential: boolean;
     behavior?: MultiInstanceBehavior;
@@ -652,12 +652,12 @@ declare module "bpmn-moddle" {
 
   // 默认导出
   export default class BpmnModdle extends Moddle {
-    constructor(packages?: Package[], options?: Object);
+    constructor(packages?: Package[], options?: object);
     fromXML(
       xmlStr: string,
-      typeName?: string | Object,
-      options?: Object
+      typeName?: string | object,
+      options?: object
     ): Promise<ParseResult | ParseError>;
-    toXML(element: string, options?: Object): Promise<SerializationResult | Error>;
+    toXML(element: string, options?: object): Promise<SerializationResult | Error>;
   }
 }

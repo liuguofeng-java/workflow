@@ -6,7 +6,7 @@ declare module "object-refs" {
     enumerable: boolean;
     inverse?: AttributeDescriptor;
   };
-  type RefsCollection = Array<Object> & {
+  type RefsCollection = Array<object> & {
     remove(element: unknown): unknown;
     contains(element: unknown): boolean;
     add(element: unknown, idx?: number): unknown;
@@ -39,15 +39,15 @@ declare module "object-refs" {
     private props: Record<string, AttributeDescriptor>;
 
     //将双向引用的一侧绑定到目标对象。
-    bind(target: Object, property: string | AttributeDescriptor): void;
-    ensureRefsCollection(target: Object, property: AttributeDescriptor): RefsCollection;
-    ensureBound(target: Object, property: AttributeDescriptor): void;
+    bind(target: object, property: string | AttributeDescriptor): void;
+    ensureRefsCollection(target: object, property: AttributeDescriptor): RefsCollection;
+    ensureBound(target: object, property: AttributeDescriptor): void;
     unset(target, property, value): void;
     set(target, property, value): void;
   }
 
   export type Collection = {
-    extend(collection: Object[], refs: Refs, property: Object, target: Object): RefsCollection;
-    isExtended(collection: Object[] | RefsCollection): boolean;
+    extend(collection: object[], refs: Refs, property: object, target: object): RefsCollection;
+    isExtended(collection: object[] | RefsCollection): boolean;
   };
 }

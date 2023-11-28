@@ -1,4 +1,4 @@
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";
 import {
@@ -22,7 +22,6 @@ export function addExtensionProperty(element: Element, property) {
     const store = modelerStore();
     const editor = editorStore();
 
-    const moddle = store.getModdle;
     const modeling = store.getModeling;
     const prefix = editor.getProcessEngine;
 
@@ -49,7 +48,7 @@ export function addExtensionProperty(element: Element, property) {
     // 创建新属性并添加
     const newProperty = createModdleElement(`${prefix}:Property`, property, properties);
     modeling.updateModdleProperties(element, properties, {
-      values: [...properties?.get("values"), newProperty]
+      values: [...properties.get("values"), newProperty]
     });
   } catch (e) {
     console.log(e);

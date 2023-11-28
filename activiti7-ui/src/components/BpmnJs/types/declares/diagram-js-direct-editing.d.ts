@@ -10,18 +10,14 @@ declare module "diagram-js-direct-editing/lib/DirectEditing" {
   import Canvas from "diagram-js/lib/core/Canvas";
   import TextBox from "diagram-js-direct-editing/lib/TextBox";
 
-  type DirectEditingProvider = {};
-
-  type ElementDescriptor = {};
-
   export default class DirectEditing {
     constructor(eventBus: EventBus, canvas: Canvas);
 
     protected _textbox: TextBox;
     protected _eventBus: EventBus;
-    protected _providers: DirectEditingProvider[];
+    protected _providers: any[];
 
-    registerProvider(provider: DirectEditingProvider): void;
+    registerProvider(provider: any): void;
 
     isActive(): boolean;
 
@@ -57,8 +53,8 @@ declare module "diagram-js-direct-editing/lib/DirectEditing" {
 declare module "diagram-js-direct-editing/lib/TextBox" {
   type TextBoxOptions = {
     container: HTMLElement;
-    keyHandler: Function;
-    resizeHandler: Function;
+    keyHandler: function;
+    resizeHandler: function;
   };
 
   type TextBoxBounds = {
@@ -85,8 +81,8 @@ declare module "diagram-js-direct-editing/lib/TextBox" {
     protected container: HTMLElement;
     protected parent: HTMLElement;
     protected content: HTMLElement;
-    protected keyHandler: Function;
-    protected resizeHandler: Function;
+    protected keyHandler: function;
+    protected resizeHandler: function;
     // protected autoResize: Function
     // protected handlePaste: Function
 
@@ -100,8 +96,8 @@ declare module "diagram-js-direct-editing/lib/TextBox" {
     create(
       bounds: TextBoxBounds,
       style: Style | string,
-      value?: string | Object,
-      options?: Object
+      value?: string | object,
+      options?: object
     ): HTMLElement;
 
     handlePaste(e: Event): void;

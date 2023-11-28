@@ -1,6 +1,3 @@
-/* 空函数 */
-export function noop() {}
-
 /**
  * 校验非空
  * @param {*} val

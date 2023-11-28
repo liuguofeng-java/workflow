@@ -12,7 +12,7 @@ declare module "camunda-bpmn-moddle/lib/CopyPasteBehavior" {
      * @param property
      * @param parent
      */
-    canCopyProperty(property: Object | string, parent: Element): boolean;
+    canCopyProperty(property: object | string, parent: Element): boolean;
 
     canHostInputOutput(parent: Element): boolean;
 

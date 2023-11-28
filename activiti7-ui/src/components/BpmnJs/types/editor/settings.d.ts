@@ -25,7 +25,7 @@ export interface EditorSettings {
 
 export type ModelerOptions<E extends Element> = ViewerOptions<E> & {
   additionalModules: ModuleDeclaration[];
-  moddleExtensions: Object;
+  moddleExtensions: object;
 };
 
 // bpmn.js 事件参数
