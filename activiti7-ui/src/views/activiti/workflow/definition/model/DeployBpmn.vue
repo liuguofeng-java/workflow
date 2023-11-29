@@ -1,20 +1,18 @@
 <template>
   <el-drawer v-model="drawer" size="100%" :with-header="false" destroy-on-close>
     <div id="designer-container">
-      <div class="close">
-        <el-icon @click="drawer = false" size="20">
-          <CloseBold />
-        </el-icon>
-      </div>
       <!-- 操作按钮 -->
       <div class="toolbar">
-        <el-button type="primary" class="room" @click="deployment">保存</el-button>
-        <Scales class="room"></Scales>
-        <Commands class="room"></Commands>
-        <Previews class="room"></Previews>
+        <el-button type="primary" @click="submit">保存</el-button>
+        <Scales></Scales>
+        <Commands></Commands>
+        <Previews></Previews>
+        <div class="close">
+          <el-icon @click="close"><Close /></el-icon>
+        </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml"></Designer>
+        <Designer :xml="xml" v-if="xml"></Designer>
         <Panel></Panel>
       </div>
     </div>
@@ -29,50 +27,74 @@ import Commands from "@/components/BpmnJs/components/Toolbar/components/Commands
 
 import Designer from "src/components/BpmnJs/components/Designer";
 import Panel from "src/components/BpmnJs/components/Panel";
-import { ElMessage, ElMessageBox } from "element-plus";
-import baseService from "@/service/baseService";
 import EventBus from "@/utils/EventBus";
 import Modeler from "bpmn-js/lib/Modeler";
+import modelerStore from "@/components/BpmnJs/store/modeler";
+import baseService from "@/service/baseService";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { nextTick } from "vue";
+
+const modeler = modelerStore();
+
+// bpmn.js 实例
+let bpmnModel: Modeler;
 
 // 是否加载抽屉
 let drawer = ref<boolean>(false);
 
-// 初始化的xml
-const xml = ref("");
-
-// bpmn.js 实例
-let BPMNModel: Modeler;
+// 流程设计器
+let xml = ref<string>();
 
 /**
- * 初始化
- * @param lastXml 上一个部署流程图xml
+ * 初始化设计器
+ * @param deploymentId 部署id
  */
-const open = (lastXml: string) => {
-  xml.value = lastXml;
+const open = (deploymentId: string | undefined) => {
   drawer.value = true;
+
+  // 获取到上一个版本的流程图xml
+  if (deploymentId) {
+    nextTick(() => {
+      baseService.get("/processDefinition/getDefinitionInfo", { deploymentId }).then((res) => {
+        if (res.code === 200) {
+          res.data.formJsonList.forEach((formJson) => {
+            modeler.setFormJson(formJson);
+          });
+          xml.value = res.data.xml;
+        }
+      });
+    });
+  }
 };
 
 /**
- * 部署流程
+ * 保存
  */
-const deployment = async () => {
+const submit = async () => {
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
-  const { xml } = await BPMNModel.saveXML({ format: true, preamble: true });
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  baseService.post(`/processDefinition/deployment`, xml).then((res) => {
-    if (res.code === 200) {
-      drawer.value = false;
-      ElMessage.success(res.msg);
-      emit("ok");
-    }
-  });
+  const formJsonList = modeler.getFormJsonList;
+  const { xml } = await bpmnModel.saveXML({ format: true, preamble: true });
+  baseService
+    .post(`/processDefinition/deployProcess`, {
+      xml,
+      formJsonList
+    })
+    .then((res) => {
+      if (res.code === 200) {
+        ElMessage.success("保存成功！");
+        drawer.value = false;
+        emit("ok");
+      }
+    });
 };
 
-const emit = defineEmits<{
-  (event: "ok"): void;
-}>();
+/**
+ * 关闭
+ */
+const close = async () => {
+  await ElMessageBox.confirm("确定要关闭吗?", "提示");
+  drawer.value = false;
+};
 
 defineExpose({
   open
@@ -82,7 +104,7 @@ defineExpose({
  * 获取bpmn事件
  */
 EventBus.on("modeler-init", (modeler: Modeler) => {
-  BPMNModel = modeler;
+  bpmnModel = modeler;
 });
 
 /**
@@ -91,22 +113,25 @@ EventBus.on("modeler-init", (modeler: Modeler) => {
 onBeforeUnmount(async () => {
   await EventBus.off("modeler-init");
 });
+
+const emit = defineEmits<{
+  (event: "ok"): void;
+}>();
 </script>
 
 <style scoped lang="scss">
-.close {
-  display: flex;
-  justify-content: flex-end;
-  margin: 5px;
-
-  i {
-    cursor: pointer;
-  }
-}
-
 #designer-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+.close {
+  font-size: 20px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  i {
+    cursor: pointer;
+  }
 }
 </style>

@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class HighlightNodeInfoVo {
     /**
-     * 节点id
+     * 流程定义节点唯一标识
      */
     private String activityId;
 

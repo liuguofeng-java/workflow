@@ -1,16 +1,10 @@
 .toolbar {
-  width: 100%;
-  height: min-content;
-  box-sizing: border-box;
-  padding: 8px 16px 8px 0;
-  display: flex;
-  align-items: center;
-  > div[class^='n-button'] + div[class^='n-button'] {
-    margin-left: 16px;
-  }
-  .room{
-    margin-right: 10px;
-  }
+  display: grid;
+  grid-column: 100px;
+  grid-template-rows: auto;
+  grid-template-columns: auto auto auto auto 1fr;
+  gap: 10px;
+  margin: 20px 0;
 }
 
 .button-list_column {

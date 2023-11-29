@@ -21,7 +21,7 @@ public class HistoryRecordVo {
     private String nodeName;
 
     /**
-     * 节点id
+     * 流程定义节点唯一标识
      */
     private String activityId;
 

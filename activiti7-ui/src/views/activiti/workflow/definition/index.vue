@@ -45,7 +45,7 @@
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
-import DeployBpmn from "@/components/DeployBpmn/index.vue";
+import DeployBpmn from "./model/DeployBpmn.vue";
 import BpmnDetails from "./model/BpmnDetails.vue";
 
 // 查询参数
@@ -107,7 +107,7 @@ function handleDetails(deploymentId: string) {
  * 新增
  */
 function handleAdd() {
-  deployBpmn.value.open();
+  deployBpmn.value.open(undefined);
 }
 
 /**
@@ -115,12 +115,7 @@ function handleAdd() {
  * @param deploymentId 流程部署id
  */
 function handleDesign(deploymentId: string) {
-  // 获取到上一个版本的流程图xml
-  baseService.get("/processDefinition/getDefinitionXml", { deploymentId }).then((res) => {
-    if (res.code === 200) {
-      deployBpmn.value.open(res.data);
-    }
-  });
+  deployBpmn.value.open(deploymentId);
 }
 
 /**

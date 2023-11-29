@@ -1,82 +1,72 @@
 <template>
   <div>
     <el-divider content-position="left">动态表单</el-divider>
-    <el-form label-width="80px">
-      <el-form-item label="表单" class="disabled-color">
-        <el-input v-model="form.formName" disabled>
-          <template #append>
-            <el-button :icon="Search" @click="selectForm.handleOpen()" />
-          </template>
-        </el-input>
-      </el-form-item>
-    </el-form>
-    <SelectForm ref="selectForm" @ok="selectFormOk" />
+    <el-table :data="list">
+      <el-table-column type="index" label="序号" width="60px" align="center" />
+      <el-table-column prop="options.name" label="类型">
+        <template #default="scoped">
+          <span>
+            <svg-icon :icon-class="scoped.row.icon" class-name="color-svg-icon" />
+            {{ i18n.methods.i18n2t(`designer.widgetLabel.${scoped.row.type}`, `extension.widgetLabel.${scoped.row.type}`) }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="options.label" label="名称" />
+    </el-table>
+
+    <div style="width: 100%">
+      <el-button type="primary" plain style="width: 100%" @click="selectFormRef.handleOpen()">设计</el-button>
+    </div>
+    <SelectForm ref="selectFormRef" :formJson="formJson" @ok="selectFormOk" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, ref } from "vue";
-import { getBusinessObject, type ModdleElement, type Element } from "bpmn-js/lib/util/ModelUtil";
-import EventBus from "@/utils/EventBus";
-import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import SelectForm from "@/components/SelectForm/index.vue";
-import { Search } from "@element-plus/icons-vue";
+import { ref, onBeforeUnmount } from "vue";
 import modelerStore from "@/components/BpmnJs/store/modeler";
+import SelectForm from "./SubChild/SelectForm.vue";
+import EventBus from "@/utils/EventBus";
+import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
+import { type Element } from "bpmn-js/lib/util/ModelUtil";
+import i18n from "@/components/FormDesigner/utils/i18n";
+import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 
 const modeler = modelerStore();
 
-// element The element.
-let scopedElement: Element = undefined;
+// 当前节点信息
+let scopedElement: Element;
 
-// moddleElement The model element.
-let moddleElement: ModdleElement = undefined;
-
-// 表单数据
-const form = ref({
-  formKey: "",
-  formName: ""
-});
+// 表格数据
+let list = ref<any[]>();
 
 // 选择表单
-const selectForm = ref();
+const selectFormRef = ref();
 
-/**
- * 选择表单返回数据
- * @param data 表单数据
- */
-const selectFormOk = (data) => {
-  updateProp("formKey", data.formId);
-  updateProp("formName", data.formName);
-};
+// 当前表单结构数据
+let formJson = ref<any>({});
 
-/**
- * 更新值
- * @param propKey 属性key
- * @param propValue 属性值
- */
-const updateProp = (propKey, propValue) => {
-  updateExModdleProp(scopedElement, moddleElement, propKey, propValue);
+// 编辑表单成功
+const selectFormOk = (data: any) => {
+  modeler.setFormJson({
+    activityId: scopedElement.id,
+    formJson: data
+  });
   getElementData();
 };
 
 /**
- * 获取节点数据
+ * 获取节点表单数据
  */
 const getElementData = () => {
-  form.value.formKey = getExPropValue(moddleElement, "formKey") || "";
-  form.value.formName = getExPropValue(moddleElement, "formName") || "";
+  formJson.value = modeler.getFormJsonList.find((t) => t.activityId === scopedElement.id)?.formJson || {};
+  list.value = formJson.value.widgetList;
 };
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
   catchUndefElement((element) => {
     scopedElement = element;
-    moddleElement = getBusinessObject(element);
     getElementData();
-
-    var formJson = modeler.getFormJson;
-    console.log("formJson=---===>", formJson);
   });
 });
 
@@ -88,11 +78,4 @@ onBeforeUnmount(async () => {
 });
 </script>
 
-<style scoped>
-.disabled-color :deep() .is-disabled > .el-input__wrapper {
-  background-color: var(--el-input-bg-color) !important;
-}
-.disabled-color :deep() .is-disabled > .el-input__wrapper > input {
-  -webkit-text-fill-color: var(--el-input-text-color) !important;
-}
-</style>
+<style scoped></style>

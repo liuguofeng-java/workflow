@@ -6,6 +6,11 @@ import type Canvas from "diagram-js/lib/core/Canvas";
 import type ElementRegistry from "diagram-js/lib/core/ElementRegistry";
 import { toRaw } from "vue";
 
+type FormJson = {
+  activityId: string | undefined;
+  formJson: any | undefined;
+};
+
 type ModelerStore = {
   activeElement: BpmnElement | undefined;
   activeElementId: string | undefined;
@@ -14,7 +19,7 @@ type ModelerStore = {
   modeling: any | undefined;
   canvas: Canvas | undefined;
   elementRegistry: ElementRegistry | undefined;
-  formJson: object | undefined;
+  formJsonList: FormJson[];
 };
 
 const defaultState: ModelerStore = {
@@ -25,14 +30,11 @@ const defaultState: ModelerStore = {
   modeling: undefined,
   canvas: undefined,
   elementRegistry: undefined,
-  formJson: {}
+  formJsonList: []
 };
 
 export default defineStore("modeler", {
-  // state: (): ModelerStore => defaultState,
-  state: () => {
-    return defaultState;
-  },
+  state: (): ModelerStore => defaultState,
   getters: {
     getActive: (state) => toRaw(state.activeElement),
     getActiveId: (state) => state.activeElementId,
@@ -41,7 +43,7 @@ export default defineStore("modeler", {
     getModeling: (state): Modeling => toRaw(state.modeling),
     getCanvas: (state): Canvas | undefined => toRaw(state.canvas),
     getElRegistry: (state) => toRaw(state.elementRegistry),
-    getFormJson: (state) => toRaw(state.formJson)
+    getFormJsonList: (state) => toRaw(state.formJsonList)
   },
   actions: {
     setModeler(modeler: Modeler | undefined) {
@@ -57,10 +59,17 @@ export default defineStore("modeler", {
     },
     setElement(element: BpmnElement | undefined) {
       this.activeElement = element;
-      this.activeElementId = element?.id;
+      this.activeElementId = element.id;
     },
-    setFormJson(formJson: object | undefined) {
-      this.formJson = formJson;
+    setFormJsonList(formJsonList: FormJson[]) {
+      this.formJsonList = formJsonList;
+    },
+    setFormJson(formJson: FormJson) {
+      const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
+      if (index !== -1) {
+        this.formJsonList.splice(index, 1);
+      }
+      this.formJsonList.push(formJson);
     }
   }
 });

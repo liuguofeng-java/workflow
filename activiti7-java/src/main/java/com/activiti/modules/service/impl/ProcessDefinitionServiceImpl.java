@@ -1,23 +1,29 @@
 package com.activiti.modules.service.impl;
 
+import com.activiti.modules.entity.SysNodeFormEntity;
 import com.activiti.modules.entity.dto.workflow.DefinitionListDto;
+import com.activiti.modules.entity.dto.workflow.DeployProcessDto;
+import com.activiti.modules.entity.dto.workflow.FormJsons;
 import com.activiti.modules.entity.vo.workflow.DefinitionListVo;
 import com.activiti.modules.service.ProcessDefinitionService;
+import com.activiti.modules.service.SysNodeFormService;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 流程定义实现
@@ -31,6 +37,8 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private SysNodeFormService sysNodeFormService;
 
     /**
      * 流程管理列表
@@ -87,15 +95,49 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     }
 
     /**
-     * 部署流程xml
+     * 部署流程
      *
-     * @param xmlStr xml字符串
+     * @param dto 参数
      */
+    @Transactional
     @Override
-    public void deploymentXmlByStr(String xmlStr) {
-        repositoryService.createDeployment().disableBpmnValidation()
-                .addString("index.bpmn", xmlStr)
+    public void deployProcess(DeployProcessDto dto) {
+        // 部署xml
+        Deployment deploy = repositoryService.createDeployment().disableBpmnValidation()
+                .addString("index.bpmn", dto.getXml())
                 .deploy();
+
+        List<FormJsons> formJsons = dto.getFormJsonList();
+        List<SysNodeFormEntity> list = new ArrayList<>();
+        Date date = new Date();
+        for (FormJsons formJson : formJsons) {
+            list.add(new SysNodeFormEntity() {{
+                setDeployId(deploy.getId());
+                setActivityId(formJson.getActivityId());
+                setFormJson(formJson.getFormJson());
+                setCreateTime(date);
+            }});
+        }
+        sysNodeFormService.saveBatch(list);
+    }
+
+    /**
+     * 获取流程定义详情
+     *
+     * @param deploymentId 部署id
+     * @return 流程xml字符串和流程表单
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> getDefinitionInfo(String deploymentId) {
+        Map<String, Object> result = new HashMap<>();
+        String xml = getDefinitionXml(deploymentId);
+        result.put("xml", xml);
+        List<SysNodeFormEntity> list = sysNodeFormService.list(new LambdaQueryWrapper<SysNodeFormEntity>()
+                .select(SysNodeFormEntity::getActivityId, SysNodeFormEntity::getFormJson)
+                .eq(SysNodeFormEntity::getDeployId, deploymentId));
+        result.put("formJsonList", list);
+        return result;
     }
 
     /**
@@ -103,8 +145,11 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
      *
      * @param deploymentId 部署id
      */
+    @Transactional
     @Override
     public void delete(String deploymentId) {
+        sysNodeFormService.remove(new LambdaQueryWrapper<SysNodeFormEntity>()
+                .eq(SysNodeFormEntity::getDeployId, deploymentId));
         repositoryService.deleteDeployment(deploymentId, true);
     }
 }

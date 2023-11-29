@@ -1,11 +1,14 @@
 package com.activiti.modules.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
 
@@ -17,7 +20,7 @@ import lombok.Data;
  * @date 2023-11-28 14:50:18
  */
 @Data
-@TableName("sys_node_form")
+@TableName(value = "sys_node_form", autoResultMap = true)
 public class SysNodeFormEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -25,11 +28,11 @@ public class SysNodeFormEntity implements Serializable {
      * 节点id
      */
     @TableId
-    private String node;
+    private String nodeId;
     /**
-     * 流程id
+     * 部署id
      */
-    private String definitionId;
+    private String deployId;
     /**
      * 流程定义节点唯一标识
      */
@@ -37,7 +40,8 @@ public class SysNodeFormEntity implements Serializable {
     /**
      * 表单详情
      */
-    private String formJson;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Map<String, Object> formJson;
     /**
      * 是否是主表单,1:是,2:否
      */

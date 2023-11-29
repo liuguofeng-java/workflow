@@ -96,7 +96,7 @@ import { getCache, removeCache } from "@/utils/cache";
 import { CacheToken } from "@/constants/cacheKey";
 
 const router = useRouter();
-let defaultActive = ref("/sys/user");
+let defaultActive = ref("/workflow/definition");
 const user = ref({
   account: String
 });
