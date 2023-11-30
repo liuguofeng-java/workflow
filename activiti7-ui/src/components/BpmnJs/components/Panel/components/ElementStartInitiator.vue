@@ -13,14 +13,14 @@
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { getInitiatorValue, setInitiatorValue } from "@/components/BpmnJs/bo-utils/initiatorUtil";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import EventBus from "@/utils/EventBus";
 
 export default defineComponent({
   name: "ElementStartInitiator",
   setup() {
     const modelerStore = modeler();
-    const getActive = computed<Element | null>(() => modelerStore.getActive!);
+    const getActive = computed<Element | null>(() => modelerStore.getActive);
     const initiator = ref<string | undefined>("");
 
     const getElementInitiator = () => {

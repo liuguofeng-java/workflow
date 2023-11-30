@@ -44,7 +44,7 @@ import { defineComponent, markRaw, nextTick } from "vue";
 import { mapState } from "pinia";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import { ModdleElement } from "bpmn-moddle";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, removeExecutionListener, updateExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import { getScriptType } from "@/components/BpmnJs/bo-utils/scriptUtil";
 import EventBus from "@/utils/EventBus";

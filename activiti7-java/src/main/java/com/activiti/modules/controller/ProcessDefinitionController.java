@@ -34,6 +34,17 @@ public class ProcessDefinitionController {
     }
 
     /**
+     * 获取流程定义xml
+     *
+     * @param deploymentId 部署id
+     */
+    @GetMapping("getDefinitionXml")
+    public R<String> getDefinitionXml(String deploymentId) {
+        String xml = processDefinitionService.getDefinitionXml(deploymentId);
+        return R.ok(xml);
+    }
+
+    /**
      * 获取流程定义详情
      *
      * @param deploymentId 部署id

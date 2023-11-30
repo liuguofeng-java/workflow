@@ -23,11 +23,12 @@ import ElementExtensionProperties from "./components/ElementExtensionProperties.
 import ElementAsyncContinuations from "./components/ElementAsyncContinuations.vue";
 import ElementJobExecution from "./components/ElementJobExecution.vue";
 import ElementStartInitiator from "./components/ElementStartInitiator.vue";
+import ElementMainForm from "./components/ElementMainForm.vue";
 import ElementForm from "./components/ElementForm.vue";
 
 import UserAssignment from "./components/UserAssignment.vue";
 
-import { isCanbeConditional } from "@/components/BpmnJs/bo-utils/conditionUtil";
+import { isCanbeConditional, isExtendStartEvent } from "@/components/BpmnJs/bo-utils/conditionUtil";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 
 const Panel = defineComponent({
@@ -45,7 +46,9 @@ const Panel = defineComponent({
     const setCurrentComponents = (element: BpmnElement) => {
       // 清空
       renderComponents.splice(0, renderComponents.length);
-      renderComponents.push(ElementGenerations);
+      // 添加组件
+      renderComponents.push(ElementGenerations); // 基本信息
+      isExtendStartEvent(element) && renderComponents.push(ElementMainForm); // 是否是开始节点
       isCanbeConditional(element) && renderComponents.push(ElementConditional);
       isJobExecutable(element) && renderComponents.push(ElementJobExecution);
       renderComponents.push(ElementExtensionProperties);

@@ -116,6 +116,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                 setDeployId(deploy.getId());
                 setActivityId(formJson.getActivityId());
                 setFormJson(formJson.getFormJson());
+                setIsMainFrom(formJson.getIsMainFrom());
                 setCreateTime(date);
             }});
         }
@@ -137,7 +138,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         result.put("xml", xml);
         // 获取节点表单
         List<SysNodeFormEntity> list = sysNodeFormService.list(new LambdaQueryWrapper<SysNodeFormEntity>()
-                .select(SysNodeFormEntity::getActivityId, SysNodeFormEntity::getFormJson)
+                .select(SysNodeFormEntity::getActivityId, SysNodeFormEntity::getFormJson, SysNodeFormEntity::getIsMainFrom)
                 .eq(SysNodeFormEntity::getDeployId, deploymentId));
         result.put("formJsonList", list);
         return result;

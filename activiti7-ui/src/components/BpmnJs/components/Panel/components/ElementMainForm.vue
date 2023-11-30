@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-divider content-position="left">动态表单</el-divider>
+    <el-divider content-position="left">主表单</el-divider>
     <el-table :data="list">
       <el-table-column type="index" label="序号" width="60px" align="center" />
       <el-table-column prop="options.name" label="类型">
@@ -50,7 +50,7 @@ const selectFormOk = (data: any) => {
   modeler.setFormJson({
     activityId: scopedElement.id,
     formJson: data,
-    isMainFrom: 0
+    isMainFrom: 1
   });
   getElementData();
 };

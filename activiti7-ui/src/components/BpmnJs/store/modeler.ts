@@ -9,6 +9,7 @@ import { toRaw } from "vue";
 type FormJson = {
   activityId: string | undefined;
   formJson: any | undefined;
+  isMainFrom: number | 0;
 };
 
 type ModelerStore = {
@@ -60,9 +61,6 @@ export default defineStore("modeler", {
     setElement(element: BpmnElement | undefined) {
       this.activeElement = element;
       this.activeElementId = element.id;
-    },
-    setFormJsonList(formJsonList: FormJson[]) {
-      this.formJsonList = formJsonList;
     },
     clearFormJson() {
       this.formJsonList.splice(0, this.formJsonList.length);

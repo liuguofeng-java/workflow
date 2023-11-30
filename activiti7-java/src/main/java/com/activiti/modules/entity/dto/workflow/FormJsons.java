@@ -21,4 +21,10 @@ public class FormJsons {
      * 表单结构
      */
     private Map<String, Object> formJson;
+
+    /**
+     * 是否是主表单
+     */
+    private int isMainFrom;
+    ;
 }

@@ -1,5 +1,5 @@
 import { is } from "bpmn-js/lib/util/ModelUtil";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { isArray } from "min-dash";
 import modeler from "@/components/BpmnJs/store/modeler";
@@ -78,7 +78,7 @@ export function createModdleElement(
   parent?: Element | ModdleElement
 ): ModdleElement {
   const moddle = modeler().getModdle;
-  const element = moddle.create(elementType, properties);
+  const element = moddle!.create(elementType, properties);
   parent && (element.$parent = parent);
   return element;
 }

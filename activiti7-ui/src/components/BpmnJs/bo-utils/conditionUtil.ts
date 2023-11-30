@@ -28,6 +28,7 @@ export function isConditionEventDefinition(element: Element): boolean {
     is(element, "bpmn:Event") && !!getEventDefinition(element, "bpmn:ConditionalEventDefinition")
   );
 }
+// 元素是否开始节点
 export function isExtendStartEvent(element: Element): boolean {
   return is(element, "bpmn:StartEvent");
 }

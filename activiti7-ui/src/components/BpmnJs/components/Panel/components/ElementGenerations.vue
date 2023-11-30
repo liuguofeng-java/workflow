@@ -19,7 +19,7 @@
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import modelerStore from "@/components/BpmnJs/store/modeler";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUtil";
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
 import { getDocumentValue, setDocumentValue } from "@/components/BpmnJs/bo-utils/documentationUtil";

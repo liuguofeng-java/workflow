@@ -45,7 +45,7 @@ public class SysNodeFormEntity implements Serializable {
     /**
      * 是否是主表单,1:是,2:否
      */
-    private Long isMainFrom;
+    private Integer isMainFrom;
     /**
      * 创建时间
      */
