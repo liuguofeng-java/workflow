@@ -10,6 +10,8 @@ import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * 代办流程
  *
@@ -42,8 +44,8 @@ public class ProcessTodoController {
      * @return 表单数据
      */
     @GetMapping("getNodeForm/{taskId}")
-    public R<String> getNodeForm(@PathVariable String taskId){
-        String nodeForm = processTodoService.getNodeForm(taskId);
+    public R<Map<String, Object>> getNodeForm(@PathVariable String taskId){
+        Map<String, Object> nodeForm = processTodoService.getNodeForm(taskId);
         return R.ok(nodeForm);
     }
 

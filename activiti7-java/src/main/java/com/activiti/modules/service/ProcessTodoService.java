@@ -6,6 +6,8 @@ import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.utils.R;
 import com.activiti.utils.page.TableDataInfo;
 
+import java.util.Map;
+
 /**
  * 代办任务
  *
@@ -26,7 +28,7 @@ public interface ProcessTodoService {
      * @param taskId 任务id
      * @return 表单数据
      */
-    String getNodeForm(String taskId);
+    Map<String, Object> getNodeForm(String taskId);
 
     /**
      * 节点审批

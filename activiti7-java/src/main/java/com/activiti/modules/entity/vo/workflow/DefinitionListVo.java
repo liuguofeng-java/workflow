@@ -2,6 +2,8 @@ package com.activiti.modules.entity.vo.workflow;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * 流程管理列表
  *
@@ -34,5 +36,12 @@ public class DefinitionListVo {
      * 版本
      */
     private int version;
+
+    /**
+     * 主表单表单详情
+     */
+    private Map<String, Object> formJson;
+
+
 
 }

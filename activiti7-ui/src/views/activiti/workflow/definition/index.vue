@@ -23,6 +23,12 @@
       <el-table-column label="流程名称" align="center" prop="name" />
       <el-table-column label="流程key" align="center" prop="key" />
       <el-table-column label="版本" align="center" prop="version" />
+      <el-table-column label="主表单" align="center" prop="version">
+        <template #default="scoped">
+          <MainForm :form-json="scoped.row.formJson" />
+          <h5 v-if="!scoped.row.formJson">暂无信息</h5>
+        </template>
+      </el-table-column>
       <el-table-column>
         <template #default="scope">
           <el-button link type="primary" icon="Crop" @click="handleDesign(scope.row.deploymentId)">设计</el-button>
@@ -47,6 +53,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import baseService from "@/service/baseService";
 import DeployBpmn from "./model/DeployBpmn.vue";
 import BpmnDetails from "./model/BpmnDetails.vue";
+import MainForm from "./model/MainForm.vue";
 
 // 查询参数
 const queryForm = reactive({

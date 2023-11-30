@@ -61,7 +61,6 @@ export function getRetryTimeCycleValue(element: Element): string | undefined {
 export function setRetryTimeCycleValue(element: Element, value: string | undefined) {
   const prefix = editor().getProcessEngine;
   const modeling = modeler().getModeling;
-  const moddle = modeler().getModdle!;
   const businessObject = getBusinessObject(element);
 
   let extensionElements = businessObject.get("extensionElements");

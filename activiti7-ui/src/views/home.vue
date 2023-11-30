@@ -19,12 +19,6 @@
             </el-icon>
             <span>流程定义</span>
           </el-menu-item>
-          <el-menu-item index="/workflow/vform">
-            <el-icon>
-              <MessageBox />
-            </el-icon>
-            <span>表单配置</span>
-          </el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="/my">

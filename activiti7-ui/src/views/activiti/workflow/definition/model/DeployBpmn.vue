@@ -77,8 +77,6 @@ const submit = async () => {
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
   const formJsonList = modeler.getFormJsonList;
   const { xml } = await bpmnModel.saveXML({ format: true, preamble: true });
-  console.log(formJsonList);
-
   baseService
     .post(`/processDefinition/deployProcess`, {
       xml,

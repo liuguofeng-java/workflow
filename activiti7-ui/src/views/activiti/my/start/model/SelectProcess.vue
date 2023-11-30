@@ -89,7 +89,7 @@ function handleQuery() {
  * @param row 选择的行
  */
 function handleSelect(row: any) {
-  emit("ok", { definitionId: row.id, definitionName: row.name });
+  emit("ok", row);
   open.value = false;
 }
 

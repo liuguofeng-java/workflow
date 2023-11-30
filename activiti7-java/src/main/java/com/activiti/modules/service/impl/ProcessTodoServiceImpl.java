@@ -1,12 +1,12 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysFormEntity;
+import com.activiti.modules.entity.SysNodeFormEntity;
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
 import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.modules.entity.vo.workflow.TodoListVo;
 import com.activiti.modules.service.ProcessTodoService;
-import com.activiti.modules.service.SysFormService;
+import com.activiti.modules.service.SysNodeFormService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import de.odysseus.el.tree.TreeBuilderException;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -54,7 +53,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
     private SysUserService userService;
 
     @Autowired
-    private SysFormService formService;
+    private SysNodeFormService nodeFormService;
 
     /**
      * 查看我代办的流程
@@ -115,28 +114,24 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      * @return 表单数据
      */
     @Override
-    public String getNodeForm(String taskId) {
+    public Map<String, Object> getNodeForm(String taskId) {
         // 获取任务
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) throw new AException("未知任务！");
-
+        // 流程定义信息
+        ProcessDefinition processDefinition = repositoryService.getProcessDefinition(task.getProcessDefinitionId());
         // 获取当前节点 formKey
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
         FlowElement flowElement = bpmnModel.getFlowElement(task.getTaskDefinitionKey());
-        // 只有用户节点才有表单
-        if (!(flowElement instanceof UserTask)) throw new AException("只能获取用户节点表单");
-        String formKey = ((UserTask) flowElement).getFormKey();
-
-        // 当前节点没有设置表单
-        if (StringUtils.isEmpty(formKey)) return "";
         // 获取表单数据
-        SysFormEntity form = formService.getOne(new LambdaQueryWrapper<SysFormEntity>()
-                .eq(SysFormEntity::getFormId, formKey));
+        SysNodeFormEntity form = nodeFormService.getOne(new LambdaQueryWrapper<SysNodeFormEntity>()
+                        .eq(SysNodeFormEntity::getDeployId,processDefinition.getDeploymentId())
+                .eq(SysNodeFormEntity::getActivityId, flowElement.getId()));
         // 没有数据可能被删除了
         if (form == null) {
-            throw new AException("没有找到动态表单,数据可能已被删除!");
+            return new HashMap<>();
         }
-        return form.getFormData();
+        return form.getFormJson();
     }
 
     /**

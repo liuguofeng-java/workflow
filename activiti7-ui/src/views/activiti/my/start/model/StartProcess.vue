@@ -21,14 +21,6 @@
             </template>
           </el-input>
         </el-form-item>
-
-        <el-form-item label="主表单" class="disabled-color">
-          <el-input v-model="form.formName" disabled>
-            <template #append>
-              <el-button :icon="Search" @click="selectForm.handleOpen()" />
-            </template>
-          </el-input>
-        </el-form-item>
       </el-form>
 
       <el-card class="box-card" v-if="Object.keys(form.formJson).length !== 0">
@@ -48,7 +40,6 @@
         </div>
       </template>
     </el-drawer>
-    <SelectForm ref="selectForm" @ok="selectFormOk" />
     <SelectProcess ref="selectProcess" @ok="selectProcessOk" />
   </div>
 </template>
@@ -56,7 +47,6 @@
 import { ref, reactive, toRef, nextTick } from "vue";
 import baseService from "@/service/baseService";
 import { ElMessage } from "element-plus";
-import SelectForm from "@/components/SelectForm/index.vue";
 import SelectProcess from "./SelectProcess.vue";
 import VFormRender from "@/components/FormDesigner/form-render/index.vue";
 
@@ -65,8 +55,6 @@ import { Search } from "@element-plus/icons-vue";
 // 是否打开弹出框
 const open = ref(false);
 
-// 选择表单
-const selectForm = ref();
 // 选择流程
 const selectProcess = ref();
 
@@ -110,25 +98,18 @@ const init = () => {
 };
 
 /**
- * 选择表单返回数据
- * @param data 表单数据
- */
-const selectFormOk = (data: any) => {
-  form.value.formId = data.formId;
-  form.value.formName = data.formName;
-  form.value.formJson = JSON.parse(data.formData);
-  nextTick(() => {
-    preForm.value.setFormJson(data.formData);
-  });
-};
-
-/**
  * 选择流程返回数据
  * @param data 表单数据
  */
 const selectProcessOk = (data: any) => {
-  form.value.definitionId = data.definitionId;
-  form.value.definitionName = data.definitionName;
+  console.log(data);
+
+  form.value.definitionId = data.id;
+  form.value.definitionName = data.name;
+  form.value.formJson = data.formJson || {};
+  nextTick(() => {
+    preForm.value?.setFormJson(form.value.formJson);
+  });
 };
 
 /**

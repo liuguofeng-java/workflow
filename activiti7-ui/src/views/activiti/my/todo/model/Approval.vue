@@ -54,11 +54,13 @@ const handleOpen = (instanceId: string, taskId: string, taskDefinitionKey: strin
   // 获取动态表单
   baseService.get(`/processTodo/getNodeForm/${taskId}`).then((res) => {
     if (res.code === 200 && res.data !== "") {
-      formJson.value = JSON.parse(res.data);
+      formJson.value = res.data;
       open.value = true;
       nextTick(() => {
-        preForm.value?.resetForm();
-        preForm.value?.setFormJson(JSON.parse(res.data));
+        if (Object.keys(res.data).length !== 0) {
+          preForm.value?.resetForm();
+          preForm.value?.setFormJson(res.data);
+        }
         form.value.comment = "";
       });
     }

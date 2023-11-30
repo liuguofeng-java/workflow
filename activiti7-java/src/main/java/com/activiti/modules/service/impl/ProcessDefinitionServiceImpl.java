@@ -61,6 +61,13 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         for (ProcessDefinition item : list) {
             DefinitionListVo vo = new DefinitionListVo();
             BeanUtils.copyProperties(item, vo);
+            // 获取主表单
+            SysNodeFormEntity mainForm = sysNodeFormService.getOne(new LambdaQueryWrapper<SysNodeFormEntity>()
+                    .eq(SysNodeFormEntity::getDeployId, item.getDeploymentId())
+                    .eq(SysNodeFormEntity::getIsMainFrom, 1));
+            if (mainForm != null) {
+                vo.setFormJson(mainForm.getFormJson());
+            }
             resultList.add(vo);
         }
         return PageUtils.getDataTable(resultList, query.count());
