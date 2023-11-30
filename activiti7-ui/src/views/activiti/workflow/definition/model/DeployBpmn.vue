@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml" v-if="xml"></Designer>
+        <Designer :xml="xml" v-if="xml !== undefined"></Designer>
         <Panel></Panel>
       </div>
     </div>
@@ -51,7 +51,8 @@ let xml = ref<string>();
  */
 const open = (deploymentId: string | undefined) => {
   drawer.value = true;
-
+  xml.value = undefined;
+  modeler.clearFormJson();
   // 获取到上一个版本的流程图xml
   if (deploymentId) {
     nextTick(() => {
@@ -64,6 +65,8 @@ const open = (deploymentId: string | undefined) => {
         }
       });
     });
+  } else {
+    xml.value = "";
   }
 };
 
@@ -127,9 +130,7 @@ const emit = defineEmits<{
 }
 .close {
   font-size: 20px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  margin-left: auto;
   i {
     cursor: pointer;
   }

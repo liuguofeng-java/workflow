@@ -14,9 +14,9 @@ const CONDITIONAL_SOURCES = [
   "bpmn:ComplexGateway"
 ];
 const defaultConditionTypeOptions: Record<string, string>[] = [
-  { label: "无条件( None )", value: "none" },
-  { label: "默认路径( Default )", value: "default" },
-  { label: "条件表达式( Expression )", value: "expression" }
+  { label: "无条件", value: "none" },
+  { label: "默认路径", value: "default" },
+  { label: "条件表达式", value: "expression" }
 ];
 // 父节点符合条件的连线
 export function isConditionalSource(element) {

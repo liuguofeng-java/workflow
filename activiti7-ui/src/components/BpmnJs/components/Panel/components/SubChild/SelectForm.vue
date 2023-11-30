@@ -1,10 +1,11 @@
 <template>
   <el-drawer v-model="drawer" size="100%" :with-header="false" append-to-body>
-    <div>
-      <el-button @click="drawer = false">关闭</el-button>
-      <el-button @click="submit">确定</el-button>
+    <div class="container">
+      <div class="header">
+        <el-button type="primary" @click="submit">保存</el-button>
+      </div>
+      <VFormDesigner v-if="drawer" ref="vfdRef" />
     </div>
-    <VFormDesigner v-if="drawer" ref="vfdRef" />
   </el-drawer>
 </template>
 <script setup lang="ts">
@@ -42,8 +43,7 @@ const handleOpen = () => {
  */
 const submit = () => {
   const formJson = vfdRef.value.getFormJson();
-  console.log(formJson);
-  emit("ok", formJson);
+  emit("ok", JSON.parse(JSON.stringify(formJson)));
   drawer.value = false;
 };
 
@@ -56,13 +56,18 @@ const emit = defineEmits<{
 }>();
 </script>
 
-<style scoped>
-.inline {
+<style scoped lang="scss">
+.container {
   display: flex;
-  justify-content: flex-end;
-}
-
-::v-deep(.el-drawer__body) {
-  overflow: hidden !important;
+  flex-direction: column;
+  height: 100%;
+  :deep() .full-height {
+    overflow-y: hidden;
+    display: block;
+  }
+  .header {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

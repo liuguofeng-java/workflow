@@ -11,10 +11,10 @@
         </el-form-item>
       </template>
 
-      <el-form-item label="条件类型">
-        <el-select v-model="conditionData.conditionType" @change="setElementConditionType">
-          <el-option v-for="item in conditionTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
+      <el-form-item label="类型">
+        <el-radio-group v-model="conditionData.conditionType" @change="setElementConditionType">
+          <el-radio-button v-for="item in conditionTypeOptions" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item label="条件内容" v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
@@ -26,7 +26,7 @@
 
 <script lang="ts" setup>
 import { ref, onBeforeUnmount } from "vue";
-import { Element } from "diagram-js/lib/model/Types";
+import { Element } from "bpmn-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";

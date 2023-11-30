@@ -1,10 +1,13 @@
 .toolbar {
-  display: grid;
-  grid-column: 100px;
-  grid-template-rows: auto;
-  grid-template-columns: auto auto auto auto 1fr;
-  gap: 10px;
-  margin: 20px 0;
+  width: 100%;
+  height: min-content;
+  box-sizing: border-box;
+  padding: 8px 16px 8px 0;
+  display: flex;
+  align-items: center;
+  > div {
+    margin-left: 16px;
+  }
 }
 
 .button-list_column {

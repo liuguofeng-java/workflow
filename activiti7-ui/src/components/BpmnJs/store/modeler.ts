@@ -64,6 +64,9 @@ export default defineStore("modeler", {
     setFormJsonList(formJsonList: FormJson[]) {
       this.formJsonList = formJsonList;
     },
+    clearFormJson() {
+      this.formJsonList.splice(0, this.formJsonList.length);
+    },
     setFormJson(formJson: FormJson) {
       const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
       if (index !== -1) {

@@ -107,6 +107,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                 .addString("index.bpmn", dto.getXml())
                 .deploy();
 
+        // 保存节点表单
         List<FormJsons> formJsons = dto.getFormJsonList();
         List<SysNodeFormEntity> list = new ArrayList<>();
         Date date = new Date();
@@ -130,9 +131,11 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, Object> getDefinitionInfo(String deploymentId) {
+        // 获取xml
         Map<String, Object> result = new HashMap<>();
         String xml = getDefinitionXml(deploymentId);
         result.put("xml", xml);
+        // 获取节点表单
         List<SysNodeFormEntity> list = sysNodeFormService.list(new LambdaQueryWrapper<SysNodeFormEntity>()
                 .select(SysNodeFormEntity::getActivityId, SysNodeFormEntity::getFormJson)
                 .eq(SysNodeFormEntity::getDeployId, deploymentId));
