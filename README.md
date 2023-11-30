@@ -45,11 +45,9 @@
 
 ####  预览
 
-![](images/bpmn.png)
-
 ![](images/leaveMain.png)
 
-![](images/auditStatus.png)
+![](images/bpmn.png)
 
 ![](images/start.png)
 
