@@ -3,7 +3,7 @@ package com.activiti.modules.service.impl;
 import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
-import com.activiti.modules.entity.vo.workflow.HistoryRecordIdentityVo;
+import com.activiti.modules.entity.vo.workflow.IdentityVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
 import com.activiti.modules.service.*;
 import com.activiti.utils.constant.ActivityType;
@@ -87,19 +87,11 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             vo.setActivityId(item.getActivityId());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());
-            vo.setUserId(item.getAssignee());
             // 审批意见
             taskService.getTaskComments(item.getTaskId())
                     .stream()
                     .findAny()
                     .ifPresent(t -> vo.setComment(t.getFullMessage()));
-            // 审批人
-            if (StringUtils.isNotEmpty(item.getAssignee())) {
-                SysUserEntity user = userService.getById(item.getAssignee());
-                if (user != null) {
-                    vo.setUserName(user.getUsername());
-                }
-            }
             // 获取获选人 或 候选组信息
             vo.setIdentity(getCandidateInfo(item.getTaskId()));
             vo.setStatus(NodeStatus.EXECUTED);
@@ -129,13 +121,6 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             HistoryRecordVo vo = new HistoryRecordVo();
             vo.setNodeName(item.getActivityName());
             vo.setActivityId(item.getActivityId());
-            // 审批人
-            if (StringUtils.isNotEmpty(item.getAssignee())) {
-                SysUserEntity user = userService.getById(item.getAssignee());
-                if (user != null) {
-                    vo.setUserName(user.getUsername());
-                }
-            }
             // 获取获选人 或 候选组信息
             vo.setIdentity(getCandidateInfo(item.getTaskId()));
             vo.setStatus(NodeStatus.UNFINISHED);
@@ -257,8 +242,8 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
      * @param taskId 任务id
      * @return 获选人 或 候选组信息
      */
-    public HistoryRecordIdentityVo getCandidateInfo(String taskId) {
-        HistoryRecordIdentityVo vo = new HistoryRecordIdentityVo();
+    public IdentityVo getCandidateInfo(String taskId) {
+        IdentityVo vo = new IdentityVo();
         // 如果没有taskId直接返回
         if (StringUtils.isEmpty(taskId)) return vo;
         List<HistoricIdentityLink> identityLinks = historyService.getHistoricIdentityLinksForTask(taskId);
@@ -275,6 +260,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                     .stream().map(SysDeptEntity::getDeptName).collect(Collectors.toList());
             vo.setGroupNames(groupNames);
         }
+
         // 候选人ids
         List<String> userIds = identityLinks.stream()
                 .filter(t -> t.getType().equals(IdentityLinkType.CANDIDATE))
@@ -285,6 +271,18 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                             .in(SysUserEntity::getUserId, userIds))
                     .stream().map(SysUserEntity::getUsername).collect(Collectors.toList());
             vo.setUserNames(userNames);
+        }
+
+        // 审批人
+        String userId = identityLinks.stream()
+                .filter(t -> t.getType().equals(IdentityLinkType.ASSIGNEE))
+                .map(HistoricIdentityLink::getUserId)
+                .filter(StringUtils::isNotEmpty).findAny().orElse(null);
+        if (StringUtils.isNotEmpty(userId)) {
+            SysUserEntity user = userService.getById(userId);
+            if (user != null) {
+                vo.setUserName(user.getUsername());
+            }
         }
         return vo;
     }

@@ -12,7 +12,12 @@ import java.util.List;
  * @date 2023/11/16 10:04
  **/
 @Data
-public class HistoryRecordIdentityVo {
+public class IdentityVo {
+
+    /**
+     * 审批人用户名称
+     */
+    private String userName;
 
     /**
      * 候选人信息

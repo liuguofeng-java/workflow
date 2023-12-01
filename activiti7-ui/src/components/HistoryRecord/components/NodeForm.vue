@@ -1,6 +1,6 @@
 <template>
   <!-- 用户节点填写的表单 -->
-  <el-popover :width="600" trigger="hover" v-if="formJson?.widgetList.length !== 0" @show="vFormRenderShow">
+  <el-popover :width="600" trigger="hover" v-if="formJson && formJson.widgetList && formJson.widgetList.length !== 0" @show="vFormRenderShow">
     <template #reference>
       <el-link type="primary">表单详情</el-link>
     </template>

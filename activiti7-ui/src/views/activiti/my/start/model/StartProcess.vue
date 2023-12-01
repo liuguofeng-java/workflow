@@ -119,7 +119,7 @@ function submitForm() {
   // 验证表单
   formRef.value.validate(async (valid: boolean) => {
     // 获取动态表单数据
-    const formData = await preForm.value.getFormData();
+    const formData = (await preForm.value?.getFormData()) || {};
     if (!valid) return;
 
     // 真实要提交的数据

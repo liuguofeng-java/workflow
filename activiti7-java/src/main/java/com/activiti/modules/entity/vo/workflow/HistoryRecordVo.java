@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 流程记录
@@ -38,16 +37,6 @@ public class HistoryRecordVo {
     private Date endTime;
 
     /**
-     * 审批人用户id
-     */
-    private String userId;
-
-    /**
-     * 审批人用户名称
-     */
-    private String userName;
-
-    /**
      * 状态 1:已完成节点,2:活动的未处理的节点(下一个节点) 参考{@link NodeStatus}
      */
     private Integer status;
@@ -60,7 +49,7 @@ public class HistoryRecordVo {
     /**
      * 流程记录身份信息
      */
-    private HistoryRecordIdentityVo identity;
+    private IdentityVo identity;
 
     /**
      * 动态表单结构数据
