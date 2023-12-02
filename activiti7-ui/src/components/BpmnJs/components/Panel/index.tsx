@@ -1,4 +1,4 @@
-import { defineComponent, Component, markRaw, onMounted, ref } from "vue";
+import { defineComponent, Component, markRaw, onMounted, ref, getCurrentInstance } from "vue";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
 import EventBus from "@/utils/EventBus";
@@ -8,6 +8,8 @@ import getBpmnIconType from "@/components/BpmnJs/bpmn-icons/getIconType";
 import bpmnIcons from "@/components/BpmnJs/bpmn-icons";
 import BpmnIcon from "./components/SubChild/BpmnIcon.vue";
 
+import { isCanbeConditional, isExtendStartEvent } from "@/components/BpmnJs/bo-utils/conditionUtil";
+import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 import { isAsynchronous } from "@/components/BpmnJs/bo-utils/asynchronousContinuationsUtil";
 import { isExecutable } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import { isJobExecutable } from "@/components/BpmnJs/bo-utils/jobExecutionUtil";
@@ -25,11 +27,7 @@ import ElementJobExecution from "./components/ElementJobExecution.vue";
 import ElementStartInitiator from "./components/ElementStartInitiator.vue";
 import ElementMainForm from "./components/ElementMainForm.vue";
 import ElementForm from "./components/ElementForm.vue";
-
 import UserAssignment from "./components/UserAssignment.vue";
-
-import { isCanbeConditional, isExtendStartEvent } from "@/components/BpmnJs/bo-utils/conditionUtil";
-import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
 
 const Panel = defineComponent({
   name: "PropertiesPanel",
@@ -38,11 +36,17 @@ const Panel = defineComponent({
     const panel = ref<HTMLDivElement | null>(null);
     const currentElementId = ref<string | undefined>(undefined);
     const currentElementType = ref<string | undefined>(undefined);
-
     const bpmnIconName = ref<string>("Process");
     const bpmnElementName = ref<string>("Process");
     const renderComponents = markRaw<Component[]>([]);
+    const {
+      proxy: { $forceUpdate }
+    }: any = getCurrentInstance();
 
+    /**
+     * 更新组件
+     * @param element 当前节点
+     */
     const setCurrentComponents = (element: BpmnElement) => {
       // 清空
       renderComponents.splice(0, renderComponents.length);
@@ -57,17 +61,22 @@ const Panel = defineComponent({
       isUserAssignmentSupported(element) && renderComponents.push(UserAssignment);
       isUserAssignmentSupported(element) && renderComponents.push(ElementForm);
       isExecutable(element) && renderComponents.push(ElementExecutionListeners);
+
+      // 发现ElementConditional未更,新强制更新组件
+      $forceUpdate();
     };
 
-    // 设置选中元素，更新 store
+    /**
+     * 设置选中元素，更新 store
+     */
     const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element;
       let activatedElementTypeName = "";
 
       if (!activatedElement) {
-        activatedElement =
-          modeler.getElRegistry?.find((el) => el.type === "bpmn:Process") ||
-          modeler.getElRegistry?.find((el) => el.type === "bpmn:Collaboration");
+        activatedElement = modeler.getElRegistry?.find(
+          (el) => el.type === "bpmn:Process" || el.type === "bpmn:Collaboration"
+        );
 
         if (!activatedElement) {
           return console.log("No Element found!");
@@ -86,6 +95,9 @@ const Panel = defineComponent({
       EventBus.emit("element-update", activatedElement);
     }, 100);
 
+    /**
+     * 初始化
+     */
     EventBus.on("modeler-init", (modeler) => {
       // 导入完成后默认选中 process 节点
       modeler.on("import.done", () => {
@@ -107,13 +119,11 @@ const Panel = defineComponent({
           setCurrentElement(element);
         }
       });
-      // 点击节点触发
-      // modeler.on("element.click", (event) => {
-      //   console.log("Element Click", event);
-      // });
     });
 
-    onMounted(() => !currentElementId.value && setCurrentElement(null));
+    onMounted(() => {
+      !currentElementId.value && setCurrentElement(null);
+    });
 
     return () => (
       <div ref={panel} class="panel">

@@ -111,7 +111,7 @@ export function setConditionExpressionValue(element: Element, body: string | und
 // 5. 元素脚本来源类型
 export function getConditionScriptTypeValue(element: Element): string | undefined {
   const prefix = editor().getProcessEngine;
-  const conditionExpression = getConditionExpression(element)!;
+  const conditionExpression = getConditionExpression(element);
   console.log(conditionExpression);
   if (conditionExpression.get("body") !== undefined) return "inline";
   if (conditionExpression.get(`${prefix}:resource`) !== undefined) return "external";
@@ -130,7 +130,7 @@ export function setConditionScriptTypeValue(element: Element, value: string | un
   if (value === "external") {
     props = { body: undefined, [`${prefix}:resource`]: "" };
   }
-  modeling.updateModdleProperties(element, getConditionExpression(element)!, props);
+  modeling.updateModdleProperties(element, getConditionExpression(element), props);
 }
 
 // 6. 元素脚本 语言类型
@@ -139,7 +139,7 @@ export function getConditionScriptLanguageValue(element: Element): string | unde
 }
 export function setConditionScriptLanguageValue(element: Element, value: string | undefined) {
   const modeling = modeler().getModeling;
-  modeling.updateModdleProperties(element, getConditionExpression(element)!, { language: value });
+  modeling.updateModdleProperties(element, getConditionExpression(element), { language: value });
 }
 
 // 7. 元素脚本 body
@@ -148,7 +148,7 @@ export function getConditionScriptBodyValue(element: Element): string | undefine
 }
 export function setConditionScriptBodyValue(element: Element, value: string | undefined) {
   const modeling = modeler().getModeling;
-  modeling.updateModdleProperties(element, getConditionExpression(element)!, { body: value });
+  modeling.updateModdleProperties(element, getConditionExpression(element), { body: value });
 }
 
 // 8. 元素脚本 source
@@ -159,7 +159,7 @@ export function getConditionScriptResourceValue(element: Element): string | unde
 export function setConditionScriptResourceValue(element: Element, value: string | undefined) {
   const modeling = modeler().getModeling;
   const prefix = editor().getProcessEngine;
-  modeling.updateModdleProperties(element, getConditionExpression(element)!, {
+  modeling.updateModdleProperties(element, getConditionExpression(element), {
     [`${prefix}:resource`]: value
   });
 }
@@ -200,6 +200,9 @@ function updateCondition(element: Element, condition?: string | ModdleElement) {
 //
 function setDefaultCondition(element: Connection, isDefault: boolean) {
   const modeling = modeler().getModeling;
+  console.log(modeling);
+  console.log(element, element.source);
+
   modeling.updateProperties(element.source as Element, {
     default: isDefault ? element : undefined
   });

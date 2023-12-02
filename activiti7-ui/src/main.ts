@@ -25,8 +25,6 @@ app.use(ElementPlus, {
 
 // vfrom相关依赖引入---------------------------------------------
 import "@/components/FormDesigner/styles/index.scss";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import Draggable from "@/../lib/vuedraggable/dist/vuedraggable.umd.js";
 import { registerIcon } from "@/components/FormDesigner/utils/el-icons";
 
@@ -37,8 +35,6 @@ import { addDirective } from "@/components/FormDesigner/utils/directive";
 import { installI18n } from "@/components/FormDesigner/utils/i18n";
 import { loadExtension } from "@/components/FormDesigner/extension/extension-loader";
 registerIcon(app);
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 app.component("draggable", Draggable);
 addDirective(app);
 installI18n(app);

@@ -19,7 +19,6 @@
         <mysql.version>8.0.28</mysql.version>
         <druid.version>1.1.13</druid.version>
         <activiti.version>7.0.0.SR1</activiti.version>
-        <commons.io.version>2.5</commons.io.version>
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
     </properties>
     <dependencies>

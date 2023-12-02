@@ -1,13 +1,13 @@
 <template>
-  <div class="rr-login">
-    <div class="rr-login-wrap">
-      <div class="rr-login-left hidden-sm-and-down">
-        <p class="rr-login-left-title">工作流</p>
+  <div class="login">
+    <div class="login-wrap">
+      <div class="login-left hidden-sm-and-down">
+        <p class="login-left-title">工作流</p>
       </div>
 
-      <div class="rr-login-right">
-        <div class="rr-login-right-main">
-          <h4 class="rr-login-right-main-title">登录</h4>
+      <div class="login-right">
+        <div class="login-right-main">
+          <h4 class="login-right-main-title">登录</h4>
           <el-form ref="formRef" label-width="80px" :status-icon="true" :model="login" :rules="rules" @keyup.enter="onLogin">
             <el-form-item label-width="0" prop="userName">
               <el-input v-model="login.userName" placeholder="用户名" prefix-icon="user" autocomplete="off"></el-input>
@@ -16,7 +16,7 @@
               <el-input placeholder="密码" v-model="login.password" prefix-icon="lock" autocomplete="off" show-password></el-input>
             </el-form-item>
             <el-form-item label-width="0">
-              <el-button type="primary" size="small" :disabled="state.loading" @click="onLogin" class="rr-login-right-main-btn"> 登录 </el-button>
+              <el-button type="primary" size="small" :disabled="state.loading" @click="onLogin" class="login-right-main-btn"> 登录 </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -76,22 +76,27 @@ const onLogin = () => {
 </script>
 
 <style lang="less" scoped>
-.rr-login {
+.login {
   width: 100vw;
   height: 100vh;
-  background: #019ec4;
+  background: #2a55c8;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  .login-wrap {
+    .login-left {
+      background-color: #4a8ffe !important;
+    }
+  }
 
   @media only screen and (max-width: 992px) {
-    .rr-login-wrap {
+    .login-wrap {
       width: 96% !important;
     }
 
-    .rr-login-right {
+    .login-right {
       width: 100% !important;
     }
   }
