@@ -3,7 +3,7 @@
     <el-divider content-position="left">常规信息</el-divider>
     <el-form label-width="80px">
       <el-form-item label="ID">
-        <el-input v-model="elementId" maxlength="32" @change="updateElementId" />
+        <el-input v-model="elementId" disabled maxlength="32" @change="updateElementId" />
       </el-form-item>
       <el-form-item label="流程名称">
         <el-input v-model="elementName" maxlength="20" @change="updateElementName" />

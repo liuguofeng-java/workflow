@@ -36,7 +36,7 @@ const Previews = defineComponent({
     return () => (
       <div>
         <el-button onClick={openXMLPreviewModel}>浏览xml</el-button>
-        <el-drawer v-model={drawer.value} size="900px" destroy-on-close>
+        <el-drawer v-model={drawer.value} size="900px" title="浏览" destroy-on-close>
           <pre>
             <code class="xml hljs">
               <div id="xmlCode">{xmlStr.value}</div>

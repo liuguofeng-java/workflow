@@ -4,7 +4,6 @@ import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { getEventDefinition } from "@/components/BpmnJs/utils/BpmnImplementationType";
 import modeler from "@/components/BpmnJs/store/modeler";
 import { createModdleElement } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
-import editor from "@/components/BpmnJs/store/editor";
 
 ///////////////////////////////// 配置项可见性
 const CONDITIONAL_SOURCES = [
@@ -106,62 +105,6 @@ export function setConditionExpressionValue(element: Element, body: string | und
     : (getConditionalEventDefinition(element) as ModdleElement);
   const formalExpressionElement = createModdleElement("bpmn:FormalExpression", { body }, parent);
   updateCondition(element, formalExpressionElement);
-}
-
-// 5. 元素脚本来源类型
-export function getConditionScriptTypeValue(element: Element): string | undefined {
-  const prefix = editor().getProcessEngine;
-  const conditionExpression = getConditionExpression(element);
-  console.log(conditionExpression);
-  if (conditionExpression.get("body") !== undefined) return "inline";
-  if (conditionExpression.get(`${prefix}:resource`) !== undefined) return "external";
-  return "none";
-}
-export function setConditionScriptTypeValue(element: Element, value: string | undefined) {
-  const prefix = editor().getProcessEngine;
-  const modeling = modeler().getModeling;
-  let props;
-  if (!value || value === "none") {
-    props = { body: undefined, [`${prefix}:resource`]: undefined };
-  }
-  if (value === "inline") {
-    props = { body: "", [`${prefix}:resource`]: undefined };
-  }
-  if (value === "external") {
-    props = { body: undefined, [`${prefix}:resource`]: "" };
-  }
-  modeling.updateModdleProperties(element, getConditionExpression(element), props);
-}
-
-// 6. 元素脚本 语言类型
-export function getConditionScriptLanguageValue(element: Element): string | undefined {
-  return getConditionExpression(element)?.get("language");
-}
-export function setConditionScriptLanguageValue(element: Element, value: string | undefined) {
-  const modeling = modeler().getModeling;
-  modeling.updateModdleProperties(element, getConditionExpression(element), { language: value });
-}
-
-// 7. 元素脚本 body
-export function getConditionScriptBodyValue(element: Element): string | undefined {
-  return getConditionExpression(element)?.get("body");
-}
-export function setConditionScriptBodyValue(element: Element, value: string | undefined) {
-  const modeling = modeler().getModeling;
-  modeling.updateModdleProperties(element, getConditionExpression(element), { body: value });
-}
-
-// 8. 元素脚本 source
-export function getConditionScriptResourceValue(element: Element): string | undefined {
-  const prefix = editor().getProcessEngine;
-  return getConditionExpression(element)?.get(`${prefix}:resource`);
-}
-export function setConditionScriptResourceValue(element: Element, value: string | undefined) {
-  const modeling = modeler().getModeling;
-  const prefix = editor().getProcessEngine;
-  modeling.updateModdleProperties(element, getConditionExpression(element), {
-    [`${prefix}:resource`]: value
-  });
 }
 
 ///////// helpers

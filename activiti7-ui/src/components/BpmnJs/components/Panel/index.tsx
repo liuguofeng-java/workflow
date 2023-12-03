@@ -25,8 +25,8 @@ import ElementExtensionProperties from "./components/ElementExtensionProperties.
 import ElementAsyncContinuations from "./components/ElementAsyncContinuations.vue";
 import ElementJobExecution from "./components/ElementJobExecution.vue";
 import ElementStartInitiator from "./components/ElementStartInitiator.vue";
-import ElementMainForm from "./components/ElementMainForm.vue";
 import ElementForm from "./components/ElementForm.vue";
+import ElementMainForm from "./components/ElementMainForm.vue";
 import UserAssignment from "./components/UserAssignment.vue";
 
 const Panel = defineComponent({
@@ -82,6 +82,10 @@ const Panel = defineComponent({
           return console.log("No Element found!");
         }
       }
+      if (activatedElement.type === "label") {
+        return;
+      }
+
       activatedElementTypeName = getBpmnIconType(activatedElement);
 
       modeler.setElement(markRaw(activatedElement));
@@ -105,12 +109,10 @@ const Panel = defineComponent({
       });
       // 监听选择事件，修改当前激活的元素以及表单
       modeler.on("selection.changed", ({ newSelection }) => {
-        if (newSelection[0]) {
-          setTimeout(() => {
-            EventBus.emit("element-init", modeler);
-          }, 200);
-        }
         setCurrentElement(newSelection[0] || null);
+        setTimeout(() => {
+          EventBus.emit("element-init", modeler);
+        }, 200);
       });
       // 节点表单修改时触发
       modeler.on("element.changed", ({ element }) => {
