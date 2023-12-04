@@ -7,8 +7,8 @@ import type ElementRegistry from "diagram-js/lib/core/ElementRegistry";
 import { toRaw } from "vue";
 
 type FormJson = {
-  activityId: string | undefined;
-  formJson: any | undefined;
+  activityId: string;
+  formJson: any;
   isMainFrom: number | 0;
 };
 

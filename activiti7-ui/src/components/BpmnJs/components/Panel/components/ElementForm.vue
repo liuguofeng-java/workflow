@@ -62,7 +62,7 @@ const selectFormOk = (data: any) => {
 const getElementData = () => {
   formJson.value = modeler.getFormJsonList.find((t) => t.activityId === scopedElement.id)?.formJson || {};
   nodeTreeData.value.length = 0;
-  formJson.value.widgetList.forEach((wItem) => {
+  formJson.value.widgetList?.forEach((wItem) => {
     buildTreeNodeOfWidget(wItem, nodeTreeData.value);
   });
 };
