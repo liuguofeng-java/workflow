@@ -23,8 +23,7 @@
           <el-table-column label="逻辑" width="100" align="center">
             <template #default="scoped">
               <el-select v-model="scoped.row.logical" placeholder="逻辑" v-if="scoped.$index !== 0">
-                <el-option label="并且" value="&&" />
-                <el-option label="或者" value="||" />
+                <el-option v-for="item in logicalList" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
               <span v-else>无</span>
             </template>
@@ -44,18 +43,13 @@
           <el-table-column label="比较" width="110" align="center">
             <template #default="scoped">
               <el-select v-model="scoped.row.compare" placeholder="比较">
-                <el-option label="==" value="==" />
-                <el-option label="!=" value="!=" />
-                <el-option label=">" value=">" />
-                <el-option label="<" value="<" />
-                <el-option label=">=" value=">=" />
-                <el-option label="<=" value="<=" />
+                <el-option v-for="compare in compareList" :label="compare" :value="compare" :key="compare" />
               </el-select>
             </template>
           </el-table-column>
           <el-table-column label="值" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.value" placeholder="运算符" v-if="getFieldType(scoped.row.field)">
+              <el-select v-model="scoped.row.value" placeholder="值" v-if="getFieldType(scoped.row.field)">
                 <el-option v-for="item in getFieldType(scoped.row.field)" :label="item.label" :value="item.value" :key="item.value" />
               </el-select>
               <el-input v-model="scoped.row.value" placeholder="值" v-else />
@@ -89,6 +83,15 @@ import debounce from "lodash.debounce";
 
 // element The element.
 let scopedElement: Element;
+
+// 运算符
+const compareList = ["==", "!=", ">", "<", ">=", "<="];
+
+// 逻辑符
+const logicalList = [
+  { label: "并且", value: "&&" },
+  { label: "或者", value: "||" }
+];
 
 // 变量配置部分
 const varVisible = ref<boolean>(false);
