@@ -189,17 +189,15 @@ const setExpression = debounce(() => {
     CU.setConditionExpressionValue(scopedElement, "");
     return;
   }
-  expression.value = "${ ";
+  expression.value = "${";
   for (let i = 0; i < list.value.length; i++) {
     const element = list.value[i];
     // 如果当前不是第一个就添加 ‘逻辑运算符’
     if (i !== 0) expression.value += ` ${element.logical} `;
     // 添加表达式
-    let value = "";
+    let value = `${element.value}`;
     if (typeof element.value === "string") {
       value = `'${element.value}'`;
-    } else {
-      value = `${element.value}`;
     }
     expression.value += `${element.field} ${element.compare} ${value}`;
   }
@@ -212,15 +210,16 @@ const setExpression = debounce(() => {
  */
 const getExpression = () => {
   const expression: string = conditionData.value.expression.replace(/^\${|\}$/g, "");
-  const data = expression.split(" ");
+  const data = ` ${expression}`.split(" ");
   const len = data.length / 4;
   let dataList: any[] = [];
   for (let i = 0; i < len; i++) {
+    const value = data[i * 4 + 3];
     dataList.push({
       logical: data[i * 4 + 0],
       field: data[i * 4 + 1],
       compare: data[i * 4 + 2],
-      value: data[i * 4 + 3].replaceAll("'", "")
+      value: Number.parseInt(value) ? Number.parseInt(value) : value.replaceAll("'", "")
     });
   }
   list.value = dataList;
