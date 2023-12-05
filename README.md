@@ -45,15 +45,33 @@
 
 ####  预览
 
-![](images/leaveMain.png)
+|                          |                           |
+| ------------------------ | ------------------------- |
+| ![](images/bpmnForm.png) | ![](images/condition.png) |
+| ![](images/start.png)    | ![](images/approve.png)   |
+| ![](images/log.png)      | ![](images/flow.png)      |
 
-![](images/bpmn.png)
 
-![](images/start.png)
 
-![](images/approve.png)
 
-![](images/log.png)
 
-![](images/flow.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
