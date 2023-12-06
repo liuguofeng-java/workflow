@@ -5,5 +5,6 @@ const eventBus: any = {};
 eventBus.on = instance.on;
 eventBus.off = instance.off;
 eventBus.emit = instance.emit;
+eventBus.all = instance.all;
 
 export default eventBus;

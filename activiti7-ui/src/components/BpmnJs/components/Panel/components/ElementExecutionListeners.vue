@@ -1,122 +1,128 @@
 <template>
-  <div v-if="false">
+  <div>
     <el-divider content-position="left">执行监听器</el-divider>
-    <el-table :data="listeners" style="width: 100%">
-      <el-table-column type="index" label="序号" />
-      <el-table-column prop="event" label="事件类型" />
-      <el-table-column prop="type" label="监听器类型" />
-      <el-table-column label="操作">
+    <el-table :data="list">
+      <el-table-column type="index" label="序号" width="60" />
+      <el-table-column prop="event" label="事件类型" width="150">
+        <template #default="scoped">
+          <template v-for="item in events" :key="item.value">
+            <span v-if="item.value === scoped.row.event">{{ item.label }}</span>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column prop="class" label="java类" />
+      <el-table-column label="操作" width="150">
         <template #default="scope">
-          <el-button link type="primary" @click="openListenerModel(scope.$index, scope.row)">修改</el-button>
+          <el-button link type="primary" @click="handleOpen(scope.$index)">修改</el-button>
           <el-button link type="primary" @click="removeListener(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button type="primary" @click="openListenerModel(-1, null)">添加</el-button>
-
-    <el-dialog v-model="modelVisible" title="添加" width="500px">
-      <el-form ref="formRef" :model="newListener" :rules="formRules" label-width="80px">
+    <div style="width: 100%">
+      <el-button type="primary" plain style="width: 100%" @click="handleOpen(-1)">新增</el-button>
+    </div>
+    <el-dialog v-model="open" title="添加" width="500px">
+      <el-form ref="formRef" :model="form" :rules="formRules" label-width="80px">
         <el-form-item label="事件类型" prop="event">
-          <el-select v-model="newListener.event">
-            <el-option v-for="item in listenerEventTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+          <el-select v-model="form.event">
+            <el-option v-for="item in events" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="监听器类型" prop="type">
-          <el-input disabled v-model="newListener.type" value="class" />
         </el-form-item>
 
         <el-form-item label="java类" prop="class">
-          <el-input v-model="newListener.class" />
+          <el-input v-model="form.class" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="saveExecutionListener">确 定</el-button>
-          <el-button @click="modelVisible = false">取 消</el-button>
+          <el-button type="primary" @click="saveListener()">确 定</el-button>
+          <el-button @click="open = false">取 消</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, markRaw, nextTick } from "vue";
-import { mapState } from "pinia";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+<script lang="ts" setup>
+import { ref, markRaw } from "vue";
 import { ModdleElement } from "bpmn-moddle";
 import { Element } from "bpmn-js/lib/model/Types";
-import { addExecutionListener, getDefaultEvent, getExecutionListeners, getExecutionListenerType, removeExecutionListener, updateExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
-import { getScriptType } from "@/components/BpmnJs/bo-utils/scriptUtil";
+import { getExecutionListeners, getExecutionListenerTypes, addExecutionListener, updateExecutionListener, removeExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import EventBus from "@/utils/EventBus";
+import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 
-export default defineComponent({
-  name: "ElementExecutionListeners",
-  data() {
-    return {
-      activeIndex: -1,
-      listeners: [],
-      listenerEventTypeOptions: [
-        { label: "Start", value: "start" },
-        { label: "End", value: "end" }
-      ],
-      listenerTypeOptions: [{ label: "Java Class", value: "class" }],
-      formRules: {
-        event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
-        type: { required: true, trigger: ["blur", "change"], message: "监听器类型不能为空" },
-        class: { required: true, trigger: ["blur", "change"], message: "java类不能为空" }
-      },
-      newListener: { event: "", type: "class", class: "" },
-      modelVisible: false,
-      listenersRaw: []
-    };
-  },
-  computed: {
-    ...mapState(modelerStore, ["getActive", "getActiveId"])
-  },
-  mounted() {
-    this.reloadExtensionListeners();
-    EventBus.on("element-update", this.reloadExtensionListeners);
-  },
-  methods: {
-    reloadExtensionListeners() {
-      this.modelVisible = false;
-      this.newListener = { event: getDefaultEvent(this.getActive), type: "class", class: "" };
-      (this.listenersRaw as ModdleElement[]) = markRaw(getExecutionListeners(this.getActive as Element));
-      const list = this.listenersRaw.map(
-        (item: ModdleElement & BpmnExecutionListener): ExecutionListenerForm => ({
-          ...item,
-          ...(item.script
-            ? {
-                script: {
-                  ...item.script,
-                  scriptType: getScriptType(item.script as ModdleElement & BpmnScript)
-                }
-              }
-            : {}),
-          type: getExecutionListenerType(item)
-        })
-      );
-      this.listeners = JSON.parse(JSON.stringify(list));
-    },
-    removeListener(index: number) {
-      const listener: ModdleElement = this.listenersRaw[index];
-      removeExecutionListener(this.getActive, listener);
-      this.reloadExtensionListeners();
-    },
-    async saveExecutionListener() {
-      await (this.$refs.formRef as any).validate();
-      console.log(this.newListener);
-      this.activeIndex === -1 ? addExecutionListener(this.getActive, this.newListener) : updateExecutionListener(this.getActive, this.newListener, this.listenersRaw[this.activeIndex]);
-      this.reloadExtensionListeners();
-    },
-    async openListenerModel(index: number, listenerData) {
-      this.activeIndex = index;
-      console.log(JSON.stringify(listenerData));
-      listenerData && (this.newListener = JSON.parse(JSON.stringify(listenerData)));
-      this.modelVisible = true;
-      await nextTick();
-      (this.$refs.formRef as any).formRef && (this.$refs.formRef as any).resetFields();
-    }
+// element The element.
+let scopedElement: Element;
+
+// 是否弹出
+let open = ref<boolean>(false);
+
+// 表格的数据
+const list = ref<ModdleElement[]>([]);
+
+// 事件类型
+let events = ref<any[]>([]);
+
+// 当前表单结构数据
+const form = ref<any>({ event: "", type: "class", class: "" });
+
+const formRules = {
+  event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
+  type: { required: true, trigger: ["blur", "change"], message: "监听器类型不能为空" },
+  class: { required: true, trigger: ["blur", "change"], message: "java类不能为空" }
+};
+
+// 行下表
+let rowIndex = -1;
+
+/**
+ * 弹出
+ * @param index 下标
+ *
+ */
+const handleOpen = (index: number) => {
+  rowIndex = index;
+  open.value = true;
+  form.value = { event: "", type: "class", class: "" };
+  if (index !== -1) {
+    const row = list.value[index];
+    form.value.event = row.event;
+    form.value.class = row.class;
   }
+};
+
+/**
+ * 添加或修改数据
+ */
+const saveListener = () => {
+  rowIndex === -1 ? addExecutionListener(scopedElement, form.value) : updateExecutionListener(scopedElement, form.value, list.value[rowIndex]);
+  getElementData();
+  open.value = false;
+};
+
+/**
+ * 删除数据
+ * @param index 下标
+ */
+const removeListener = (index: number) => {
+  const listener: ModdleElement = list.value[index];
+  removeExecutionListener(scopedElement, listener);
+  getElementData();
+};
+
+/**
+ * 获取数据
+ */
+const getElementData = () => {
+  list.value = markRaw(getExecutionListeners(scopedElement as Element));
+};
+
+// 点击用户节点，初始化用
+EventBus.on("element-init", function () {
+  catchUndefElement((element) => {
+    scopedElement = element;
+    events.value = getExecutionListenerTypes(element);
+    getElementData();
+  });
 });
 </script>

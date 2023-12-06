@@ -1,4 +1,12 @@
-import { defineComponent, Component, markRaw, onMounted, ref, getCurrentInstance } from "vue";
+import {
+  defineComponent,
+  Component,
+  markRaw,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  getCurrentInstance
+} from "vue";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
 import EventBus from "@/utils/EventBus";
@@ -26,7 +34,6 @@ import ElementAsyncContinuations from "./components/ElementAsyncContinuations.vu
 import ElementJobExecution from "./components/ElementJobExecution.vue";
 import ElementStartInitiator from "./components/ElementStartInitiator.vue";
 import ElementForm from "./components/ElementForm.vue";
-import ElementMainForm from "./components/ElementMainForm.vue";
 import UserAssignment from "./components/UserAssignment.vue";
 
 const Panel = defineComponent({
@@ -52,7 +59,7 @@ const Panel = defineComponent({
       renderComponents.splice(0, renderComponents.length);
       // 添加组件
       renderComponents.push(ElementGenerations); // 基本信息
-      isExtendStartEvent(element) && renderComponents.push(ElementMainForm); // 是否是开始节点
+      isExtendStartEvent(element) && renderComponents.push(ElementForm); // 是否是开始节点
       isCanbeConditional(element) && renderComponents.push(ElementConditional);
       isJobExecutable(element) && renderComponents.push(ElementJobExecution);
       renderComponents.push(ElementExtensionProperties);
@@ -123,8 +130,19 @@ const Panel = defineComponent({
       });
     });
 
+    /**
+     * 初始化
+     */
     onMounted(() => {
       !currentElementId.value && setCurrentElement(null);
+    });
+
+    /**
+     * 销毁事件，防止重复触发
+     */
+    onBeforeUnmount(() => {
+      console.log("------>>>>>?end");
+      EventBus.all.clear();
     });
 
     return () => (

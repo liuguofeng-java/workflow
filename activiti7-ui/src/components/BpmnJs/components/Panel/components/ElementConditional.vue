@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onBeforeUnmount } from "vue";
+import { ref, computed } from "vue";
 import { Element } from "bpmn-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/utils/EventBus";
@@ -276,12 +276,5 @@ EventBus.on("element-init", function () {
     // 获取表达式数据
     getExpression();
   });
-});
-
-/**
- * 销毁事件，防止重复触发
- */
-onBeforeUnmount(async () => {
-  await EventBus.off("element-init");
 });
 </script>

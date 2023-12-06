@@ -1,5 +1,4 @@
 import emitter from "@/components/FormDesigner/utils/emitter";
-import eventBus from "@/components/FormDesigner/utils/event-bus";
 
 export default {
   mixins: [emitter],

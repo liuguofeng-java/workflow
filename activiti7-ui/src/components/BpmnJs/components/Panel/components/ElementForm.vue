@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import SelectForm from "./SubChild/SelectForm.vue";
 import EventBus from "@/utils/EventBus";
@@ -167,12 +167,6 @@ EventBus.on("element-init", function () {
     scopedElement = element;
     getElementData();
   });
-});
-/**
- * 销毁事件，防止重复触发
- */
-onBeforeUnmount(async () => {
-  await EventBus.off("element-init");
 });
 </script>
 

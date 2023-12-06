@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from "vue";
+import { ref } from "vue";
 import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUtil";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import SingleUser from "@/components/SingleUser/index.vue";
@@ -217,13 +217,6 @@ EventBus.on("element-init", function () {
       updateUserAssignProp("assignee", "${initiator}");
     }
   });
-});
-
-/**
- * 销毁事件，防止重复触发
- */
-onBeforeUnmount(async () => {
-  await EventBus.off("element-init");
 });
 </script>
 

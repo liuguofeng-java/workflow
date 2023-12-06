@@ -11,13 +11,6 @@ import modeler from "@/components/BpmnJs/store/modeler";
 import { createScript } from "@/components/BpmnJs/bo-utils/scriptUtil";
 import { LISTENER_ALLOWED_TYPES } from "@/components/BpmnJs/config/bpmnEnums";
 
-export const EXECUTION_LISTENER_TYPE = {
-  class: "Java class",
-  expression: "Expression",
-  delegateExpression: "Delegate expression",
-  script: "Script"
-};
-
 // execution listener list
 export function getExecutionListeners(element: Element): ModdleElement[] {
   const prefix = editor().getProcessEngine;
@@ -91,13 +84,18 @@ export function getDefaultEvent(element: Element) {
   return is(element, "bpmn:SequenceFlow") ? "take" : "start";
 }
 
+/**
+ * 获取监听器类型
+ * @param element 当前节点
+ * @returns 监听器类型
+ */
 export function getExecutionListenerTypes(element: Element) {
   if (is(element, "bpmn:SequenceFlow")) {
-    return [{ label: "Take", value: "take" }];
+    return [{ label: "连接线", value: "take" }];
   }
   return [
-    { label: "Start", value: "start" },
-    { label: "End", value: "end" }
+    { label: "开始", value: "start" },
+    { label: "结束", value: "end" }
   ];
 }
 
@@ -108,15 +106,7 @@ function updateListenerProperty(
 ) {
   const modeling = modeler().getModeling;
   const prefix = editor().getProcessEngine;
-  const {
-    event,
-    class: listenerClass,
-    expression,
-    delegateExpression,
-    script,
-    type,
-    fields
-  } = props;
+  const { event, class: listenerClass, expression, delegateExpression, script } = props;
 
   const updateProperty = (key, value) =>
     modeling.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value });
@@ -125,7 +115,6 @@ function updateListenerProperty(
   listenerClass && updateProperty("class", listenerClass);
   expression && updateProperty("expression", expression);
   delegateExpression && updateProperty("delegateExpression", delegateExpression);
-  console.log(props);
 
   if (script) {
     const bpmnScript = createScript(script);

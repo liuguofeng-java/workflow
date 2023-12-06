@@ -1,6 +1,5 @@
 import { deepClone } from "@/components/FormDesigner/utils/util";
 import FormValidators from "@/components/FormDesigner/utils/validators";
-import eventBus from "@/components/FormDesigner/utils/event-bus";
 
 export default {
   inject: [
