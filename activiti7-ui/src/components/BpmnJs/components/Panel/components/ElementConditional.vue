@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-divider content-position="left">条件设置</el-divider>
     <el-form label-width="80px">
       <template v-if="varVisible">
@@ -49,9 +49,14 @@
           </el-table-column>
           <el-table-column label="值" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.value" placeholder="值" v-if="getFieldType(scoped.row.field)">
-                <el-option v-for="item in getFieldType(scoped.row.field)" :label="item.label" :value="item.value" :key="item.value" />
+              <el-select v-model="scoped.row.value" placeholder="值" v-if="getFieldType(scoped.row.field)?.type === 'Array'">
+                <el-option v-for="item in getFieldType(scoped.row.field)?.value" :label="item.label" :value="item.value" :key="item.value" />
               </el-select>
+              <el-select v-model="scoped.row.value" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Boolean'">
+                <el-option label="真" :value="true" />
+                <el-option label="假" :value="false" />
+              </el-select>
+              <el-input v-model="scoped.row.value" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Number'" type="number" />
               <el-input v-model="scoped.row.value" placeholder="值" v-else />
             </template>
           </el-table-column>
@@ -91,6 +96,25 @@ const compareList = ["==", "!=", ">", "<", ">=", "<="];
 const logicalList = [
   { label: "并且", value: "&&" },
   { label: "或者", value: "||" }
+];
+
+// 控件类型
+type WidgetType = {
+  name: "select" | "radio" | "checkbox" | "switch" | "input" | "textarea" | "number" | "rate" | "slider";
+  type: "Text" | "Number" | "Boolean" | "Array";
+  value: any;
+};
+
+// 控件类型
+const widgetTypes: WidgetType[] = [
+  { name: "select", type: "Array", value: [] },
+  { name: "checkbox", type: "Array", value: [] },
+  { name: "radio", type: "Array", value: [] },
+  { name: "switch", type: "Boolean", value: false },
+  { name: "input", type: "Text", value: "" },
+  { name: "number", type: "Number", value: 0 },
+  { name: "rate", type: "Number", value: 0 },
+  { name: "slider", type: "Number", value: 0 }
 ];
 
 // 变量配置部分
@@ -168,19 +192,28 @@ const handleDelete = (index: number) => {
 
 /**
  * 获取字段类型
+ * @param field 字段名称
  */
-const getFieldType = computed(() => (value: string) => {
+const getFieldType = computed(() => (field: string): WidgetType | undefined => {
   setExpression();
+  const input = widgetTypes.find((t) => t.name === "input");
   for (let i = 0; i < nodeWidgets.value.length; i++) {
     const item = nodeWidgets.value[i];
     for (let j = 0; j < item.widgetList.length; j++) {
       const widget = item.widgetList[j];
-      if (widget.options.name === value) {
-        return widget.options.optionItems;
+      // 找出控件
+      if (widget.options.name === field) {
+        const widgetType = widgetTypes.find((t) => t.name == widget.type);
+        // 如果未知控件直接返回 input
+        if (!widgetType) return JSON.parse(JSON.stringify(input));
+        if (widgetType.type === "Array") {
+          widgetType.value = widget.options.optionItems;
+        }
+        return widgetType;
       }
     }
   }
-  return undefined;
+  return JSON.parse(JSON.stringify(input));
 });
 
 /**
@@ -200,7 +233,7 @@ const setExpression = debounce(() => {
     // 添加表达式
     let value = `${element.value}`;
     if (typeof element.value === "string") {
-      value = `'${element.value}'`;
+      value = `"${element.value}"`;
     }
     expression.value += `${element.field} ${element.compare} ${value}`;
   }
@@ -212,6 +245,9 @@ const setExpression = debounce(() => {
  * 回显数据
  */
 const getExpression = () => {
+  if (!conditionData.value.expression) {
+    return;
+  }
   const expression: string = conditionData.value.expression.replace(/^\${|\}$/g, "");
   const data = ` ${expression}`.split(" ");
   const len = data.length / 4;
@@ -222,7 +258,7 @@ const getExpression = () => {
       logical: data[i * 4 + 0],
       field: data[i * 4 + 1],
       compare: data[i * 4 + 2],
-      value: Number.parseInt(value) ? Number.parseInt(value) : value.replaceAll("'", "")
+      value: Number.parseInt(value) ? Number.parseInt(value) : value.replaceAll('"', "")
     });
   }
   list.value = dataList;

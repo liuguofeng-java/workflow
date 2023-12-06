@@ -66,7 +66,7 @@ const showNodeInfo = (elementId: string) => {
   const nodeInfo = document.querySelector(`#nodeInfo`) as HTMLElement;
   open.value = true;
   popper = new Popper(element, nodeInfo, {
-    placement: "right"
+    placement: "bottom"
   });
 };
 
