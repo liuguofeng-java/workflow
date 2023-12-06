@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card shadow="never">
     <el-divider content-position="left" v-if="scopedElement?.type === 'bpmn:StartEvent'">主表单</el-divider>
     <el-divider content-position="left" v-if="scopedElement?.type === 'bpmn:UserTask'">动态表单</el-divider>
 
@@ -19,7 +19,7 @@
       <el-button type="primary" plain style="width: 100%" @click="selectFormRef.handleOpen()">设计</el-button>
     </div>
     <SelectForm ref="selectFormRef" :formJson="formJson" @ok="selectFormOk" />
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts" setup>

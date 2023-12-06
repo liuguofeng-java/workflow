@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card shadow="never">
     <el-divider content-position="left">用户分配</el-divider>
     <el-form label-width="80px">
       <el-form-item label="类型">
@@ -36,7 +36,7 @@
         <el-input v-model="UAForm.priority" @change="updateUserAssignProp('priority', $event)" />
       </el-form-item> -->
     </el-form>
-  </div>
+  </el-card>
 </template>
 
 <script setup lang="ts">

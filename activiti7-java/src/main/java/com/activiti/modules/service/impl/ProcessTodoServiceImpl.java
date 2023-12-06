@@ -67,7 +67,6 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
         PageDomain params = PageUtils.getPageParams();
         TaskQuery query = taskService.createTaskQuery()
                 .active()
-                .includeProcessVariables()
                 .taskCandidateOrAssigned(dto.getUserId(), usersGroups)
                 .processDefinitionNameLike("%" + dto.getDefinitionName() + "%")
                 .processDefinitionKeyLike("%" + dto.getDefinitionKey() + "%")
@@ -127,7 +126,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
         SysNodeFormEntity form = nodeFormService.getOne(new LambdaQueryWrapper<SysNodeFormEntity>()
                         .eq(SysNodeFormEntity::getDeployId,processDefinition.getDeploymentId())
                 .eq(SysNodeFormEntity::getActivityId, flowElement.getId()));
-        // 没有数据可能被删除了
+        // 用户没有填写表单
         if (form == null) {
             return new HashMap<>();
         }
@@ -146,7 +145,6 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
             usersGroups.add(dto.getDeptId());
             TaskQuery query = taskService.createTaskQuery()
                     .active()
-                    .includeProcessVariables()
                     .processInstanceId(dto.getProcessInstanceId())
                     .taskCandidateOrAssigned(dto.getUserId(), usersGroups)
                     .orderByTaskCreateTime()

@@ -32,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/activiti/workflow/definition/index.vue")
       },
       {
+        path: "workflow/listener",
+        name: "listener", // 执行监听器
+        component: () => import("@/views/activiti/workflow/listener/index.vue")
+      },
+      {
         path: "my/start",
         name: "start", // 我发起的
         component: () => import("@/views/activiti/my/start/index.vue")

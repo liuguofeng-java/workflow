@@ -19,6 +19,12 @@
             </el-icon>
             <span>流程定义</span>
           </el-menu-item>
+          <el-menu-item index="/workflow/listener">
+            <el-icon>
+              <Operation />
+            </el-icon>
+            <span>执行监听器</span>
+          </el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="/my">

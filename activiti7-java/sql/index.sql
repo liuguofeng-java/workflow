@@ -718,6 +718,28 @@ INSERT INTO `sys_node_form` VALUES ('dc0a484217605db3452890a55e289be0', '0718e15
 INSERT INTO `sys_node_form` VALUES ('f818ae0974b980614bb141e2c83e263e', 'b8c5bfb4-8ebb-11ee-afff-30c9aba6c580', 'Activity_1jtdgj7', '{\"formConfig\": {\"size\": \"\", \"cssCode\": \"\", \"refName\": \"vForm\", \"functions\": \"\", \"modelName\": \"formData\", \"rulesName\": \"rules\", \"labelAlign\": \"label-left-align\", \"labelWidth\": 80, \"layoutType\": \"PC\", \"customClass\": [], \"jsonVersion\": 3, \"labelPosition\": \"left\", \"onFormCreated\": \"\", \"onFormMounted\": \"\", \"onFormDataChange\": \"\"}, \"widgetList\": [{\"id\": \"textarea102303\", \"key\": 51314, \"icon\": \"textarea-field\", \"type\": \"textarea\", \"options\": {\"name\": \"textarea102303\", \"rows\": 3, \"size\": \"\", \"label\": \"备注\", \"hidden\": false, \"onBlur\": \"\", \"onFocus\": \"\", \"onInput\": \"\", \"disabled\": false, \"onChange\": \"\", \"readonly\": false, \"required\": false, \"onCreated\": \"\", \"onMounted\": \"\", \"labelAlign\": \"\", \"onValidate\": \"\", \"validation\": \"\", \"columnWidth\": \"200px\", \"customClass\": [], \"labelHidden\": false, \"placeholder\": \"\", \"defaultValue\": \"\", \"requiredHint\": \"\", \"showWordLimit\": false, \"validationHint\": \"\", \"labelIconPosition\": \"rear\"}, \"formItemFlag\": true}, {\"id\": \"radio27864\", \"key\": 77278, \"icon\": \"radio-field\", \"type\": \"radio\", \"options\": {\"name\": \"radio27864\", \"size\": \"\", \"label\": \"radio\", \"border\": false, \"hidden\": false, \"disabled\": false, \"onChange\": \"\", \"required\": false, \"onCreated\": \"\", \"onMounted\": \"\", \"labelAlign\": \"\", \"labelWidth\": null, \"onValidate\": \"\", \"validation\": \"\", \"buttonStyle\": false, \"columnWidth\": \"200px\", \"customClass\": [], \"labelHidden\": false, \"optionItems\": [{\"label\": \"radio 1\", \"value\": 1}, {\"label\": \"radio 2\", \"value\": 2}, {\"label\": \"radio 3\", \"value\": 3}], \"defaultValue\": null, \"displayStyle\": \"inline\", \"labelTooltip\": null, \"requiredHint\": \"\", \"labelIconClass\": null, \"validationHint\": \"\", \"labelIconPosition\": \"rear\"}, \"formItemFlag\": true}, {\"id\": \"daterange95401\", \"key\": 51062, \"icon\": \"date-range-field\", \"type\": \"date-range\", \"options\": {\"name\": \"daterange95401\", \"size\": \"\", \"type\": \"daterange\", \"label\": \"date-range\", \"format\": \"YYYY-MM-DD\", \"hidden\": false, \"onBlur\": \"\", \"onFocus\": \"\", \"disabled\": false, \"editable\": false, \"onChange\": \"\", \"readonly\": false, \"required\": false, \"clearable\": true, \"onCreated\": \"\", \"onMounted\": \"\", \"labelAlign\": \"\", \"labelWidth\": null, \"onValidate\": \"\", \"validation\": \"\", \"columnWidth\": \"200px\", \"customClass\": [], \"labelHidden\": false, \"valueFormat\": \"YYYY-MM-DD\", \"defaultValue\": null, \"labelTooltip\": null, \"requiredHint\": \"\", \"autoFullWidth\": true, \"endPlaceholder\": \"\", \"labelIconClass\": null, \"validationHint\": \"\", \"startPlaceholder\": \"\", \"labelIconPosition\": \"rear\"}, \"formItemFlag\": true}]}', 0, '2023-11-29 21:32:21');
 
 -- ----------------------------
+-- Table structure for sys_listener
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_listener`;
+CREATE TABLE `sys_listener`  (
+   `listener_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '监听器id',
+   `listener_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '监听器名称',
+   `event` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '事件类型',
+   `java_class` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'java类',
+   `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
+   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+   `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+   PRIMARY KEY (`listener_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '执行监听器' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_listener
+-- ----------------------------
+INSERT INTO `sys_listener` VALUES ('504ee91cbde9b16192c69871a25acb08', '测试1', 'take', 'com.activiti.modules.listener.MyExecutionListener', 0, 'xxxxx', '2023-12-06 23:17:42', '2023-12-06 22:55:00');
+
+
+-- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;

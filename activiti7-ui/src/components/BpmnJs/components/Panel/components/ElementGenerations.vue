@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card shadow="never">
     <el-divider content-position="left">常规信息</el-divider>
     <el-form label-width="80px">
       <el-form-item label="ID">
@@ -12,7 +12,7 @@
         <el-input v-model="elementDoc" type="textarea" @change="updateElementDoc" />
       </el-form-item>
     </el-form>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">

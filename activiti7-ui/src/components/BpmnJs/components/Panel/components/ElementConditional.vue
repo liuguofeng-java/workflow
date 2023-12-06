@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <el-card shadow="never" class="container">
     <el-divider content-position="left">条件设置</el-divider>
     <el-form label-width="80px">
       <template v-if="varVisible">
@@ -20,7 +20,7 @@
       <div v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
         <el-alert title="表达式" :description="expression" v-if="expression" type="success" :closable="false" />
         <el-table :data="list">
-          <el-table-column label="逻辑" width="100" align="center">
+          <el-table-column label="逻辑" width="95" align="center">
             <template #default="scoped">
               <el-select v-model="scoped.row.logical" placeholder="逻辑" v-if="scoped.$index !== 0">
                 <el-option v-for="item in logicalList" :key="item.value" :label="item.label" :value="item.value" />
@@ -40,7 +40,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="比较" width="110" align="center">
+          <el-table-column label="比较" width="85" align="center">
             <template #default="scoped">
               <el-select v-model="scoped.row.compare" placeholder="比较">
                 <el-option v-for="compare in compareList" :label="compare" :value="compare" :key="compare" />
@@ -72,7 +72,7 @@
         </div>
       </div>
     </el-form>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts" setup>

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <el-card shadow="never">
     <el-divider content-position="left">执行监听器</el-divider>
     <el-table :data="list">
       <el-table-column type="index" label="序号" width="60" />
-      <el-table-column prop="event" label="事件类型" width="150">
+      <el-table-column prop="event" label="事件类型" width="80">
         <template #default="scoped">
           <template v-for="item in events" :key="item.value">
             <span v-if="item.value === scoped.row.event">{{ item.label }}</span>
@@ -11,7 +11,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="class" label="java类" />
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="120">
         <template #default="scope">
           <el-button link type="primary" @click="handleOpen(scope.$index)">修改</el-button>
           <el-button link type="primary" @click="removeListener(scope.$index)">删除</el-button>
@@ -40,7 +40,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts" setup>
@@ -68,7 +68,6 @@ const form = ref<any>({ event: "", type: "class", class: "" });
 
 const formRules = {
   event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
-  type: { required: true, trigger: ["blur", "change"], message: "监听器类型不能为空" },
   class: { required: true, trigger: ["blur", "change"], message: "java类不能为空" }
 };
 

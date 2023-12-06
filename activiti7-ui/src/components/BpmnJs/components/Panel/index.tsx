@@ -141,7 +141,6 @@ const Panel = defineComponent({
      * 销毁事件，防止重复触发
      */
     onBeforeUnmount(() => {
-      console.log("------>>>>>?end");
       EventBus.all.clear();
     });
 
