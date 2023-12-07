@@ -106,11 +106,11 @@ function updateListenerProperty(
 ) {
   const modeling = modeler().getModeling;
   const prefix = editor().getProcessEngine;
-  const { event, class: listenerClass, expression, delegateExpression, script } = props;
+  const { name, event, class: listenerClass, expression, delegateExpression, script } = props;
 
   const updateProperty = (key, value) =>
     modeling.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value });
-
+  name && updateProperty("name", name);
   event && updateProperty("event", event);
   listenerClass && updateProperty("class", listenerClass);
   expression && updateProperty("expression", expression);

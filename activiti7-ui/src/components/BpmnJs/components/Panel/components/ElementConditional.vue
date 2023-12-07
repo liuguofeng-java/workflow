@@ -20,9 +20,9 @@
       <div v-if="conditionData.conditionType && conditionData.conditionType === 'expression'">
         <el-alert title="表达式" :description="expression" v-if="expression" type="success" :closable="false" />
         <el-table :data="list">
-          <el-table-column label="逻辑" width="95" align="center">
+          <el-table-column label="逻辑" width="90" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.logical" placeholder="逻辑" v-if="scoped.$index !== 0">
+              <el-select v-model="scoped.row.logical" placeholder="逻辑" v-if="scoped.$index !== 0" size="small">
                 <el-option v-for="item in logicalList" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
               <span v-else>无</span>
@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column label="字段" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.field">
+              <el-select v-model="scoped.row.field" size="small">
                 <el-option-group v-for="item in nodeWidgets" :key="item.activityId" :label="item.activityName">
                   <el-option v-for="widget in item.widgetList" :key="widget.value" :value="widget.options.name" :label="widget.options.label">
                     <svg-icon v-if="widget.icon" :icon-class="widget.icon" class-name="color-svg-icon" />
@@ -40,29 +40,29 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="比较" width="85" align="center">
+          <el-table-column label="比较" width="80" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.compare" placeholder="比较">
+              <el-select v-model="scoped.row.compare" placeholder="比较" size="small">
                 <el-option v-for="compare in compareList" :label="compare" :value="compare" :key="compare" />
               </el-select>
             </template>
           </el-table-column>
           <el-table-column label="值" align="center">
             <template #default="scoped">
-              <el-select v-model="scoped.row.value" placeholder="值" v-if="getFieldType(scoped.row.field)?.type === 'Array'">
+              <el-select v-model="scoped.row.value" size="small" placeholder="值" v-if="getFieldType(scoped.row.field)?.type === 'Array'">
                 <el-option v-for="item in getFieldType(scoped.row.field)?.value" :label="item.label" :value="item.value" :key="item.value" />
               </el-select>
-              <el-select v-model="scoped.row.value" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Boolean'">
+              <el-select v-model="scoped.row.value" size="small" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Boolean'">
                 <el-option label="真" :value="true" />
                 <el-option label="假" :value="false" />
               </el-select>
-              <el-input v-model="scoped.row.value" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Number'" type="number" />
-              <el-input v-model="scoped.row.value" placeholder="值" v-else />
+              <el-input v-model="scoped.row.value" size="small" placeholder="值" v-else-if="getFieldType(scoped.row.field)?.type === 'Number'" type="number" />
+              <el-input v-model="scoped.row.value" size="small" placeholder="值" v-else />
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="80" align="center">
+          <el-table-column label="操作" width="55" align="center">
             <template #default="scope">
-              <el-button size="small" type="primary" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button link size="small" type="primary" @click="handleDelete(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

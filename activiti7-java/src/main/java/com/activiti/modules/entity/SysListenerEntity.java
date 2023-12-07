@@ -32,10 +32,6 @@ public class SysListenerEntity implements Serializable {
      */
     private String listenerName;
     /**
-     * 事件类型
-     */
-    private String event;
-    /**
      * java类
      */
     private String javaClass;

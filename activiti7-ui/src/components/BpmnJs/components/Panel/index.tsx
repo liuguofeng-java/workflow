@@ -14,7 +14,7 @@ import modelerStore from "@/components/BpmnJs/store/modeler";
 
 import getBpmnIconType from "@/components/BpmnJs/bpmn-icons/getIconType";
 import bpmnIcons from "@/components/BpmnJs/bpmn-icons";
-import BpmnIcon from "./components/SubChild/BpmnIcon.vue";
+import BpmnIcon from "./components/sub/BpmnIcon.vue";
 
 import { isCanbeConditional, isExtendStartEvent } from "@/components/BpmnJs/bo-utils/conditionUtil";
 import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";

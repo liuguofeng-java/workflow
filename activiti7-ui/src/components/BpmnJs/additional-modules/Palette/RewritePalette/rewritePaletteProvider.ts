@@ -101,6 +101,14 @@ class RewritePaletteProvider extends PaletteProvider {
         "activity",
         "bpmn-icon-user-task",
         "用户任务"
+      ),
+      "create.service-task": createAction(
+        elementFactory,
+        create,
+        "bpmn:ServiceTask",
+        "activity",
+        "bpmn-icon-service-task",
+        "服务任务"
       )
     });
 

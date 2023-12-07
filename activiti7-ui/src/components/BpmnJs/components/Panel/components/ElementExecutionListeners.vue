@@ -3,6 +3,12 @@
     <el-divider content-position="left">执行监听器</el-divider>
     <el-table :data="list">
       <el-table-column type="index" label="序号" width="60" />
+      <el-table-column prop="" label="名称">
+        <template #default="scoped">
+          <span v-if="scoped.row.$attrs.name">{{ scoped.row.$attrs.name }}</span>
+          <span v-else>{{ scoped.row.$attrs["activiti:name"] }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="event" label="事件类型" width="80">
         <template #default="scoped">
           <template v-for="item in events" :key="item.value">
@@ -10,7 +16,7 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column prop="class" label="java类" />
+      <el-table-column prop="class" label="java类" show-overflow-tooltip />
       <el-table-column label="操作" width="120">
         <template #default="scope">
           <el-button link type="primary" @click="handleOpen(scope.$index)">修改</el-button>
@@ -29,8 +35,12 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="java类" prop="class">
-          <el-input v-model="form.class" />
+        <el-form-item label="java类" prop="class" class="disabled-color">
+          <el-input v-model="form.name" disabled>
+            <template #append>
+              <el-button :icon="Search" @click="selectListenerRef.handleOpen()" />
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -40,6 +50,9 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 选择监听器 -->
+    <SelectListener ref="selectListenerRef" @ok="selectListenerOk" />
   </el-card>
 </template>
 
@@ -50,6 +63,8 @@ import { Element } from "bpmn-js/lib/model/Types";
 import { getExecutionListeners, getExecutionListenerTypes, addExecutionListener, updateExecutionListener, removeExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
+import { Search } from "@element-plus/icons-vue";
+import SelectListener from "./sub/SelectListener.vue";
 
 // element The element.
 let scopedElement: Element;
@@ -64,7 +79,7 @@ const list = ref<ModdleElement[]>([]);
 let events = ref<any[]>([]);
 
 // 当前表单结构数据
-const form = ref<any>({ event: "", type: "class", class: "" });
+const form = ref<any>({ name: "", event: "", type: "class", class: "" });
 
 const formRules = {
   event: { required: true, trigger: ["blur", "change"], message: "事件类型不能为空" },
@@ -74,6 +89,9 @@ const formRules = {
 // 行下表
 let rowIndex = -1;
 
+// 选择监听器实例
+const selectListenerRef = ref();
+
 /**
  * 弹出
  * @param index 下标
@@ -82,9 +100,10 @@ let rowIndex = -1;
 const handleOpen = (index: number) => {
   rowIndex = index;
   open.value = true;
-  form.value = { event: "", type: "class", class: "" };
+  form.value = { name: "", event: "", type: "class", class: "" };
   if (index !== -1) {
     const row = list.value[index];
+    form.value.name = row.$attrs.name ? row.$attrs.name : row.$attrs["activiti:name"];
     form.value.event = row.event;
     form.value.class = row.class;
   }
@@ -114,6 +133,16 @@ const removeListener = (index: number) => {
  */
 const getElementData = () => {
   list.value = markRaw(getExecutionListeners(scopedElement as Element));
+  console.log(list.value);
+};
+
+/**
+ * 选择监听器成功事件
+ * @param data 选择的数据
+ */
+const selectListenerOk = (data: any) => {
+  form.value.name = data.listenerName;
+  form.value.class = data.javaClass;
 };
 
 // 点击用户节点，初始化用
@@ -125,3 +154,12 @@ EventBus.on("element-init", function () {
   });
 });
 </script>
+
+<style scoped>
+.disabled-color :deep() .is-disabled > .el-input__wrapper {
+  background-color: var(--el-input-bg-color) !important;
+}
+.disabled-color :deep() .is-disabled > .el-input__wrapper > input {
+  -webkit-text-fill-color: var(--el-input-text-color) !important;
+}
+</style>

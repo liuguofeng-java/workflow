@@ -200,7 +200,7 @@ const emit = defineEmits<{
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
 }
 .tag-input {
   margin-right: 10px;

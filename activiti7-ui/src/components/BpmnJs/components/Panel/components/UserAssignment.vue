@@ -43,9 +43,9 @@
 import { ref } from "vue";
 import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUtil";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import SingleUser from "@/components/SingleUser/index.vue";
-import MultipleUser from "@/components/MultipleUser/index.vue";
-import MultipleDept from "@/components/MultipleDept/index.vue";
+import SingleUser from "./sub/SingleUser.vue";
+import MultipleUser from "./sub/MultipleUser.vue";
+import MultipleDept from "./sub/MultipleDept.vue";
 import EventBus from "@/utils/EventBus";
 import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
 

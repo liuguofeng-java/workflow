@@ -17,6 +17,7 @@ declare interface BpmnExtensionElements {
 }
 
 declare interface BpmnExecutionListener {
+  name: string;
   event: string;
   expression?: string;
   class?: string;

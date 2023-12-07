@@ -2,13 +2,15 @@
 <template>
   <div class="select-container">
     <div class="tag-input">
-      <el-tag v-if="currentRow?.username">{{ currentRow?.username }}</el-tag>
+      <el-tag v-for="(tag, index) in selectUserList" :key="tag.userId" closable @close="handleDel(index)">
+        {{ tag.username }}
+      </el-tag>
     </div>
     <el-button @click="handleOpen" type="primary">
       <el-icon> <Edit /> </el-icon>选择
     </el-button>
   </div>
-  <el-dialog v-model="open" title="选择人" width="1200px" append-to-body>
+  <el-dialog v-model="open" title="选择人" width="1200px" append-to-body :before-close="submit">
     <el-form :inline="true" :model="queryForm" class="demo-form-inline">
       <el-form-item label="用户名称">
         <el-input v-model="queryForm.userName" placeholder="用户名称" clearable />
@@ -27,24 +29,20 @@
       </el-form-item>
     </el-form>
 
-    <el-table v-loading="loading" :data="list" ref="tableRef">
+    <el-table v-loading="loading" :data="list" @select="handleSelectionChange" @select-all="handleSelectionChange" ref="tableRef">
+      <el-table-column type="selection" width="55" />
       <el-table-column label="序号" type="index" width="100" />
       <el-table-column label="账号名称" align="center" prop="account" />
       <el-table-column label="部门" align="center" prop="deptName" />
       <el-table-column label="手机号" align="center" prop="mobile" />
       <el-table-column label="邮箱" align="center" prop="email" />
       <el-table-column label="创建时间" align="center" prop="createTime" />
-      <el-table-column label="操作">
-        <template #default="scope">
-          <el-button link type="primary" @click="handleCurrentChange(scope.row)">选择</el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <el-pagination background layout="prev, pager, next" v-model:page-size="queryForm.pageSize" v-model:current-page="queryForm.pageNo" :total="total" @current-change="getList" />
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="open = false">关闭</el-button>
+        <el-button @click="submit">关闭</el-button>
       </div>
     </template>
   </el-dialog>
@@ -54,24 +52,25 @@ import { ref, watch, reactive } from "vue";
 import baseService from "@/service/baseService";
 
 const props = defineProps({
-  user: {
-    type: Object,
-    default: () => {
-      return {};
-    }
+  list: {
+    type: Array,
+    default: () => []
   }
 });
 
 // 表格实例
 const tableRef = ref();
 
-// 选择的行
-const currentRow = ref<any>();
+// 表格选择的数据
+const tableSelectionList = ref<any[]>([]);
+
+// 选择的用户信息
+const selectUserList = ref<any[]>([]);
 
 watch(
-  () => props.user,
+  () => props.list,
   async () => {
-    currentRow.value = props.user;
+    selectUserList.value = props.list;
   },
   { deep: true, immediate: true }
 );
@@ -122,8 +121,10 @@ const getList = () => {
     .then((res) => {
       loading.value = false;
       if (res.code === 200) {
+        addSelectUserList();
         list.value = res.rows;
         total.value = res.total;
+        reloadTableSelect();
       } else {
         list.value = [];
       }
@@ -131,6 +132,53 @@ const getList = () => {
     .catch(() => {
       loading.value = false;
     });
+};
+
+/**
+ * 添加到selectUserList
+ */
+const addSelectUserList = () => {
+  tableSelectionList.value.forEach((item) => {
+    const selectIndex = selectUserList.value.findIndex((t) => t.userId === item.userId);
+    if (selectIndex === -1) {
+      selectUserList.value.push({
+        userId: item.userId,
+        username: item.username
+      });
+    }
+  });
+};
+
+/**
+ * 加载选择的table项
+ */
+const reloadTableSelect = () => {
+  setTimeout(() => {
+    selectUserList.value.forEach((item) => {
+      const index = list.value.findIndex((t) => t.userId === item.userId);
+      if (index !== -1) {
+        tableRef.value.toggleRowSelection(list.value[index], undefined);
+      }
+    });
+  }, 100);
+};
+
+/**
+ * 选择table数据
+ * @param selectData 选择的数据
+ */
+const handleSelectionChange = (selectData: any[]) => {
+  tableSelectionList.value = selectData;
+  // 删除取消的
+  list.value.forEach((item) => {
+    const tableIndex = tableSelectionList.value.findIndex((t) => t.userId === item.userId);
+    if (tableIndex === -1) {
+      const selectIndex = selectUserList.value.findIndex((t) => t.userId === item.userId);
+      if (selectIndex !== -1) selectUserList.value.splice(selectIndex, 1);
+    }
+  });
+
+  emit("ok", selectUserList.value);
 };
 
 /**
@@ -142,12 +190,22 @@ function handleQuery() {
 }
 
 /**
- * 选择行事件
- * @param val 选择的行数据
+ * 删除
+ * @param index 下标
  */
-function handleCurrentChange(val: any) {
-  currentRow.value = val;
-  emit("ok", { userId: val.userId, username: val.username });
+function handleDel(index: number) {
+  const row: any = selectUserList.value.splice(index, 1);
+  let tableIndex = tableSelectionList.value.findIndex((t) => t.userId === row[0].userId);
+  if (tableIndex !== -1) tableSelectionList.value.splice(tableIndex, 1);
+  emit("ok", selectUserList.value);
+}
+
+/**
+ * 提交数据
+ */
+function submit() {
+  addSelectUserList();
+  emit("ok", selectUserList.value);
   open.value = false;
 }
 
@@ -156,7 +214,7 @@ defineExpose({
 });
 
 const emit = defineEmits<{
-  (event: "ok", currentRow: any): void;
+  (event: "ok", list: any[]): void;
 }>();
 </script>
 
@@ -165,9 +223,8 @@ const emit = defineEmits<{
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
 }
-
 .tag-input {
   margin-right: 10px;
   min-height: 32px;
@@ -176,7 +233,6 @@ const emit = defineEmits<{
   padding: 2px 10px;
   box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
 }
-
 .tag-input > span {
   margin-right: 5px;
 }

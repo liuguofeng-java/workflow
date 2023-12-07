@@ -13,7 +13,6 @@ export function getExtensionElementsList(
 ): ModdleElement[] {
   const extensionElements = businessObject?.get("extensionElements");
   if (!extensionElements) return [];
-
   const values = extensionElements.get("values");
   if (!values || !values.length) return [];
 

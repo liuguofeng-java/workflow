@@ -17,18 +17,10 @@
 
     <el-table v-loading="loading" :data="list">
       <el-table-column label="序号" type="index" width="70" />
-      <el-table-column label="监听器名称" align="center" prop="listenerName" />
-      <el-table-column label="事件类型" align="center" prop="event">
-        <template #default="scoped">
-          <template v-for="(item, index) in events" :key="index">
-            <span v-if="item.value === scoped.row.event">{{ item.label }}</span>
-          </template>
-        </template>
-      </el-table-column>
+      <el-table-column label="监听器名称" align="center" prop="listenerName" width="200" />
       <el-table-column label="java类" align="center" prop="javaClass" show-overflow-tooltip />
       <el-table-column label="备注" align="center" prop="remark" show-overflow-tooltip />
-      <el-table-column label="修改时间" align="center" prop="updateTime" />
-      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="150" />
       <el-table-column>
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row.listenerId)">修改</el-button>
@@ -42,21 +34,9 @@
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog v-model="open" :title="title" width="600px" append-to-body>
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
-        <el-row :gutter="24">
-          <el-col :span="12">
-            <el-form-item label="名称" prop="listenerName">
-              <el-input v-model="form.listenerName" placeholder="请输入监听器名称" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="事件类型" prop="event">
-              <el-select v-model="form.event" clearable placeholder="请输入事件类型">
-                <el-option v-for="item in events" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
+        <el-form-item label="名称" prop="listenerName">
+          <el-input v-model="form.listenerName" placeholder="请输入监听器名称" />
+        </el-form-item>
         <el-form-item label="java类" prop="javaClass">
           <el-input v-model="form.javaClass" placeholder="请输入java类" />
         </el-form-item>
@@ -112,13 +92,6 @@ const rules = ref({
   event: [{ required: true, message: "事件类型不能为空", trigger: "blur" }],
   javaClass: [{ required: true, message: "java类不能为空", trigger: "blur" }]
 });
-
-// 事件类型
-const events = [
-  { label: "连接线", value: "take" },
-  { label: "开始", value: "start" },
-  { label: "结束", value: "end" }
-];
 
 /**
  * 查询列表

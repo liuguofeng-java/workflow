@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import modelerStore from "@/components/BpmnJs/store/modeler";
-import SelectForm from "./SubChild/SelectForm.vue";
+import SelectForm from "./sub/SelectForm.vue";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import { type Element } from "bpmn-js/lib/util/ModelUtil";

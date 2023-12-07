@@ -14,7 +14,7 @@ declare module "moddle" {
   export class ModdleElement extends Element {
     constructor(attrs: object);
     readonly $type: string;
-    $attrs: object;
+    $attrs: any;
     $parent: any;
     [field: string]: any;
 

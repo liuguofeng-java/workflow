@@ -68,7 +68,7 @@ public class SysListenerController {
         try {
             Class.forName(model.getJavaClass());
         } catch (ClassNotFoundException e) {
-            throw new AException("保存失败,类不存在");
+            throw new AException("类路径不存在!");
         }
 
         Date date = new Date();
