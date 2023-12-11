@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml" v-if="xml !== undefined"></Designer>
+        <Designer :xml="xml" />
         <Panel></Panel>
       </div>
     </div>
@@ -31,7 +31,7 @@ import EventBus from "@/utils/EventBus";
 import Modeler from "bpmn-js/lib/Modeler";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import baseService from "@/service/baseService";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, ElLoading } from "element-plus";
 import { nextTick } from "vue";
 
 const modeler = modelerStore();
@@ -50,23 +50,29 @@ let xml = ref<string>();
  * @param deploymentId 部署id
  */
 const open = (deploymentId: string | undefined) => {
-  drawer.value = true;
-  xml.value = undefined;
   modeler.clearFormJson();
   // 获取到上一个版本的流程图xml
   if (deploymentId) {
     nextTick(() => {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "加载中",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
       baseService.get("/processDefinition/getDefinitionInfo", { deploymentId }).then((res) => {
         if (res.code === 200) {
           res.data.formJsonList.forEach((formJson) => {
             modeler.setFormJson(formJson);
           });
           xml.value = res.data.xml;
+          loading.close();
+          drawer.value = true;
         }
       });
     });
   } else {
     xml.value = "";
+    drawer.value = true;
   }
 };
 

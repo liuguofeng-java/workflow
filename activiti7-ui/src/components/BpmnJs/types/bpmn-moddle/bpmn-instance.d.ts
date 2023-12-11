@@ -1,15 +1,8 @@
-declare interface BpmnScript {
-  scriptFormat?: string;
-  resource?: string;
-  value?: string;
-}
-
 declare interface BpmnField {
   name: string;
   expression?: string;
-  stringValue?: string;
   string?: string;
-  htmlVar?: string;
+  type?: "string" | "expression";
 }
 
 declare interface BpmnExtensionElements {
@@ -22,7 +15,6 @@ declare interface BpmnExecutionListener {
   expression?: string;
   class?: string;
   delegateExpression?: string;
-  script?: BpmnScript;
   fields?: BpmnField[];
 }
 

@@ -8,7 +8,6 @@ import {
 } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { createScript } from "@/components/BpmnJs/bo-utils/scriptUtil";
 import { LISTENER_ALLOWED_TYPES } from "@/components/BpmnJs/config/bpmnEnums";
 
 // execution listener list
@@ -80,6 +79,11 @@ export function getListenersContainer(element: Element): ModdleElement {
   return businessObject?.get("processRef") || businessObject;
 }
 
+/**
+ * 获取默认事件类型
+ * @param element 当前节点
+ * @returns 类型
+ */
 export function getDefaultEvent(element: Element) {
   return is(element, "bpmn:SequenceFlow") ? "take" : "start";
 }
@@ -99,6 +103,12 @@ export function getExecutionListenerTypes(element: Element) {
   ];
 }
 
+/**
+ * 更新监听器
+ * @param element 节点
+ * @param listener
+ * @param props 参数
+ */
 function updateListenerProperty(
   element: Element,
   listener: ModdleElement,
@@ -106,7 +116,7 @@ function updateListenerProperty(
 ) {
   const modeling = modeler().getModeling;
   const prefix = editor().getProcessEngine;
-  const { name, event, class: listenerClass, expression, delegateExpression, script } = props;
+  const { name, event, class: listenerClass, expression, delegateExpression, fields } = props;
 
   const updateProperty = (key, value) =>
     modeling.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value });
@@ -116,8 +126,23 @@ function updateListenerProperty(
   expression && updateProperty("expression", expression);
   delegateExpression && updateProperty("delegateExpression", delegateExpression);
 
-  if (script) {
-    const bpmnScript = createScript(script);
-    modeling.updateModdleProperties(element, listener, { script: bpmnScript });
-  }
+  // 添加字段
+  const bpmnField: ModdleElement[] = [];
+  fields?.forEach((item) => {
+    bpmnField.push(createFieldObject(item, prefix));
+  });
+  updateProperty("fields", bpmnField);
+}
+
+/**
+ * 创建 监听器的注入字段 实例
+ * @param option 值
+ * @param prefix 前缀
+ * @returns
+ */
+export function createFieldObject(option: BpmnField, prefix: string): ModdleElement {
+  const { name, type, string, expression } = option;
+  const fieldConfig = type === "string" ? { name, string } : { name, expression };
+  const moddle = modeler().getModdle;
+  return moddle!.create(`${prefix}:Field`, fieldConfig);
 }
