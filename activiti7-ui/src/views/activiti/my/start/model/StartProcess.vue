@@ -15,7 +15,7 @@
         </el-form-item>
 
         <el-form-item label="选择流程" prop="definitionId" class="disabled-color">
-          <el-input v-model="form.definitionName" disabled>
+          <el-input v-model="form.definitionName" readonly="readonly">
             <template #append>
               <el-button :icon="Search" @click="selectProcess.init()" />
             </template>
@@ -154,12 +154,3 @@ defineExpose({
   init
 });
 </script>
-
-<style scoped>
-.disabled-color :deep() .is-disabled > .el-input__wrapper {
-  background-color: var(--el-input-bg-color) !important;
-}
-.disabled-color :deep() .is-disabled > .el-input__wrapper > input {
-  -webkit-text-fill-color: var(--el-input-text-color) !important;
-}
-</style>

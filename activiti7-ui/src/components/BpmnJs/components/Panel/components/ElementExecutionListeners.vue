@@ -41,7 +41,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="java类" prop="class" class="disabled-color">
-              <el-input v-model="Lform.name" disabled>
+              <el-input v-model="Lform.name" readonly="readonly">
                 <template #append>
                   <el-button :icon="Search" @click="selectListenerRef.handleOpen()" />
                 </template>
@@ -291,12 +291,3 @@ EventBus.on("element-init", function () {
   });
 });
 </script>
-
-<style scoped>
-.disabled-color :deep() .is-disabled > .el-input__wrapper {
-  background-color: var(--el-input-bg-color) !important;
-}
-.disabled-color :deep() .is-disabled > .el-input__wrapper > input {
-  -webkit-text-fill-color: var(--el-input-text-color) !important;
-}
-</style>
