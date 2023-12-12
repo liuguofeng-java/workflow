@@ -6,7 +6,12 @@ package com.activiti.utils.constant;
  * @author liuguofeng
  * @date 2023/11/04 12:27
  **/
-public class Constant {
+public class Constants {
+
+    /**
+     * 文件上传前缀
+     */
+    public final static String RESOURCE_PREFIX = "upload";
 
     /**
      * 前端在请求头内传的token,为了模拟登录,

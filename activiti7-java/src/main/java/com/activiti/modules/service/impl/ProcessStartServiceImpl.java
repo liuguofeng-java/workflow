@@ -4,7 +4,7 @@ import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
 import com.activiti.modules.service.ProcessStartService;
-import com.activiti.utils.constant.Constant;
+import com.activiti.utils.constant.Constants;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
@@ -129,7 +129,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         Map<String, Object> variables = dto.getVariables();
         // 设置发起人用户id
         // 如果节点审批人,设置的是发起人,则审批节点的 assignee="${initiator}"
-        variables.put(Constant.PROCESS_INITIATOR, userId);
+        variables.put(Constants.PROCESS_INITIATOR, userId);
         runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
     }
 

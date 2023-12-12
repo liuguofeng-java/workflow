@@ -1,24 +1,26 @@
 package com.activiti.config;
 
+import com.activiti.utils.constant.Constants;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 跨域配置
+ * 资源配置
  *
  * @author liuguofeng
  * @date 2023/10/16 09:33
  **/
 @Configuration
-public class CorsConfig implements WebMvcConfigurer {
+public class ResourcesConfig implements WebMvcConfigurer {
+
+    @Value("${system.uploadPath}")
+    private String uploadPath;
 
     /**
      * 跨域配置
@@ -40,5 +42,15 @@ public class CorsConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", config);
         // 返回新的CorsFilter
         return new CorsFilter(source);
+    }
+
+    /**
+     * 文件映射配置
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        /** 本地文件上传路径 */
+        registry.addResourceHandler(Constants.RESOURCE_PREFIX + "/**")
+                .addResourceLocations("file:" + uploadPath + "/");
     }
 }

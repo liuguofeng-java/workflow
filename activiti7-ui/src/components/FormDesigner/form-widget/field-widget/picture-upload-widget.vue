@@ -215,10 +215,10 @@ export default {
           name: customResult.name,
           url: customResult.url
         });
-      } else if (!!defaultResult && !!defaultResult.name && !!defaultResult.url) {
+      } else if (!!defaultResult && !!defaultResult.data.name && !!defaultResult.data.url) {
         this.fieldModel.push({
-          name: defaultResult.name,
-          url: defaultResult.url
+          name: defaultResult.data.name,
+          url: import.meta.env.VITE_APP_API + defaultResult.data.url
         });
       } else {
         this.fieldModel = deepClone(fileList);

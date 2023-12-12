@@ -762,7 +762,7 @@ export const advancedFields = [
       customRule: "",
       customRuleHint: "",
       //-------------------
-      uploadURL: "",
+      uploadURL: import.meta.env.VITE_APP_API + "/common/upload",
       uploadTip: "",
       withCredentials: false,
       multipleSelect: false,
@@ -806,7 +806,7 @@ export const advancedFields = [
       customRule: "",
       customRuleHint: "",
       //-------------------
-      uploadURL: "",
+      uploadURL: import.meta.env.VITE_APP_API + "/common/upload",
       uploadTip: "",
       withCredentials: false,
       multipleSelect: false,

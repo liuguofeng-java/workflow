@@ -2,7 +2,7 @@ package com.activiti.utils;
 
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.service.SysUserService;
-import com.activiti.utils.constant.Constant;
+import com.activiti.utils.constant.Constants;
 import com.activiti.utils.exception.AException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +23,7 @@ public class TokenUtils {
         SysUserService userService = SpringUtils.getBean(SysUserService.class);
 
         // 在请求头获取用户id
-        String userId = ServletUtils.getHeader(Constant.TOKEN);
+        String userId = ServletUtils.getHeader(Constants.TOKEN);
         if (StringUtils.isEmpty(userId)) {
             throw new AException("未登录！", 401);
         }
