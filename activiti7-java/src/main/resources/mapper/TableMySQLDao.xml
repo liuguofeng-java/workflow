@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.activiti.modules.dao.TableMySQLDao">
+	<select id="tableList" resultType="TableInfo">
+        select
+            table_name, table_comment, create_time
+        from information_schema.tables
+        where table_schema = (select database()) and table_name NOT LIKE 'act_%'
+        <if test="tableName != null and tableName.trim() != ''">
+            and table_name like concat('%', #{tableName}, '%')
+        </if>
+        order by create_time desc
+    </select>
+
+	<select id="tableColumns" resultType="TableColumns">
+        select column_name, data_type, column_comment, column_key
+        from information_schema.columns
+        where table_name = #{tableName}
+          and table_schema = (select database())
+        order by ordinal_position
+    </select>
+</mapper>

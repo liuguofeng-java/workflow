@@ -1,12 +1,4 @@
-import {
-  defineComponent,
-  Component,
-  markRaw,
-  onMounted,
-  onBeforeUnmount,
-  ref,
-  getCurrentInstance
-} from "vue";
+import { defineComponent, Component, markRaw, onMounted, onBeforeUnmount, ref } from "vue";
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
 import EventBus from "@/utils/EventBus";
@@ -27,6 +19,7 @@ import {
 } from "@/components/BpmnJs/bo-utils/initiatorUtil";
 
 import ElementGenerations from "./components/ElementGenerations.vue";
+import ElementDbTable from "./components/ElementDbTable.vue";
 import ElementConditional from "./components/ElementConditional.vue";
 import ElementExecutionListeners from "./components/ElementExecutionListeners.vue";
 import ElementExtensionProperties from "./components/ElementExtensionProperties.vue";
@@ -46,10 +39,6 @@ const Panel = defineComponent({
     const bpmnIconName = ref<string>("Process");
     const bpmnElementName = ref<string>("Process");
     const renderComponents = markRaw<Component[]>([]);
-    const {
-      proxy: { $forceUpdate }
-    }: any = getCurrentInstance();
-
     /**
      * 更新组件
      * @param element 当前节点
@@ -59,6 +48,7 @@ const Panel = defineComponent({
       renderComponents.splice(0, renderComponents.length);
       // 添加组件
       renderComponents.push(ElementGenerations); // 基本信息
+      element.type === "bpmn:Process" && renderComponents.push(ElementDbTable); // 数据库配置
       isExtendStartEvent(element) && renderComponents.push(ElementForm); // 是否是开始节点
       isCanbeConditional(element) && renderComponents.push(ElementConditional);
       isJobExecutable(element) && renderComponents.push(ElementJobExecution);
@@ -68,9 +58,6 @@ const Panel = defineComponent({
       isUserAssignmentSupported(element) && renderComponents.push(UserAssignment);
       isUserAssignmentSupported(element) && renderComponents.push(ElementForm);
       isExecutable(element) && renderComponents.push(ElementExecutionListeners);
-
-      // 发现ElementConditional未更,新强制更新组件
-      $forceUpdate();
     };
 
     /**

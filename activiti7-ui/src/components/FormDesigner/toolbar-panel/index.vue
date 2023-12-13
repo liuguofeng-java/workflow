@@ -1316,7 +1316,7 @@ export default {
   overflow: hidden;
 
   .right-toolbar-con {
-    text-align: left;
+    text-align: right;
     width: 600px;
   }
 

@@ -6,23 +6,6 @@ import type Canvas from "diagram-js/lib/core/Canvas";
 import type ElementRegistry from "diagram-js/lib/core/ElementRegistry";
 import { toRaw } from "vue";
 
-type FormJson = {
-  activityId: string;
-  formJson: any;
-  isMainFrom: number | 0;
-};
-
-type ModelerStore = {
-  activeElement: BpmnElement | undefined;
-  activeElementId: string | undefined;
-  modeler: Modeler | undefined;
-  moddle: Moddle | undefined;
-  modeling: any | undefined;
-  canvas: Canvas | undefined;
-  elementRegistry: ElementRegistry | undefined;
-  formJsonList: FormJson[];
-};
-
 const defaultState: ModelerStore = {
   activeElement: undefined,
   activeElementId: undefined,
@@ -31,7 +14,8 @@ const defaultState: ModelerStore = {
   modeling: undefined,
   canvas: undefined,
   elementRegistry: undefined,
-  formJsonList: []
+  formJsonList: [],
+  tableInfo: undefined
 };
 
 export default defineStore("modeler", {
@@ -44,7 +28,8 @@ export default defineStore("modeler", {
     getModeling: (state): Modeling => toRaw(state.modeling),
     getCanvas: (state): Canvas | undefined => toRaw(state.canvas),
     getElRegistry: (state) => toRaw(state.elementRegistry),
-    getFormJsonList: (state) => toRaw(state.formJsonList)
+    getFormJsonList: (state) => toRaw(state.formJsonList),
+    getTableInfo: (state) => toRaw(state.tableInfo)
   },
   actions: {
     setModeler(modeler: Modeler | undefined) {
@@ -71,6 +56,15 @@ export default defineStore("modeler", {
         this.formJsonList.splice(index, 1);
       }
       this.formJsonList.push(formJson);
+    },
+    setTableInfo(tableInfo: TableInfo) {
+      tableInfo.columns = [];
+      this.tableInfo = tableInfo;
+    },
+    setTableColumns(tableColumns: TableColumns[]) {
+      if (this.tableInfo) {
+        this.tableInfo.columns = tableColumns;
+      }
     }
   }
 });

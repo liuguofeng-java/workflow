@@ -33,3 +33,5 @@ spring:
 system:
   # 文件路径 示例（ Windows配置D:/xxx，Linux配置 /home/xxxxx）
   uploadPath: D:/uploadPath
+  #指定数据库,参考类: DbType
+  database: MY_SQL

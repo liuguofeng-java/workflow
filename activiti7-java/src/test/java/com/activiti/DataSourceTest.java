@@ -1,6 +1,10 @@
 package com.activiti;
 
+import com.activiti.modules.dao.TableDao;
+import com.activiti.modules.dao.TableMySQLDao;
 import com.activiti.modules.entity.SysUserEntity;
+import com.activiti.modules.entity.TableColumns;
+import com.activiti.modules.entity.TableInfo;
 import com.activiti.modules.service.SysUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +19,17 @@ import java.util.List;
 @SpringBootTest
 public class DataSourceTest {
     @Autowired
-    private SysUserService userService;
+    private TableDao tableDao;
 
     @Test
     public void demo01(){
-        List<SysUserEntity> list = userService.list();
+        List<TableInfo> tableInfos = tableDao.tableList("");
+        System.out.println();
+    }
+
+    @Test
+    public void demo02(){
+        List<TableColumns> tableColumns = tableDao.tableColumns("test");
         System.out.println();
     }
 }
