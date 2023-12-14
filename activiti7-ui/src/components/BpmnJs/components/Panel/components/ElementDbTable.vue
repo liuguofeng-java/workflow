@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="表备注">
-          <el-input v-model="form.comment" placeholder="无" readonly="readonly" />
+          <el-input v-model="form.tableComment" placeholder="无" readonly="readonly" />
         </el-form-item>
       </template>
 
@@ -30,7 +30,7 @@
           <el-input v-model="form.tableName" placeholder="表名称" clearable />
         </el-form-item>
         <el-form-item label="表备注">
-          <el-input v-model="form.comment" placeholder="表备注" clearable />
+          <el-input v-model="form.tableComment" placeholder="表备注" clearable />
         </el-form-item>
       </template>
 
@@ -68,7 +68,7 @@ const list = ref<any[]>([]);
 const form = ref<TableInfo>({
   tableName: "",
   type: "",
-  comment: "",
+  tableComment: "",
   columns: []
 });
 
@@ -83,7 +83,7 @@ watch(
     // 更新表备注
     if (form.value.type !== "ready") return;
     const item = list.value.find((t) => t.tableName === form.value.tableName);
-    if (item) form.value.comment = item.tableComment;
+    if (item) form.value.tableComment = item.tableComment;
   },
   { deep: true, immediate: true }
 );
@@ -113,7 +113,7 @@ const getList = () => {
  */
 const resetFields = () => {
   form.value.tableName = "";
-  form.value.comment = "";
+  form.value.tableComment = "";
 };
 
 /**
@@ -122,8 +122,14 @@ const resetFields = () => {
 const submitForm = () => {
   formRef.value.validate((valid: boolean) => {
     if (!valid) return;
-    ElMessageBox.confirm("确认要做更新操作吗?更新将删除所有已配置的字段", "提示").then(() => {
+    ElMessageBox.confirm("确认要做更新操作吗?更新将删除所有已配置的字段", "提示").then(async () => {
       form.value.columns = [];
+
+      if (form.value.type === "ready") {
+        let res = await baseService.get(`/table/tableColumns?tableName=${form.value.tableName}`);
+        form.value.columns = res.data;
+        console.log(JSON.stringify(form.value));
+      }
       modeler.setTableInfo(form.value);
       ElMessage.success("更新成功!");
     });

@@ -15,7 +15,9 @@ const defaultState: ModelerStore = {
   canvas: undefined,
   elementRegistry: undefined,
   formJsonList: [],
-  tableInfo: undefined
+  tableInfo: undefined,
+  widgetType: undefined,
+  nodelColumns: []
 };
 
 export default defineStore("modeler", {
@@ -29,7 +31,10 @@ export default defineStore("modeler", {
     getCanvas: (state): Canvas | undefined => toRaw(state.canvas),
     getElRegistry: (state) => toRaw(state.elementRegistry),
     getFormJsonList: (state) => toRaw(state.formJsonList),
-    getTableInfo: (state) => toRaw(state.tableInfo)
+    getTableInfo: (state) => toRaw(state.tableInfo),
+    getWidgetType: (state) => toRaw(state.widgetType),
+    getNodelColumns: (state) =>
+      toRaw(state.nodelColumns.find((t) => t.activityId == state.activeElementId)?.columns)
   },
   actions: {
     setModeler(modeler: Modeler | undefined) {
@@ -58,13 +63,38 @@ export default defineStore("modeler", {
       this.formJsonList.push(formJson);
     },
     setTableInfo(tableInfo: TableInfo) {
-      tableInfo.columns = [];
       this.tableInfo = tableInfo;
+      this.nodelColumns = [];
     },
     setTableColumns(tableColumns: TableColumns[]) {
       if (this.tableInfo) {
         this.tableInfo.columns = tableColumns;
       }
+    },
+    setWidgetType(widgetType: WidgetType) {
+      this.widgetType = widgetType;
+    },
+    setNodelColumn(tableColumn: TableColumns) {
+      const activityId = this.activeElementId;
+      if (!activityId) return;
+      let tableItem = this.nodelColumns.find((t) => t.activityId === activityId);
+      if (!tableItem) {
+        tableItem = {
+          activityId: activityId,
+          columns: [tableColumn]
+        };
+        this.nodelColumns.push(tableItem);
+      } else {
+        const columnIndex = tableItem.columns.findIndex(
+          (t) => t.columnName === tableColumn.columnName
+        );
+        if (columnIndex !== -1) {
+          tableItem.columns.splice(columnIndex, 1);
+        } else {
+          tableItem.columns.push(tableColumn);
+        }
+      }
+      console.log("nodelColumns->>>/", this.nodelColumns);
     }
   }
 });

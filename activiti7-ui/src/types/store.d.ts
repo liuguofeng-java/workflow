@@ -8,12 +8,20 @@ type FormJson = {
 };
 
 /**
+ * 节点绑定的数据库字段类型
+ */
+type NodelColumn = {
+  activityId: string; // 节点id
+  columns: TableColumns[]; // 表备注
+};
+
+/**
  * 数据库信息
  */
 type TableInfo = {
   tableName: string; // 表名称
   type: "" | "create" | "ready"; // create: 新表结构,ready:现有的表结构
-  comment: string; // 表备注
+  tableComment: string; // 表备注
   columns: TableColumns[]; // 表备注
 };
 
@@ -23,7 +31,15 @@ type TableInfo = {
 type TableColumns = {
   columnName: string; // 行名称
   dataType: string; // 数据类型
-  comment: string; // 备注
+  columnComment: string; // 备注
+};
+
+/**
+ * 组件类型
+ */
+type WidgetType = {
+  widgetType: any; // 组件类型
+  widgetDefaultType: any; // 组件默认类型
 };
 
 type ModelerStore = {
@@ -36,4 +52,6 @@ type ModelerStore = {
   elementRegistry: ElementRegistry | undefined;
   formJsonList: FormJson[];
   tableInfo: TableInfo | undefined;
+  widgetType: WidgetType | undefined;
+  nodelColumns: NodelColumn[];
 };

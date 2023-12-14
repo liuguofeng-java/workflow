@@ -49,16 +49,18 @@ let xml = ref<string>();
  * 初始化设计器
  * @param deploymentId 部署id
  */
-const open = (deploymentId: string | undefined) => {
+const open = async (deploymentId: string | undefined) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "加载中",
+    background: "rgba(0, 0, 0, 0.7)"
+  });
+  const res = await baseService.get("/table/getWidgetType");
+  modeler.setWidgetType(res.data);
   modeler.clearFormJson();
   // 获取到上一个版本的流程图xml
   if (deploymentId) {
     nextTick(() => {
-      const loading = ElLoading.service({
-        lock: true,
-        text: "加载中",
-        background: "rgba(0, 0, 0, 0.7)"
-      });
       baseService.get("/processDefinition/getDefinitionInfo", { deploymentId }).then((res) => {
         if (res.code === 200) {
           res.data.formJsonList.forEach((formJson) => {
@@ -73,6 +75,7 @@ const open = (deploymentId: string | undefined) => {
   } else {
     xml.value = "";
     drawer.value = true;
+    loading.close();
   }
 };
 

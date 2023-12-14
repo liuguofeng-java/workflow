@@ -34,7 +34,7 @@ const designerConfig = ref<any>({
 
   presetCssCode: "", //设计器预设CSS样式代码
 
-  resetFormJson: false //是否在设计器初始化时将表单内容重置为空
+  resetFormJson: true //是否在设计器初始化时将表单内容重置为空
 });
 
 // 是否打开弹出框
@@ -58,6 +58,8 @@ const pops = defineProps({
 const handleOpen = () => {
   drawer.value = true;
   nextTick(() => {
+    console.log(pops.formJson);
+
     vfdRef.value.setFormJson(pops.formJson);
   });
 };
