@@ -1,12 +1,20 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysNodeFormEntity;
+import com.activiti.modules.dao.TableDao;
+import com.activiti.modules.entity.SysDeployEntity;
+import com.activiti.modules.entity.SysDeployNodeEntity;
+import com.activiti.modules.entity.TableColumns;
 import com.activiti.modules.entity.dto.workflow.DefinitionListDto;
 import com.activiti.modules.entity.dto.workflow.DeployProcessDto;
-import com.activiti.modules.entity.dto.workflow.FormJsons;
+import com.activiti.modules.entity.dto.workflow.FormJsonsDto;
+import com.activiti.modules.entity.dto.workflow.TableInfoDto;
 import com.activiti.modules.entity.vo.workflow.DefinitionListVo;
+import com.activiti.modules.entity.vo.workflow.NodeColumnsVo;
+import com.activiti.modules.entity.vo.workflow.TableColumnsVo;
+import com.activiti.modules.entity.vo.workflow.TableInfoVo;
 import com.activiti.modules.service.ProcessDefinitionService;
-import com.activiti.modules.service.SysNodeFormService;
+import com.activiti.modules.service.SysDeployNodeService;
+import com.activiti.modules.service.SysDeployService;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
@@ -38,7 +46,13 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     private RepositoryService repositoryService;
 
     @Autowired
-    private SysNodeFormService sysNodeFormService;
+    private SysDeployNodeService deployNodeService;
+
+    @Autowired
+    private SysDeployService deployService;
+
+    @Autowired
+    private TableDao tableDao;
 
     /**
      * 流程管理列表
@@ -62,9 +76,9 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
             DefinitionListVo vo = new DefinitionListVo();
             BeanUtils.copyProperties(item, vo);
             // 获取主表单
-            SysNodeFormEntity mainForm = sysNodeFormService.getOne(new LambdaQueryWrapper<SysNodeFormEntity>()
-                    .eq(SysNodeFormEntity::getDeployId, item.getDeploymentId())
-                    .eq(SysNodeFormEntity::getIsMainFrom, 1));
+            SysDeployNodeEntity mainForm = deployNodeService.getOne(new LambdaQueryWrapper<SysDeployNodeEntity>()
+                    .eq(SysDeployNodeEntity::getDeployId, item.getDeploymentId())
+                    .eq(SysDeployNodeEntity::getIsMainFrom, 1));
             if (mainForm != null) {
                 vo.setFormJson(mainForm.getFormJson());
             }
@@ -114,20 +128,35 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                 .addString("index.bpmn", dto.getXml())
                 .deploy();
 
-        // 保存节点表单
-        List<FormJsons> formJsons = dto.getFormJsonList();
-        List<SysNodeFormEntity> list = new ArrayList<>();
         Date date = new Date();
-        for (FormJsons formJson : formJsons) {
-            list.add(new SysNodeFormEntity() {{
+        // 流程部署详情
+        TableInfoDto tableInfo = dto.getTableInfo();
+        if (tableInfo != null) {
+            SysDeployEntity sysDeploy = new SysDeployEntity();
+            sysDeploy.setTableName(tableInfo.getTableName());
+            sysDeploy.setTableComment(tableInfo.getTableComment());
+            sysDeploy.setDeployId(deploy.getId());
+            sysDeploy.setCreateTime(date);
+            deployService.save(sysDeploy);
+        }
+
+        // 保存节点数据
+        List<FormJsonsDto> formJsons = dto.getFormJsonList();
+        List<SysDeployNodeEntity> list = new ArrayList<>();
+        for (FormJsonsDto formJson : formJsons) {
+            SysDeployNodeEntity deployNode = new SysDeployNodeEntity() {{
                 setDeployId(deploy.getId());
                 setActivityId(formJson.getActivityId());
                 setFormJson(formJson.getFormJson());
                 setIsMainFrom(formJson.getIsMainFrom());
                 setCreateTime(date);
-            }});
+            }};
+            dto.getNodeColumns().stream().filter(t -> t.getActivityId()
+                            .equals(formJson.getActivityId())).findAny()
+                    .ifPresent(t -> deployNode.setColumns(t.getColumns()));
+            list.add(deployNode);
         }
-        sysNodeFormService.saveBatch(list);
+        deployNodeService.saveBatch(list);
     }
 
     /**
@@ -144,10 +173,42 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         String xml = getDefinitionXml(deploymentId);
         result.put("xml", xml);
         // 获取节点表单
-        List<SysNodeFormEntity> list = sysNodeFormService.list(new LambdaQueryWrapper<SysNodeFormEntity>()
-                .select(SysNodeFormEntity::getActivityId, SysNodeFormEntity::getFormJson, SysNodeFormEntity::getIsMainFrom)
-                .eq(SysNodeFormEntity::getDeployId, deploymentId));
+        List<SysDeployNodeEntity> list = deployNodeService.list(new LambdaQueryWrapper<SysDeployNodeEntity>()
+                .select(SysDeployNodeEntity::getActivityId,
+                        SysDeployNodeEntity::getFormJson,
+                        SysDeployNodeEntity::getColumns,
+                        SysDeployNodeEntity::getIsMainFrom)
+                .eq(SysDeployNodeEntity::getDeployId, deploymentId));
         result.put("formJsonList", list);
+
+        SysDeployEntity sysDeploy = deployService.getById(deploymentId);
+        if (sysDeploy != null) {
+            // 表结构信息
+            TableInfoVo tableInfo = new TableInfoVo();
+            tableInfo.setTableName(sysDeploy.getTableName());
+            tableInfo.setTableComment(sysDeploy.getTableComment());
+            List<TableColumns> tableColumns = tableDao.tableColumns(sysDeploy.getTableName());
+            List<TableColumnsVo> columns = new ArrayList<>();
+            for (TableColumns tableColumn : tableColumns) {
+                TableColumnsVo tableColumnsVo = new TableColumnsVo();
+                BeanUtils.copyProperties(tableColumn, tableColumnsVo);
+                columns.add(tableColumnsVo);
+            }
+            tableInfo.setColumns(columns);
+            result.put("tableInfo", tableInfo);
+
+            // 获取节点绑定数据库表字段的数据
+            List<NodeColumnsVo> nodeColumnsVos = new ArrayList<>();
+            for (SysDeployNodeEntity deployNode : list) {
+                if(deployNode.getColumns() == null) continue;
+                NodeColumnsVo nodeColumnsVo = new NodeColumnsVo();
+                nodeColumnsVo.setActivityId(deployNode.getActivityId());
+                nodeColumnsVo.setColumns(deployNode.getColumns());
+                nodeColumnsVos.add(nodeColumnsVo);
+            }
+            result.put("nodeColumns", nodeColumnsVos);
+
+        }
         return result;
     }
 
@@ -159,8 +220,10 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @Transactional
     @Override
     public void delete(String deploymentId) {
-        sysNodeFormService.remove(new LambdaQueryWrapper<SysNodeFormEntity>()
-                .eq(SysNodeFormEntity::getDeployId, deploymentId));
+        deployNodeService.remove(new LambdaQueryWrapper<SysDeployNodeEntity>()
+                .eq(SysDeployNodeEntity::getDeployId, deploymentId));
+        deployService.remove(new LambdaQueryWrapper<SysDeployEntity>()
+                .eq(SysDeployEntity::getDeployId, deploymentId));
         repositoryService.deleteDeployment(deploymentId, true);
     }
 }

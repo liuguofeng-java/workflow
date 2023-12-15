@@ -14,6 +14,10 @@ import { ref } from "vue";
 import VFormDesigner from "@/components/FormDesigner/index.vue";
 import { nextTick } from "vue";
 import { Edit } from "@element-plus/icons-vue";
+import modelerStore from "@/components/BpmnJs/store/modeler";
+import { buildTreeToList } from "@/components/BpmnJs/bo-utils/variableUtil";
+
+const modeler = modelerStore();
 
 const designerConfig = ref<any>({
   languageMenu: true, //是否显示语言切换菜单
@@ -69,8 +73,43 @@ const handleOpen = () => {
  */
 const submit = () => {
   const formJson = vfdRef.value.getFormJson();
+
+  // 更新组件表字段,查看字段是否被删除
+  updateNodeTableColumns(formJson);
+
   emit("ok", JSON.parse(JSON.stringify(formJson)));
   drawer.value = false;
+};
+
+/**
+ * 更新组件表字段,查看字段是否被删除
+ */
+const updateNodeTableColumns = (formJson: any) => {
+  const widgetTree = formJson?.widgetList;
+  // 把树形结构转成列表
+  const widgetList = getWidgetList(widgetTree);
+  const nodeColumns = modeler.getNodeColumn;
+  if (nodeColumns) {
+    for (let i = 0; i < nodeColumns.length; i++) {
+      const element = nodeColumns[i];
+      const index = widgetList.findIndex((t) => t.options.name === element.columnName);
+      if (index === -1) {
+        modeler.removeNodeColumn(element);
+      }
+    }
+  }
+};
+
+/**
+ * 获取全部组件列表
+ * @returns
+ */
+const getWidgetList = (widgetTree): any[] => {
+  const widgetList: any[] = [];
+  widgetTree.forEach((widget) => {
+    buildTreeToList(widget, widgetList);
+  });
+  return widgetList;
 };
 
 defineExpose({

@@ -1,12 +1,12 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysNodeFormEntity;
+import com.activiti.modules.entity.SysDeployNodeEntity;
 import com.activiti.modules.entity.SysUserEntity;
 import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
 import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.modules.entity.vo.workflow.TodoListVo;
 import com.activiti.modules.service.ProcessTodoService;
-import com.activiti.modules.service.SysNodeFormService;
+import com.activiti.modules.service.SysDeployNodeService;
 import com.activiti.modules.service.SysUserService;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
@@ -53,7 +53,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
     private SysUserService userService;
 
     @Autowired
-    private SysNodeFormService nodeFormService;
+    private SysDeployNodeService deployNodeService;
 
     /**
      * 查看我代办的流程
@@ -123,9 +123,9 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
         FlowElement flowElement = bpmnModel.getFlowElement(task.getTaskDefinitionKey());
         // 获取表单数据
-        SysNodeFormEntity form = nodeFormService.getOne(new LambdaQueryWrapper<SysNodeFormEntity>()
-                        .eq(SysNodeFormEntity::getDeployId,processDefinition.getDeploymentId())
-                .eq(SysNodeFormEntity::getActivityId, flowElement.getId()));
+        SysDeployNodeEntity form = deployNodeService.getOne(new LambdaQueryWrapper<SysDeployNodeEntity>()
+                        .eq(SysDeployNodeEntity::getDeployId,processDefinition.getDeploymentId())
+                .eq(SysDeployNodeEntity::getActivityId, flowElement.getId()));
         // 用户没有填写表单
         if (form == null) {
             return new HashMap<>();

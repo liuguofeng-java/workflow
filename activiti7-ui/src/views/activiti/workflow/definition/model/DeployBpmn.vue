@@ -55,14 +55,18 @@ const open = async (deploymentId: string | undefined) => {
     text: "加载中",
     background: "rgba(0, 0, 0, 0.7)"
   });
+  modeler.clearData();
   const res = await baseService.get("/table/getWidgetType");
   modeler.setWidgetType(res.data);
-  modeler.clearFormJson();
   // 获取到上一个版本的流程图xml
   if (deploymentId) {
     nextTick(() => {
       baseService.get("/processDefinition/getDefinitionInfo", { deploymentId }).then((res) => {
         if (res.code === 200) {
+          let tableInfo = res.data.tableInfo;
+          tableInfo.type = "ready";
+          modeler.setTableInfo(tableInfo);
+          modeler.setNodeColumns(res.data.nodeColumns);
           res.data.formJsonList.forEach((formJson) => {
             modeler.setFormJson(formJson);
           });
@@ -84,12 +88,19 @@ const open = async (deploymentId: string | undefined) => {
  */
 const submit = async () => {
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
+  // 动态表单数据
   const formJsonList = modeler.getFormJsonList;
+  // 节点绑定字段信息
+  const nodeColumns = modeler.getNodeColumns;
+  // 表信息
+  const tableInfo = modeler.getTableInfo;
   const { xml } = await bpmnModel.saveXML({ format: true, preamble: true });
   baseService
     .post(`/processDefinition/deployProcess`, {
       xml,
-      formJsonList
+      formJsonList,
+      nodeColumns,
+      tableInfo
     })
     .then((res) => {
       if (res.code === 200) {

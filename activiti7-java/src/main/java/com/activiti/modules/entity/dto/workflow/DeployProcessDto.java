@@ -3,7 +3,6 @@ package com.activiti.modules.entity.dto.workflow;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 部署流程
@@ -21,7 +20,17 @@ public class DeployProcessDto {
     /**
      * 表单数据
      */
-    private List<FormJsons> formJsonList;
+    private List<FormJsonsDto> formJsonList;
+
+    /**
+     * 节点绑定字段信息
+     */
+    private List<NodeColumnsDto> nodeColumns;
+
+    /**
+     * 数据库表信息
+     */
+    private TableInfoDto tableInfo;
 
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <el-form-item label="数据库" v-if="tableInfo.type">
+  <el-form-item label="数据库" v-if="isShowCheckField">
     <el-checkbox v-model="checkField" label="绑定表字段" />
   </el-form-item>
 
@@ -8,13 +8,16 @@
     而数据库表中没有符合类型,所以不能绑定表字段`"
     type="warning"
     :closable="false"
-    v-if="tableInfo.type === 'ready' && fieldList.length === 0"
+    v-if="tableInfo.type === 'ready' && fieldList.length === 0 && widgetType"
   />
 
-  <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-if="tableInfo.type === 'create' && checkField">
+  <!-- 绑定新创建表字段 -->
+  <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-if="isShowCreate">
     <el-input type="text" v-model="optionModel.name" @change="updateWidgetNameAndRef"></el-input>
   </el-form-item>
-  <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-else-if="tableInfo.type === 'ready' && fieldList.length !== 0 && checkField">
+
+  <!-- 是否显示绑定已有的表字段 -->
+  <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-else-if="isShowReady">
     <el-select v-model="optionModel.name" filterable @change="updateWidgetNameAndRef" :title="i18nt('designer.setting.editNameHelp')">
       <el-option v-for="(item, index) in fieldList" :key="index" :value="item.columnName">
         <span v-if="!item.columnComment">{{ item.columnName }}</span>
@@ -71,6 +74,29 @@ export default {
     }
   },
   computed: {
+    /**
+     * 是否绑定新创建表字段
+     */
+    isShowCreate() {
+      return this.tableInfo.type === "create" && this.checkField;
+    },
+    /**
+     * 是否显示绑定已有的表字段
+     */
+    isShowReady() {
+      return this.tableInfo.type === "ready" && this.fieldList.length !== 0 && this.checkField;
+    },
+    /**
+     * 是否显示绑定表字段
+     */
+    isShowCheckField() {
+      if (this.tableInfo.type === "create") {
+        return true;
+      } else if (this.tableInfo.type === "ready" && this.fieldList.length !== 0 && this.widgetType) {
+        return true;
+      }
+      return false;
+    },
     widgetNameReadonly() {
       return !!this.getDesignerConfig().widgetNameReadonly;
     }
@@ -100,7 +126,7 @@ export default {
         }
         if (this.checkField) {
           const modeler = modelerStore();
-          modeler.setNodelColumn({
+          modeler.setNodeColumn({
             columnName: this.optionModel.name,
             columnComment: this.optionModel.label
           });
@@ -120,10 +146,10 @@ export default {
      * 获取表信息
      */
     geTableInfo() {
-      console.log(this.optionModel);
       this.checkField = false;
       const modeler = modelerStore();
       this.tableInfo = modeler.getTableInfo || {};
+      console.log("getWidgetType", modeler.getWidgetType);
       this.widgetType = modeler.getWidgetType.widgetType[this.selectedWidget.type];
       if (modeler.getTableInfo?.type === "ready") {
         // 没有找到对应组件的控件
@@ -137,8 +163,8 @@ export default {
         }
         this.fieldList = fieldList;
       }
-      // ------回显
-      const column = modeler.getNodelColumns?.find((t) => t.columnName == this.optionModel.name);
+      // 回显
+      const column = modeler.getNodeColumn?.find((t) => t.columnName == this.optionModel.name);
       if (column) {
         this.checkField = true;
       }

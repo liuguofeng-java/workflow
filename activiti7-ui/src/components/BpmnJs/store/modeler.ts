@@ -17,7 +17,7 @@ const defaultState: ModelerStore = {
   formJsonList: [],
   tableInfo: undefined,
   widgetType: undefined,
-  nodelColumns: []
+  nodeColumns: []
 };
 
 export default defineStore("modeler", {
@@ -33,8 +33,9 @@ export default defineStore("modeler", {
     getFormJsonList: (state) => toRaw(state.formJsonList),
     getTableInfo: (state) => toRaw(state.tableInfo),
     getWidgetType: (state) => toRaw(state.widgetType),
-    getNodelColumns: (state) =>
-      toRaw(state.nodelColumns.find((t) => t.activityId == state.activeElementId)?.columns)
+    getNodeColumns: (state) => toRaw(state.nodeColumns),
+    getNodeColumn: (state) =>
+      toRaw(state.nodeColumns.find((t) => t.activityId == state.activeElementId)?.columns)
   },
   actions: {
     setModeler(modeler: Modeler | undefined) {
@@ -52,8 +53,11 @@ export default defineStore("modeler", {
       this.activeElement = element;
       this.activeElementId = element.id;
     },
-    clearFormJson() {
+    clearData() {
       this.formJsonList.splice(0, this.formJsonList.length);
+      this.nodeColumns.splice(0, this.nodeColumns.length);
+      this.widgetType = undefined;
+      this.tableInfo = undefined;
     },
     setFormJson(formJson: FormJson) {
       const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
@@ -64,7 +68,7 @@ export default defineStore("modeler", {
     },
     setTableInfo(tableInfo: TableInfo) {
       this.tableInfo = tableInfo;
-      this.nodelColumns = [];
+      // this.nodeColumns = [];
     },
     setTableColumns(tableColumns: TableColumns[]) {
       if (this.tableInfo) {
@@ -74,27 +78,39 @@ export default defineStore("modeler", {
     setWidgetType(widgetType: WidgetType) {
       this.widgetType = widgetType;
     },
-    setNodelColumn(tableColumn: TableColumns) {
+    removeNodeColumn(tableColumn: TableColumns) {
       const activityId = this.activeElementId;
       if (!activityId) return;
-      let tableItem = this.nodelColumns.find((t) => t.activityId === activityId);
+      const tableItem = this.nodeColumns.find((t) => t.activityId === activityId);
+      if (!tableItem) return;
+      const columnIndex = tableItem.columns.findIndex(
+        (t) => t.columnName === tableColumn.columnName
+      );
+      if (columnIndex == -1) return;
+      tableItem.columns.splice(columnIndex, 1);
+    },
+    setNodeColumns(nodelColumns: NodelColumn[]) {
+      this.nodeColumns = nodelColumns;
+    },
+    setNodeColumn(tableColumn: TableColumns) {
+      const activityId = this.activeElementId;
+      if (!activityId) return;
+      let tableItem = this.nodeColumns.find((t) => t.activityId === activityId);
+      console.log("xxxxx", tableItem);
+
       if (!tableItem) {
+        console.log("-------/-/-");
+
         tableItem = {
           activityId: activityId,
           columns: [tableColumn]
         };
-        this.nodelColumns.push(tableItem);
+        this.nodeColumns.push(tableItem);
       } else {
-        const columnIndex = tableItem.columns.findIndex(
-          (t) => t.columnName === tableColumn.columnName
-        );
-        if (columnIndex !== -1) {
-          tableItem.columns.splice(columnIndex, 1);
-        } else {
-          tableItem.columns.push(tableColumn);
-        }
+        this.removeNodeColumn(tableColumn);
+        tableItem.columns.push(tableColumn);
       }
-      console.log("nodelColumns->>>/", this.nodelColumns);
+      console.log("nodeColumns->>>/", this.nodeColumns);
     }
   }
 });

@@ -9,10 +9,10 @@ type NodeWidget = {
 };
 
 /**
- * 获取全部组件
+ * 获取全部组件树形结构
  * @returns
  */
-export const getWidgetList = (): NodeWidget[] => {
+export const getWidgetTree = (): NodeWidget[] => {
   const nodeWidgets: NodeWidget[] = [];
 
   const elementRegistry: any = modeler.getModeler?.get("elementRegistry");

@@ -10,7 +10,7 @@ import java.util.Map;
  * @date 2023/11/29 17:25
  **/
 @Data
-public class FormJsons {
+public class FormJsonsDto {
 
     /**
      * 流程定义节点唯一标识

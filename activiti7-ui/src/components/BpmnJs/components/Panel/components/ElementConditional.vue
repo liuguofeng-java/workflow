@@ -81,7 +81,7 @@ import { Element } from "bpmn-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import { getWidgetList } from "@/components/BpmnJs/bo-utils/variableUtil";
+import { getWidgetTree } from "@/components/BpmnJs/bo-utils/variableUtil";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 import { ElMessage } from "element-plus";
 import debounce from "lodash.debounce";
@@ -272,7 +272,7 @@ EventBus.on("element-init", function () {
     scopedElement = element;
     // 获取表单数据
     getElementData();
-    nodeWidgets.value = getWidgetList();
+    nodeWidgets.value = getWidgetTree();
     // 获取表达式数据
     getExpression();
   });

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.activiti.modules.dao.TablePostgreSQLDao">
-	<select id="tableList" resultType="TableInfo">
+	<select id="tableList" resultType="com.activiti.modules.entity.TableInfo">
 		select
 		    t1.tablename as table_name, obj_description(relfilenode, 'pg_class') as table_comment, now() as create_time
 		from pg_tables t1, pg_class t2
@@ -13,7 +13,7 @@
 		order by t1.tablename desc
 	</select>
 
-	<select id="tableColumns" resultType="TableColumns">
+	<select id="tableColumns" resultType="com.activiti.modules.entity.TableColumns">
         select t2.attname                                        as column_name,
                pg_type.typname                                   as data_type,
                col_description(t2.attrelid, t2.attnum)           as column_comment,

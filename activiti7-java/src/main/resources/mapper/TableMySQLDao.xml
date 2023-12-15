@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.activiti.modules.dao.TableMySQLDao">
-	<select id="tableList" resultType="TableInfo">
+	<select id="tableList" resultType="com.activiti.modules.entity.TableInfo">
         select
             table_name, table_comment, create_time
         from information_schema.tables
@@ -13,7 +13,7 @@
         order by create_time desc
     </select>
 
-	<select id="tableColumns" resultType="TableColumns">
+	<select id="tableColumns" resultType="com.activiti.modules.entity.TableColumns">
         select column_name, data_type, column_comment, column_key
         from information_schema.columns
         where table_name = #{tableName}

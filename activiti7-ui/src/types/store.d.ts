@@ -53,5 +53,5 @@ type ModelerStore = {
   formJsonList: FormJson[];
   tableInfo: TableInfo | undefined;
   widgetType: WidgetType | undefined;
-  nodelColumns: NodelColumn[];
+  nodeColumns: NodelColumn[];
 };
