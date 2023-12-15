@@ -1,5 +1,6 @@
 package com.activiti.modules.entity;
 
+import com.activiti.utils.handler.NodeColumnTypeHandler;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -43,11 +44,10 @@ public class SysDeployNodeEntity implements Serializable {
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
     private Map<String, Object> formJson;
-
     /**
      * 表单详情
      */
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @TableField(typeHandler = NodeColumnTypeHandler.class)
     private List<NodeColumnItem> columns;
     /**
      * 是否是主表单,1:是,2:否

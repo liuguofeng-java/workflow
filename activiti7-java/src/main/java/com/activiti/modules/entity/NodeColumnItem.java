@@ -2,6 +2,8 @@ package com.activiti.modules.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 绑定的具体字段
  *
@@ -9,7 +11,7 @@ import lombok.Data;
  * @date 2023/12/13 10:23
  **/
 @Data
-public class NodeColumnItem {
+public class NodeColumnItem implements Serializable {
 
     /**
      * 行名称

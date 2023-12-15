@@ -65,6 +65,7 @@ export default defineStore("modeler", {
         this.formJsonList.splice(index, 1);
       }
       this.formJsonList.push(formJson);
+      console.log("formJsonList====>>/", this.formJsonList);
     },
     setTableInfo(tableInfo: TableInfo) {
       this.tableInfo = tableInfo;

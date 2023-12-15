@@ -15,6 +15,7 @@ import com.activiti.modules.entity.vo.workflow.TableInfoVo;
 import com.activiti.modules.service.ProcessDefinitionService;
 import com.activiti.modules.service.SysDeployNodeService;
 import com.activiti.modules.service.SysDeployService;
+import com.activiti.modules.service.TableService;
 import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
@@ -52,7 +53,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     private SysDeployService deployService;
 
     @Autowired
-    private TableDao tableDao;
+    private TableService tableService;
 
     /**
      * 流程管理列表
@@ -179,7 +180,14 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                         SysDeployNodeEntity::getColumns,
                         SysDeployNodeEntity::getIsMainFrom)
                 .eq(SysDeployNodeEntity::getDeployId, deploymentId));
-        result.put("formJsonList", list);
+
+        List<FormJsonsDto> formJsonList = new ArrayList<>();
+        for (SysDeployNodeEntity deployNode : list) {
+            FormJsonsDto formJsonsDto = new FormJsonsDto();
+            BeanUtils.copyProperties(deployNode, formJsonsDto);
+            formJsonList.add(formJsonsDto);
+        }
+        result.put("formJsonList", formJsonList);
 
         SysDeployEntity sysDeploy = deployService.getById(deploymentId);
         if (sysDeploy != null) {
@@ -187,7 +195,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
             TableInfoVo tableInfo = new TableInfoVo();
             tableInfo.setTableName(sysDeploy.getTableName());
             tableInfo.setTableComment(sysDeploy.getTableComment());
-            List<TableColumns> tableColumns = tableDao.tableColumns(sysDeploy.getTableName());
+            List<TableColumns> tableColumns = tableService.tableColumns(sysDeploy.getTableName(), null);
             List<TableColumnsVo> columns = new ArrayList<>();
             for (TableColumns tableColumn : tableColumns) {
                 TableColumnsVo tableColumnsVo = new TableColumnsVo();
@@ -200,7 +208,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
             // 获取节点绑定数据库表字段的数据
             List<NodeColumnsVo> nodeColumnsVos = new ArrayList<>();
             for (SysDeployNodeEntity deployNode : list) {
-                if(deployNode.getColumns() == null) continue;
+                if (deployNode.getColumns() == null) continue;
                 NodeColumnsVo nodeColumnsVo = new NodeColumnsVo();
                 nodeColumnsVo.setActivityId(deployNode.getActivityId());
                 nodeColumnsVo.setColumns(deployNode.getColumns());

@@ -54,8 +54,9 @@ public class TableController {
      * @return 表结构信息
      */
     @GetMapping("tableColumns")
-    public R<List<TableColumns>> tableColumns(@RequestParam String tableName) {
-        List<TableColumns> columns = tableService.tableColumns(tableName);
+    public R<List<TableColumns>> tableColumns(@RequestParam String tableName,
+                                              @RequestParam(required = false) String columnKey) {
+        List<TableColumns> columns = tableService.tableColumns(tableName, columnKey);
         return R.ok(columns);
     }
 

@@ -20,6 +20,7 @@
         <druid.version>1.1.13</druid.version>
         <activiti.version>7.0.0.SR1</activiti.version>
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
+        <fastjson.version>2.0.34</fastjson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -74,6 +75,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+
+        <!-- 阿里JSON解析器 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

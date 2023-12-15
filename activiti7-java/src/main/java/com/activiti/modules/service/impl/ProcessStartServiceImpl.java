@@ -1,24 +1,31 @@
 package com.activiti.modules.service.impl;
 
+import com.activiti.modules.entity.SysDeployNodeEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
 import com.activiti.modules.service.ProcessStartService;
+import com.activiti.modules.service.SysDeployNodeService;
+import com.activiti.modules.service.SysDeployService;
 import com.activiti.utils.constant.Constants;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -42,6 +49,12 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private SysDeployService deployService;
+
+    @Autowired
+    private SysDeployNodeService deployNodeService;
 
     /**
      * 我发起的任务列表
@@ -122,6 +135,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
      * @param dto    启动流程参数
      * @param userId 当前用户登录id
      */
+    @Transactional
     @Override
     public void startProcess(StartProcessDto dto, String userId) {
         // 设置流程发起人用户Id
@@ -130,7 +144,16 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 设置发起人用户id
         // 如果节点审批人,设置的是发起人,则审批节点的 assignee="${initiator}"
         variables.put(Constants.PROCESS_INITIATOR, userId);
-        runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
+        ProcessInstance instance = runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
+
+        // 获取相关数据
+        ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(dto.getDefinitionId()).singleResult();
+        SysDeployNodeEntity deployNode = deployNodeService.getOne(new LambdaQueryWrapper<SysDeployNodeEntity>()
+                .eq(SysDeployNodeEntity::getIsMainFrom, "1")
+                .eq(SysDeployNodeEntity::getDeployId, definition.getDeploymentId()));
+        // 保存数据
+        deployService.saveData(instance.getId(), definition.getDeploymentId(), deployNode.getActivityId(), variables);
     }
 
 
@@ -154,7 +177,4 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 删除历史流程实例
         historyService.deleteHistoricProcessInstance(instanceId);
     }
-
-
-
 }
