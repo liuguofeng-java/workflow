@@ -188,6 +188,9 @@ const handleAdd = () => {
  */
 const handleDelete = (index: number) => {
   list.value.splice(index, 1);
+  if (list.value.length === 0) {
+    setExpression();
+  }
 };
 
 /**
@@ -222,7 +225,7 @@ const getFieldType = computed(() => (field: string): WidgetType | undefined => {
 const setExpression = debounce(() => {
   if (list.value.length == 0) {
     expression.value = "";
-    CU.setConditionExpressionValue(scopedElement, "");
+    CU.setConditionExpressionValue(scopedElement, undefined);
     return;
   }
   expression.value = "${";
@@ -238,6 +241,8 @@ const setExpression = debounce(() => {
     expression.value += `${element.field} ${element.compare} ${value}`;
   }
   expression.value += "}";
+  console.log(expression.value);
+
   CU.setConditionExpressionValue(scopedElement, expression.value);
 }, 100);
 

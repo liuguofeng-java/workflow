@@ -3,7 +3,7 @@
     <el-divider content-position="left" v-if="scopedElement?.type === 'bpmn:StartEvent'">主表单</el-divider>
     <el-divider content-position="left" v-if="scopedElement?.type === 'bpmn:UserTask'">动态表单</el-divider>
 
-    <el-card shadow="hover">
+    <el-card shadow="never">
       <el-tree ref="nodeTree" :data="nodeTreeData" node-key="id" default-expand-all highlight-current class="node-tree" icon-class="el-icon-arrow-right" :expand-on-click-node="false">
         <template #default="{ node, data }">
           <div>
