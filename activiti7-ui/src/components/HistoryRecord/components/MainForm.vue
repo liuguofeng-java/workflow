@@ -28,7 +28,7 @@ const preFormRef = ref();
 
 watch(
   () => pops.formJson,
-  async () => {
+  () => {
     nextTick(() => {
       preFormRef.value?.disableForm();
     });

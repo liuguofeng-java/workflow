@@ -9,6 +9,12 @@ package com.activiti.utils.constant;
 public class ActivityType {
 
     /**
+     * 开始节点
+     */
+    public final static String START_EVENT = "startEvent";
+
+
+    /**
      * 用户节点
      */
     public final static String USER_TASK = "userTask";

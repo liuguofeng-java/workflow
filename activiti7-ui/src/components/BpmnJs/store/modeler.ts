@@ -28,7 +28,7 @@ export default defineStore("modeler", {
     getModeler: (state) => toRaw(state.modeler),
     getModdle: (state) => toRaw(state.moddle),
     getModeling: (state): Modeling => toRaw(state.modeling),
-    getCanvas: (state): Canvas | undefined => toRaw(state.canvas),
+    getCanvas: (state): Canvas => toRaw(state.canvas),
     getElRegistry: (state) => toRaw(state.elementRegistry),
     getFormJsonList: (state) => toRaw(state.formJsonList),
     getTableInfo: (state) => toRaw(state.tableInfo),
@@ -59,17 +59,17 @@ export default defineStore("modeler", {
       this.widgetType = undefined;
       this.tableInfo = undefined;
     },
-    setFormJson(formJson: FormJson) {
+    setFormJson(formJson: FormJsonList) {
       const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
       if (index !== -1) {
         this.formJsonList.splice(index, 1);
       }
       this.formJsonList.push(formJson);
-      console.log("formJsonList====>>/", this.formJsonList);
     },
     setTableInfo(tableInfo: TableInfo) {
+      // 过滤主键
+      tableInfo.columns = tableInfo.columns.filter((t) => t.columnKey !== "PRI");
       this.tableInfo = tableInfo;
-      // this.nodeColumns = [];
     },
     setTableColumns(tableColumns: TableColumns[]) {
       if (this.tableInfo) {
@@ -97,11 +97,7 @@ export default defineStore("modeler", {
       const activityId = this.activeElementId;
       if (!activityId) return;
       let tableItem = this.nodeColumns.find((t) => t.activityId === activityId);
-      console.log("xxxxx", tableItem);
-
       if (!tableItem) {
-        console.log("-------/-/-");
-
         tableItem = {
           activityId: activityId,
           columns: [tableColumn]

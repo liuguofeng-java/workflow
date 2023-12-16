@@ -1,9 +1,35 @@
 /**
+ * 组件详情
+ */
+type WidgetOptions = {
+  name: string;
+  label: string;
+  optionItems: [];
+};
+
+/**
+ * 组件列表
+ */
+type WidgetList = {
+  id: string;
+  key: number;
+  icon: string;
+  type: string;
+  options: WidgetOptions;
+};
+/**
  * 动态表单数据
  */
 type FormJson = {
+  formConfig: [];
+  widgetList: WidgetList[];
+};
+/**
+ * 动态表单数据
+ */
+type FormJsonList = {
   activityId: string;
-  formJson: any;
+  formJson: FormJson;
   isMainFrom: number | 0;
 };
 
@@ -32,6 +58,7 @@ type TableColumns = {
   columnName: string; // 行名称
   dataType: string; // 数据类型
   columnComment: string; // 备注
+  columnKey: "" | "PRI"; // 行键
 };
 
 /**
@@ -50,7 +77,7 @@ type ModelerStore = {
   modeling: any | undefined;
   canvas: Canvas | undefined;
   elementRegistry: ElementRegistry | undefined;
-  formJsonList: FormJson[];
+  formJsonList: FormJsonList[];
   tableInfo: TableInfo | undefined;
   widgetType: WidgetType | undefined;
   nodeColumns: NodelColumn[];

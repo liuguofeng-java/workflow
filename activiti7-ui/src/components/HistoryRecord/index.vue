@@ -76,6 +76,7 @@ const open = (id: string) => {
  */
 const historyRecord = async () => {
   loading.value = true;
+  mainFormInfo.value = {};
   historyRecordList.value = [];
   const historyRecordRes = await baseService.get(`/processStart/getHistoryRecord?instanceId=${instanceId.value}`);
   if (historyRecordRes.code === 200) {

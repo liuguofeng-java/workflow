@@ -174,6 +174,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
                     .stream().filter(t -> t.getTaskId() != null && t.getTaskId().equals(task.getId()))
                     .findAny().orElse(null);
             // 保存数据
+            assert activityInstance != null;
             deployService.saveData(task.getProcessInstanceId(), definition.getDeploymentId(),
                     activityInstance.getActivityId(), variables);
         } catch (TreeBuilderException ex) {

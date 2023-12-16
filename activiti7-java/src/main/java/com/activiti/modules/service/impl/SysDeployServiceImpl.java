@@ -25,7 +25,7 @@ public class SysDeployServiceImpl extends ServiceImpl<SysDeployDao, SysDeployEnt
     private TableService tableService;
 
     /**
-     * 插入数据到数据库表中
+     * 插入数据到绑定数据库表中
      *
      * @param instanceId 实例id
      * @param deployId   部署id

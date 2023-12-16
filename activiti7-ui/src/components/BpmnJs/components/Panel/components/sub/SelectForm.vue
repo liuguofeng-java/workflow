@@ -62,8 +62,6 @@ const pops = defineProps({
 const handleOpen = () => {
   drawer.value = true;
   nextTick(() => {
-    console.log(pops.formJson);
-
     vfdRef.value.setFormJson(pops.formJson);
   });
 };

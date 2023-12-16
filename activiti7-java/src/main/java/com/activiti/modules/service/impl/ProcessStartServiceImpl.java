@@ -1,24 +1,21 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysDeployNodeEntity;
 import com.activiti.modules.entity.dto.workflow.StartListDto;
 import com.activiti.modules.entity.dto.workflow.StartProcessDto;
 import com.activiti.modules.entity.vo.workflow.StartListVo;
 import com.activiti.modules.service.ProcessStartService;
-import com.activiti.modules.service.SysDeployNodeService;
 import com.activiti.modules.service.SysDeployService;
+import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constants;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
-import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -52,9 +49,6 @@ public class ProcessStartServiceImpl implements ProcessStartService {
 
     @Autowired
     private SysDeployService deployService;
-
-    @Autowired
-    private SysDeployNodeService deployNodeService;
 
     /**
      * 我发起的任务列表
@@ -149,11 +143,15 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         // 获取相关数据
         ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionId(dto.getDefinitionId()).singleResult();
-        SysDeployNodeEntity deployNode = deployNodeService.getOne(new LambdaQueryWrapper<SysDeployNodeEntity>()
-                .eq(SysDeployNodeEntity::getIsMainFrom, "1")
-                .eq(SysDeployNodeEntity::getDeployId, definition.getDeploymentId()));
+
+        HistoricActivityInstance activityInstance = historyService.createHistoricActivityInstanceQuery()
+                .processInstanceId(instance.getId()).list()
+                .stream().filter(t -> t.getActivityType().equals(ActivityType.START_EVENT))
+                .findAny().orElse(null);
         // 保存数据
-        deployService.saveData(instance.getId(), definition.getDeploymentId(), deployNode.getActivityId(), variables);
+        assert activityInstance != null;
+        deployService.saveData(instance.getId(), definition.getDeploymentId(),
+                activityInstance.getActivityId(), variables);
     }
 
 

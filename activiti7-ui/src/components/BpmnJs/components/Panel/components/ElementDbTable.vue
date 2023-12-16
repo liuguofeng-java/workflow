@@ -1,7 +1,6 @@
 <template>
   <el-card shadow="never" class="container">
     <el-divider content-position="left">数据库配置</el-divider>
-
     <el-form label-width="80px" :model="form" ref="formRef" :rules="rules">
       <el-form-item label="类型">
         <el-radio-group v-model="form.type" @change="resetFields()">
@@ -37,6 +36,27 @@
       <el-form-item>
         <el-button type="primary" @click="submitForm">更新</el-button>
       </el-form-item>
+
+      <el-card shadow="never" v-if="columnList.length !== 0">
+        <template #header>
+          <div class="card-header">
+            <span>已绑定字段</span>
+          </div>
+        </template>
+        <div v-for="(item, index) in columnList" :key="index">
+          <span>{{ item.activityName }}</span>
+          <el-table :data="item.columns" style="width: 100%">
+            <el-table-column prop="columnName" label="表字段" />
+            <el-table-column prop="widgetIcon" label="控件类型">
+              <template #default="scope">
+                <svg-icon v-if="scope.row.widgetIcon" :icon-class="scope.row.widgetIcon" class-name="color-svg-icon" />
+                {{ i18n.methods.i18n2t(`designer.widgetLabel.${scope.row.widgetType}`, `extension.widgetLabel.${scope.row.widgetType}`) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="columnComment" label="控件名称" />
+          </el-table>
+        </div>
+      </el-card>
     </el-form>
   </el-card>
 </template>
@@ -46,14 +66,17 @@ import { ref, watch } from "vue";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import { type Element } from "bpmn-js/lib/util/ModelUtil";
 import baseService from "@/service/baseService";
 import { ElMessageBox, ElMessage } from "element-plus";
+import i18n from "@/components/FormDesigner/utils/i18n";
+import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 
 const modeler = modelerStore();
 
-// 当前节点信息
-let scopedElement: Element;
+const activeName = ref();
+
+// 绑定的字段列表
+let columnList = ref<NodeColumnInfo[]>([]);
 
 // 表单实例
 const formRef = ref();
@@ -87,6 +110,43 @@ watch(
   },
   { deep: true, immediate: true }
 );
+
+type NodeColumnInfoItem = {
+  columnName: string; // 表字段名称
+  columnComment: string; // 备注
+  widgetType: string; // 控件类型
+  widgetIcon: string; // 控件类型
+};
+
+type NodeColumnInfo = {
+  activityName: string;
+  columns: NodeColumnInfoItem[];
+};
+
+/**
+ * 用于获取绑定的节点信息
+ */
+const getNodeColumns = (_elements: any[]) => {
+  const nodeColumnInfos: NodeColumnInfo[] = [];
+  modeler.getNodeColumns.forEach((nodeItem) => {
+    const columns: NodeColumnInfoItem[] = [];
+    const formJson = modeler.getFormJsonList.find((t) => t.activityId === nodeItem.activityId);
+    nodeItem.columns.forEach((columnItem) => {
+      const widgetItem = formJson?.formJson.widgetList.find((t) => t.options.name === columnItem.columnName);
+      columns.push({
+        columnName: columnItem.columnName,
+        columnComment: columnItem.columnComment,
+        widgetType: widgetItem?.type || "",
+        widgetIcon: widgetItem?.icon || ""
+      });
+    });
+    nodeColumnInfos.push({
+      activityName: _elements[nodeItem.activityId]?.element.businessObject?.name,
+      columns: columns
+    });
+  });
+  columnList.value = nodeColumnInfos;
+};
 
 /**
  * 获取数据
@@ -124,11 +184,13 @@ const submitForm = () => {
     if (!valid) return;
     ElMessageBox.confirm("确认要做更新操作吗?更新将删除所有已配置的字段", "提示").then(async () => {
       form.value.columns = [];
-
       if (form.value.type === "ready") {
         let res = await baseService.get(`/table/tableColumns?tableName=${form.value.tableName}`);
         form.value.columns = res.data;
-        console.log(JSON.stringify(form.value));
+      }
+      // 只有选项是创建表的时候,更新数据才不会置空节点绑定的字段
+      if (!(modeler.getTableInfo?.type === "create" && form.value.type === "create")) {
+        modeler.setNodeColumns([]);
       }
       modeler.setTableInfo(form.value);
       ElMessage.success("更新成功!");
@@ -137,9 +199,10 @@ const submitForm = () => {
 };
 
 // 点击用户节点，初始化用
-EventBus.on("element-init", function () {
+EventBus.on("element-init", function (_modeler) {
+  const _elements = _modeler.get("elementRegistry")._elements;
+  getNodeColumns(_elements);
   catchUndefElement((element) => {
-    scopedElement = element;
     if (modeler.getTableInfo) {
       form.value = JSON.parse(JSON.stringify(modeler.getTableInfo));
     }

@@ -52,20 +52,42 @@ export default {
       checkField: false, // 是否绑定数据库字段
       tableInfo: {}, //表结构
       fieldList: [], // 数据库字段
-      widgetType: [] // 类型
+      widgetType: [] // 控件类型
     };
   },
   watch: {
+    /**
+     * 组件id改变时要初始化数据
+     */
     "selectedWidget.id": {
       immediate: true,
       handler() {
         this.geTableInfo();
       }
     },
+    /**
+     * 如果label名称改变也要更新数据
+     */
+    "selectedWidget.options.label": {
+      immediate: true,
+      handler() {
+        if (this.checkField) {
+          const modeler = modelerStore();
+          modeler.setNodeColumn({
+            columnName: this.optionModel.name,
+            columnComment: this.optionModel.label
+          });
+        }
+      }
+    },
+    /**
+     * 如果取消勾选要重新分配组件唯一名称
+     */
     checkField: {
       immediate: true,
       handler(value) {
         if (!value) {
+          console.log("selectedWidget>>>", this.selectedWidget);
           const newName = this.selectedWidget.type + generateId();
           this.optionModel.name = newName;
           this.updateWidgetNameAndRef(newName);
