@@ -156,7 +156,7 @@ export default {
         let foundRef = this.designer.formWidget.getWidgetRef(newName); // 检查newName是否已存在！！
         if (foundRef) {
           this.selectedWidget.options.name = oldName;
-          this.$message.info(this.i18nt("designer.hint.duplicateName") + newName);
+          this.$message.info(`当前表字段${newName}已绑定表单`);
           return;
         }
 

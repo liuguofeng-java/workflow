@@ -40,13 +40,16 @@
     </el-form-item>
 
     <template v-if="!!this.designer">
-      <div class="field-action" v-if="designer.selectedId === field.id">
-        <i :title="i18nt('designer.hint.selectParentWidget')" @click.stop="selectParentWidget(field)"><svg-icon icon-class="el-back" /></i>
-        <i v-if="!!parentList && parentList.length > 1" :title="i18nt('designer.hint.moveUpWidget')" @click.stop="moveUpWidget(field)"><svg-icon icon-class="el-move-up" /></i>
-        <i v-if="!!parentList && parentList.length > 1" :title="i18nt('designer.hint.moveDownWidget')" @click.stop="moveDownWidget(field)"><svg-icon icon-class="el-move-down" /></i>
-        <i :title="i18nt('designer.hint.remove')" @click.stop="removeFieldWidget">
-          <svg-icon icon-class="el-delete" />
-        </i>
+      <div class="field-action">
+        <span v-if="columnName">绑定表字段: {{ columnName }}</span>
+        <template v-if="designer.selectedId === field.id">
+          <i :title="i18nt('designer.hint.selectParentWidget')" @click.stop="selectParentWidget(field)"><svg-icon icon-class="el-back" /></i>
+          <i v-if="!!parentList && parentList.length > 1" :title="i18nt('designer.hint.moveUpWidget')" @click.stop="moveUpWidget(field)"><svg-icon icon-class="el-move-up" /></i>
+          <i v-if="!!parentList && parentList.length > 1" :title="i18nt('designer.hint.moveDownWidget')" @click.stop="moveDownWidget(field)"><svg-icon icon-class="el-move-down" /></i>
+          <i :title="i18nt('designer.hint.remove')" @click.stop="removeFieldWidget">
+            <svg-icon icon-class="el-delete" />
+          </i>
+        </template>
       </div>
 
       <div class="drag-handler background-opacity" v-if="designer.selectedId === field.id">
@@ -61,6 +64,7 @@
 <script>
 import i18n from "@/components/FormDesigner/utils/i18n";
 import SvgIcon from "@/components/FormDesigner/svg-icon";
+import modelerStore from "@/components/BpmnJs/store/modeler";
 
 export default {
   name: "form-item-wrapper",
@@ -96,6 +100,24 @@ export default {
     rules: Array
   },
   inject: ["getFormConfig"],
+  data() {
+    return {
+      columnName: ""
+    };
+  },
+  watch: {
+    /**
+     * 当前节点已绑定的表字段
+     */
+    "field.options.name": {
+      immediate: true,
+      handler() {
+        const modeler = modelerStore();
+        let nodeColumn = modeler.getNodeColumn;
+        this.columnName = nodeColumn?.find((t) => t.columnName === this.field.options.name)?.columnName;
+      }
+    }
+  },
   computed: {
     formConfig() {
       return this.getFormConfig();
@@ -242,6 +264,12 @@ export default {
       color: #fff;
       margin: 0 3px;
       cursor: pointer;
+    }
+
+    span {
+      font-size: 14px;
+      color: #fff;
+      margin: 0 3px;
     }
   }
 

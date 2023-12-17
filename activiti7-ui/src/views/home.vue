@@ -160,9 +160,9 @@ onMounted(() => {
 }
 
 .left-container {
-  width: 350px;
+  width: 250px !important;
   background: #343844;
-  min-width: 200px;
+  min-width: 250px !important;
 }
 
 .rigth-container {
