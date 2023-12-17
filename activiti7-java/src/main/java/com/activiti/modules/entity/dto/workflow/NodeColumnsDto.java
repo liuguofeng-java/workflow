@@ -3,6 +3,7 @@ package com.activiti.modules.entity.dto.workflow;
 import com.activiti.modules.entity.NodeColumnItem;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ public class NodeColumnsDto {
     /**
      * 流程定义节点唯一标识
      */
+    @NotBlank(message = "流程定义节点唯一标识")
     private String activityId;
 
     /**

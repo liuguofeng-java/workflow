@@ -6,7 +6,11 @@
         select
         t1.tablename as table_name, obj_description(relfilenode, 'pg_class') as table_comment, now() as create_time
         from pg_tables t1, pg_class t2
-        where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname
+        where t1.tablename not like 'pg%'
+        and t1.tablename not like 'sql_%'
+        and t1.tablename not like 'sys_%'
+        and t1.tablename not like 'act_%'
+        and t1.tablename = t2.relname
         <if test="tableName != null and tableName.trim() != ''">
             and t1.tablename like concat('%', #{tableName}, '%')
         </if>

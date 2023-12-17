@@ -85,6 +85,7 @@ public class TableServiceImpl implements TableService {
         for (NodeColumnItem column : columns) {
             String columnName = column.getColumnName();
             Object value = variables.get(columnName);
+            if(value == null) continue;
             // 如果是list类型,转成字符串保存到数据库
             if (value instanceof List) {
                 value = JSON.toJSONString(value);

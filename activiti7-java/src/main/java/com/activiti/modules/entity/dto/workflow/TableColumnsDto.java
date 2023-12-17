@@ -2,6 +2,8 @@ package com.activiti.modules.entity.dto.workflow;
 
 import lombok.Data;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * 表结构
  *
@@ -14,6 +16,7 @@ public class TableColumnsDto {
     /**
      * 行名称
      */
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9_]*$", message = "绑定字段-字段名称不符合规则")
     private String columnName;
     /**
      * 数据类型

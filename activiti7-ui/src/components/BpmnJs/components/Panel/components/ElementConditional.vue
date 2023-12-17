@@ -32,7 +32,7 @@
             <template #default="scoped">
               <el-select v-model="scoped.row.field" size="small">
                 <el-option-group v-for="item in nodeWidgets" :key="item.activityId" :label="item.activityName">
-                  <el-option v-for="widget in item.widgetList" :key="widget.value" :value="widget.options.name" :label="widget.options.label">
+                  <el-option v-for="widget in item.widgetList" :key="widget.key" :value="widget.options.name" :label="widget.options.label">
                     <svg-icon v-if="widget.icon" :icon-class="widget.icon" class-name="color-svg-icon" />
                     {{ widget.options.label }}
                   </el-option>
@@ -81,7 +81,7 @@ import { Element } from "bpmn-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
-import { getWidgetTree } from "@/components/BpmnJs/bo-utils/variableUtil";
+import { type NodeWidget, getWidgetTree } from "@/components/BpmnJs/bo-utils/variableUtil";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 import { ElMessage } from "element-plus";
 import debounce from "lodash.debounce";
@@ -128,7 +128,7 @@ const conditionTypeOptions = ref<Record<string, string>[]>([]);
 const conditionData = ref<any>({});
 
 // 组件列表
-const nodeWidgets = ref<any[]>([]);
+const nodeWidgets = ref<NodeWidget[]>([]);
 const list = ref<any[]>([]);
 
 // 流程表达式
@@ -241,8 +241,6 @@ const setExpression = debounce(() => {
     expression.value += `${element.field} ${element.compare} ${value}`;
   }
   expression.value += "}";
-  console.log(expression.value);
-
   CU.setConditionExpressionValue(scopedElement, expression.value);
 }, 100);
 

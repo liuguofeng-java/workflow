@@ -48,7 +48,19 @@ export default {
   inject: ["serverFieldList", "getDesignerConfig"],
   data() {
     return {
-      nameRequiredRule: [{ required: true, message: "必填项" }],
+      nameRequiredRule: [
+        { required: true, message: "必填项" },
+        {
+          type: "string",
+          required: true,
+          message: "表不符合规则！",
+          validator: (rule, value) => {
+            const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+            var pattern = new RegExp(regex);
+            return pattern.test(value);
+          }
+        }
+      ],
       checkField: false, // 是否绑定数据库字段
       tableInfo: {}, //表结构
       fieldList: [], // 数据库字段
@@ -129,6 +141,14 @@ export default {
       if (isEmptyStr(newName)) {
         this.selectedWidget.options.name = oldName;
         this.$message.info(this.i18nt("designer.hint.nameRequired"));
+        return;
+      }
+
+      const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+      var pattern = new RegExp(regex);
+      if (!pattern.test(newName)) {
+        this.selectedWidget.options.name = oldName;
+        this.$message.info("表字段不符合规则");
         return;
       }
 

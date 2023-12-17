@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class NodeColumnItem implements Serializable {
 
     /**
-     * 行名称
+     * 表字段名称
      */
     private String columnName;
 

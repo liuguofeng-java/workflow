@@ -6,7 +6,7 @@
         select
         table_name, table_comment, create_time
         from information_schema.tables
-        where table_schema = (select database()) and table_name NOT LIKE 'act_%'
+        where table_schema = (select database()) and table_name NOT LIKE 'act_%' and table_name NOT LIKE 'sys_%'
         <if test="tableName != null and tableName.trim() != ''">
             and table_name like concat('%', #{tableName}, '%')
         </if>

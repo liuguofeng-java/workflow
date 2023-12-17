@@ -8,7 +8,7 @@ import com.activiti.utils.page.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -61,7 +61,7 @@ public class ProcessDefinitionController {
      * @param dto 参数
      */
     @PostMapping("deployProcess")
-    public R<String> deployProcess(@RequestBody DeployProcessDto dto) {
+    public R<String> deployProcess(@Valid @RequestBody DeployProcessDto dto) {
         processDefinitionService.deployProcess(dto);
         return R.ok();
     }

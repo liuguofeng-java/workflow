@@ -2,6 +2,8 @@ package com.activiti.modules.entity.dto.workflow;
 
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 /**
@@ -16,6 +18,7 @@ public class TableInfoDto {
     /**
      * 表名称
      */
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9_]*$", message = "绑定表名称不符合规则")
     private String tableName;
 
     /**
@@ -26,5 +29,6 @@ public class TableInfoDto {
     /**
      * 数据库表信息
      */
+    @Valid
     private List<TableColumnsDto> columns;
 }

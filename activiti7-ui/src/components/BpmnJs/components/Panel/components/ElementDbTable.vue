@@ -22,7 +22,7 @@
     <el-empty v-else />
 
     <!-- 展示已绑定字段 -->
-    <div>
+    <div v-if="columnList.length !== 0">
       <el-divider content-position="left">已绑定字段</el-divider>
       <div v-for="(item, index) in columnList" :key="index" class="binding-container">
         <div class="node-name">
@@ -138,7 +138,36 @@ const detail = ref<TableInfo>({
 
 // 表单验证
 const rules = ref({
-  tableName: [{ required: true, message: "表名称必填项", trigger: "blur" }]
+  tableName: [
+    { required: true, message: "表名称必填项", trigger: "blur" },
+    {
+      type: "string",
+      required: true,
+      message: "表不符合规则！",
+      validator: (rule, value) => {
+        if (!value) return true;
+        const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+        var pattern = new RegExp(regex);
+        return pattern.test(value);
+      }
+    },
+    {
+      type: "string",
+      required: true,
+      message: "不能包含'sys_'、'act_'、'sql_'",
+      validator: (rule, value) => {
+        return value.indexOf("sys_") === -1 && value.indexOf("sql_") === -1 && value.indexOf("act_") === -1;
+      }
+    },
+    {
+      type: "string",
+      required: true,
+      message: "不能创建数据库已有的表",
+      validator: (rule, value) => {
+        return list.value.findIndex((t) => t.tableName === value) === -1;
+      }
+    }
+  ]
 });
 
 watch(

@@ -2,10 +2,10 @@ import modelerStore from "@/components/BpmnJs/store/modeler";
 
 const modeler = modelerStore();
 
-type NodeWidget = {
+export type NodeWidget = {
   activityId: string;
   activityName: string;
-  widgetList: any[];
+  widgetList: WidgetList[];
 };
 
 /**
