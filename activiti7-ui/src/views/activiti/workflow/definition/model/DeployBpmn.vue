@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml" />
+        <Designer :xml="xml" v-if="drawer" />
         <Panel></Panel>
       </div>
     </div>
@@ -28,16 +28,12 @@ import Commands from "@/components/BpmnJs/components/Toolbar/components/Commands
 import Designer from "src/components/BpmnJs/components/Designer";
 import Panel from "src/components/BpmnJs/components/Panel";
 import EventBus from "@/utils/EventBus";
-import Modeler from "bpmn-js/lib/Modeler";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox, ElLoading } from "element-plus";
 import { nextTick } from "vue";
 
 const modeler = modelerStore();
-
-// bpmn.js 实例
-let bpmnModel: Modeler;
 
 // 是否加载抽屉
 let drawer = ref<boolean>(false);
@@ -64,9 +60,13 @@ const open = async (deploymentId: string | undefined) => {
       baseService.get("/processDefinition/getDefinitionInfo", { deploymentId }).then((res) => {
         if (res.code === 200) {
           let tableInfo = res.data.tableInfo;
-          tableInfo.type = "ready";
-          modeler.setTableInfo(tableInfo);
-          modeler.setNodeColumns(res.data.nodeColumns);
+          if (tableInfo) {
+            tableInfo.type = "ready";
+            modeler.setTableInfo(tableInfo);
+          }
+          if (res.data.nodeColumns) {
+            modeler.setNodeColumns(res.data.nodeColumns);
+          }
           res.data.formJsonList.forEach((formJson) => {
             modeler.setFormJson(formJson);
           });
@@ -94,7 +94,10 @@ const submit = async () => {
   const nodeColumns = modeler.getNodeColumns;
   // 表信息
   const tableInfo = modeler.getTableInfo;
-  const { xml } = await bpmnModel.saveXML({ format: true, preamble: true });
+  const { xml } = await modeler.getModeler.saveXML({ format: true, preamble: true });
+
+  console.log("xml>", xml);
+
   baseService
     .post(`/processDefinition/deployProcess`, {
       xml,
@@ -121,13 +124,6 @@ const close = async () => {
 
 defineExpose({
   open
-});
-
-/**
- * 获取bpmn事件
- */
-EventBus.on("modeler-init", (modeler: Modeler) => {
-  bpmnModel = modeler;
 });
 
 /**

@@ -706,6 +706,13 @@ CREATE TABLE `sys_deploy` (
   PRIMARY KEY (`deploy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程部署详情';
 
+
+CREATE TABLE `sys_process_instance` (
+  `business_key` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '业务id',
+  `deploy_id` varchar(40) COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
+  PRIMARY KEY (`business_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程实例数据';
+
 -- ----------------------------
 -- Table structure for sys_listener
 -- ----------------------------

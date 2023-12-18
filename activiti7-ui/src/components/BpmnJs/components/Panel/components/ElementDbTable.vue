@@ -100,7 +100,7 @@ import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 
 const modeler = modelerStore();
 
-let _elements = [];
+let _elements: any[] = [];
 
 // 是否打开更新
 const open = ref<boolean>(false);
@@ -164,6 +164,7 @@ const rules = ref({
       required: true,
       message: "不能创建数据库已有的表",
       validator: (rule, value) => {
+        if (form.value.type === "ready") return true;
         return list.value.findIndex((t) => t.tableName === value) === -1;
       }
     }

@@ -99,7 +99,6 @@ export default {
       immediate: true,
       handler(value) {
         if (!value) {
-          console.log("selectedWidget>>>", this.selectedWidget);
           const newName = this.selectedWidget.type + generateId();
           this.optionModel.name = newName;
           this.updateWidgetNameAndRef(newName);
@@ -137,6 +136,9 @@ export default {
   },
   methods: {
     updateWidgetNameAndRef(newName) {
+      // 把-全部替换_
+      newName = newName.replace(/-/g, "_");
+      // 空验证
       let oldName = this.designer.selectedWidgetName;
       if (isEmptyStr(newName)) {
         this.selectedWidget.options.name = oldName;
@@ -144,14 +146,17 @@ export default {
         return;
       }
 
+      // 正则验证
       const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
       var pattern = new RegExp(regex);
       if (!pattern.test(newName)) {
+        console.log("newName-->", newName);
         this.selectedWidget.options.name = oldName;
         this.$message.info("表字段不符合规则");
         return;
       }
 
+      // 验证唯一名称是否重复
       if (this.designer.formWidget) {
         let foundRef = this.designer.formWidget.getWidgetRef(newName); // 检查newName是否已存在！！
         if (foundRef) {
