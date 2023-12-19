@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <el-form-item label="数据库" v-if="isShowCheckField">
     <el-checkbox v-model="checkField" label="绑定表字段" />
@@ -13,7 +14,7 @@
 
   <!-- 绑定新创建表字段 -->
   <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-if="isShowCreate">
-    <el-input type="text" v-model="optionModel.name" @change="updateWidgetNameAndRef"></el-input>
+    <el-input type="text" v-model="optionModel.name" @change="updateWidgetNameAndRef" maxlength="15"></el-input>
   </el-form-item>
 
   <!-- 是否显示绑定已有的表字段 -->
@@ -50,6 +51,7 @@ export default {
     return {
       nameRequiredRule: [
         { required: true, message: "必填项" },
+        { min: 3, max: 15, message: "长度应为 3 到 15" },
         {
           type: "string",
           required: true,
@@ -78,30 +80,40 @@ export default {
       }
     },
     /**
-     * 如果label名称改变也要更新数据
-     */
-    "selectedWidget.options.label": {
-      immediate: true,
-      handler() {
-        if (this.checkField) {
-          const modeler = modelerStore();
-          modeler.setNodeColumn({
-            columnName: this.optionModel.name,
-            columnComment: this.optionModel.label
-          });
-        }
-      }
-    },
-    /**
      * 如果取消勾选要重新分配组件唯一名称
      */
     checkField: {
       immediate: true,
       handler(value) {
+        const modeler = modelerStore();
         if (!value) {
           const newName = this.selectedWidget.type + generateId();
+          // eslint-disable-next-line vue/no-mutating-props
           this.optionModel.name = newName;
           this.updateWidgetNameAndRef(newName);
+        } else if (modeler.getTableInfo?.type === "create") {
+          this.setTableColumn();
+        }
+      }
+    },
+    /**
+     * 如果label名称改变也要更新数据
+     */
+    "selectedWidget.options.label": {
+      immediate: true,
+      handler() {
+        this.setTableColumn();
+      }
+    },
+    /**
+     * 如果name名称改变,并且是create和选中状态
+     */
+    "selectedWidget.options.name": {
+      immediate: true,
+      handler() {
+        const modeler = modelerStore();
+        if (modeler.getTableInfo?.type === "create" && this.checkField) {
+          this.setTableColumn();
         }
       }
     }
@@ -141,6 +153,7 @@ export default {
       // 空验证
       let oldName = this.designer.selectedWidgetName;
       if (isEmptyStr(newName)) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.selectedWidget.options.name = oldName;
         this.$message.info(this.i18nt("designer.hint.nameRequired"));
         return;
@@ -150,7 +163,7 @@ export default {
       const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
       var pattern = new RegExp(regex);
       if (!pattern.test(newName)) {
-        console.log("newName-->", newName);
+        // eslint-disable-next-line vue/no-mutating-props
         this.selectedWidget.options.name = oldName;
         this.$message.info("表字段不符合规则");
         return;
@@ -160,6 +173,7 @@ export default {
       if (this.designer.formWidget) {
         let foundRef = this.designer.formWidget.getWidgetRef(newName); // 检查newName是否已存在！！
         if (foundRef) {
+          // eslint-disable-next-line vue/no-mutating-props
           this.selectedWidget.options.name = oldName;
           this.$message.info(`当前表字段${newName}已绑定表单`);
           return;
@@ -171,13 +185,7 @@ export default {
           let newLabel = this.getLabelByFieldName(newName);
           this.designer.updateSelectedWidgetNameAndLabel(this.selectedWidget, newName, newLabel);
         }
-        if (this.checkField) {
-          const modeler = modelerStore();
-          modeler.setNodeColumn({
-            columnName: this.optionModel.name,
-            columnComment: this.optionModel.label
-          });
-        }
+        this.setTableColumn();
       }
     },
 
@@ -190,19 +198,49 @@ export default {
       return null;
     },
     /**
+     * 设置节点字段
+     */
+    setTableColumn() {
+      const modeler = modelerStore();
+      // 如果现有字段没有被选择
+      const fieldIndex = this.fieldList.findIndex((t) => t.columnName === this.optionModel.name);
+      if (modeler.getTableInfo?.type === "ready" && fieldIndex === -1) return;
+
+      // 如果选择数据库字段就更新节点数据
+      if (this.checkField) {
+        modeler.setNodeColumn({
+          columnName: this.optionModel.name,
+          columnComment: this.optionModel.label
+        });
+        // 如果是创建表要在结构添加
+        if (modeler.getTableInfo?.type === "create") {
+          let datType = Reflect.ownKeys(modeler.getWidgetDataType.widgetDefaultDataType[this.selectedWidget.type]);
+          console.log(datType);
+          modeler.setTableColumn({
+            columnName: this.optionModel.name,
+            columnComment: this.optionModel.label,
+            dataType: datType[0],
+            columnKey: ""
+          });
+        }
+      }
+      // eslint-disable-next-line vue/no-mutating-props
+      this.optionModel.checkField = this.checkField;
+    },
+    /**
      * 获取表信息
      */
     geTableInfo() {
       this.checkField = false;
       const modeler = modelerStore();
+      const fieldList = [];
       this.tableInfo = modeler.getTableInfo || {};
-      console.log("getWidgetType", modeler.getWidgetType);
-      this.widgetType = modeler.getWidgetType.widgetType[this.selectedWidget.type];
+      console.log("getWidgetDataType", modeler.getWidgetDataType);
+      this.widgetType = modeler.getWidgetDataType.widgetDataType[this.selectedWidget.type];
       if (modeler.getTableInfo?.type === "ready") {
         // 没有找到对应组件的控件
         if (!this.widgetType) return;
         // 查询的数据库相应的字段
-        const fieldList = [];
         for (let i = 0; i < this.widgetType.length; i++) {
           const dataType = this.widgetType[i];
           const columns = modeler.getTableInfo.columns.filter((t) => t.dataType === dataType);

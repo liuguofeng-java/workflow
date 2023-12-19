@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml" v-if="drawer" />
+        <Designer :xml="xml" />
         <Panel></Panel>
       </div>
     </div>
@@ -20,14 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
+import { ref } from "vue";
 import Previews from "@/components/BpmnJs/components/Toolbar/components/Previews";
 import Scales from "@/components/BpmnJs/components/Toolbar/components/Scales";
 import Commands from "@/components/BpmnJs/components/Toolbar/components/Commands";
-
 import Designer from "src/components/BpmnJs/components/Designer";
 import Panel from "src/components/BpmnJs/components/Panel";
-import EventBus from "@/utils/EventBus";
 import modelerStore from "@/components/BpmnJs/store/modeler";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox, ElLoading } from "element-plus";
@@ -52,8 +50,8 @@ const open = async (deploymentId: string | undefined) => {
     background: "rgba(0, 0, 0, 0.7)"
   });
   modeler.clearData();
-  const res = await baseService.get("/table/getWidgetType");
-  modeler.setWidgetType(res.data);
+  const res = await baseService.get("/table/getWidgetDataType");
+  modeler.setWidgetDataType(res.data);
   // 获取到上一个版本的流程图xml
   if (deploymentId) {
     nextTick(() => {
@@ -95,9 +93,6 @@ const submit = async () => {
   // 表信息
   const tableInfo = modeler.getTableInfo;
   const { xml } = await modeler.getModeler.saveXML({ format: true, preamble: true });
-
-  console.log("xml>", xml);
-
   baseService
     .post(`/processDefinition/deployProcess`, {
       xml,
@@ -124,13 +119,6 @@ const close = async () => {
 
 defineExpose({
   open
-});
-
-/**
- * 销毁事件，防止重复触发
- */
-onBeforeUnmount(async () => {
-  await EventBus.off("modeler-init");
 });
 
 const emit = defineEmits<{

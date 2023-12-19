@@ -29,9 +29,9 @@ public class TableController {
      *
      * @return 结果
      */
-    @GetMapping("getWidgetType")
-    public R<Map<String, Object>> getWidgetType() {
-        Map<String, Object> map = tableService.getWidgetType();
+    @GetMapping("getWidgetDataType")
+    public R<Map<String, Object>> getWidgetDataType() {
+        Map<String, Object> map = tableService.getWidgetDataType();
         return R.ok(map);
     }
 

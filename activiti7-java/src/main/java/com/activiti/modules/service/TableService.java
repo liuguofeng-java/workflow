@@ -20,7 +20,7 @@ public interface TableService {
      *
      * @return 结果
      */
-    Map<String, Object> getWidgetType();
+    Map<String, Object> getWidgetDataType();
 
     /**
      * 数据库表信息

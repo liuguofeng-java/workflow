@@ -1,11 +1,11 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.config.WidgetDataConfig;
 import com.activiti.modules.dao.TableDao;
 import com.activiti.modules.entity.NodeColumnItem;
 import com.activiti.modules.entity.TableColumns;
 import com.activiti.modules.entity.TableInfo;
 import com.activiti.modules.service.TableService;
+import com.activiti.modules.service.WidgetDataTypeService;
 import com.activiti.utils.constant.ColumnKeyType;
 import com.activiti.utils.exception.AException;
 import com.alibaba.fastjson2.JSON;
@@ -28,16 +28,19 @@ public class TableServiceImpl implements TableService {
     @Autowired
     private TableDao tableDao;
 
+    @Autowired
+    private WidgetDataTypeService widgetDataTypeService;
+
     /**
      * 获取组件类型
      *
      * @return 结果
      */
     @Override
-    public Map<String, Object> getWidgetType() {
+    public Map<String, Object> getWidgetDataType() {
         Map<String, Object> map = new HashMap<>();
-        map.put("widgetType", WidgetDataConfig.WIDGET_TYPE);
-        map.put("widgetDefaultType", WidgetDataConfig.WIDGET_DEFAULT_TYPE);
+        map.put("widgetDataType", widgetDataTypeService.getWidgetDataType());
+        map.put("widgetDefaultDataType", widgetDataTypeService.getDefaultWidgetDataType());
         return map;
     }
 

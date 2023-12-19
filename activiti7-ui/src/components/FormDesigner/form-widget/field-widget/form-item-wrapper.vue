@@ -109,12 +109,25 @@ export default {
     /**
      * 当前节点已绑定的表字段
      */
-    "field.options.name": {
+    "field.options.checkField": {
       immediate: true,
       handler() {
         const modeler = modelerStore();
         let nodeColumn = modeler.getNodeColumn;
         this.columnName = nodeColumn?.find((t) => t.columnName === this.field.options.name)?.columnName;
+      }
+    },
+    /**
+     * 当前节点已绑定的表字段
+     */
+    "field.options.name": {
+      immediate: true,
+      handler() {
+        setTimeout(() => {
+          const modeler = modelerStore();
+          let nodeColumn = modeler.getNodeColumn;
+          this.columnName = nodeColumn?.find((t) => t.columnName === this.field.options.name)?.columnName;
+        }, 50);
       }
     }
   },
@@ -174,9 +187,6 @@ export default {
     subFormItemFlag() {
       return this.parentWidget ? this.parentWidget.type === "sub-form" : false;
     }
-  },
-  created() {
-    //
   },
   methods: {
     selectField(field) {

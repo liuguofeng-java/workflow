@@ -72,9 +72,17 @@ const handleOpen = () => {
 const submit = () => {
   const formJson = vfdRef.value.getFormJson();
 
+  const a = modeler.getNodeColumn;
+  console.log("nodeColumns=-====>>>", a);
+
   // 更新组件表字段,查看字段是否被删除
   updateNodeTableColumns(formJson);
 
+  const nodeColumns = modeler.getNodeColumn;
+  console.log("nodeColumns=-====>>>", nodeColumns);
+
+  // 如果是create,更新表字段，删除没有绑定的字段
+  modeler.updateTableColumn();
   emit("ok", JSON.parse(JSON.stringify(formJson)));
   drawer.value = false;
 };
@@ -88,11 +96,14 @@ const updateNodeTableColumns = (formJson: any) => {
   const widgetList = getWidgetList(widgetTree);
   const nodeColumns = modeler.getNodeColumn;
   if (nodeColumns) {
-    for (let i = 0; i < nodeColumns.length; i++) {
+    let i = 0;
+    while (i < nodeColumns.length) {
       const element = nodeColumns[i];
       const index = widgetList.findIndex((t) => t.options.name === element.columnName);
       if (index === -1) {
         modeler.removeNodeColumn(element);
+      } else {
+        i++;
       }
     }
   }

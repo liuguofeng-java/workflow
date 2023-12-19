@@ -62,11 +62,11 @@ type TableColumns = {
 };
 
 /**
- * 组件类型
+ * 组件与表类型对应
  */
-type WidgetType = {
-  widgetType: any; // 组件类型
-  widgetDefaultType: any; // 组件默认类型
+type WidgetDataType = {
+  widgetDataType: any; // 组件类型
+  widgetDefaultDataType: any; // 组件默认类型
 };
 
 type ModelerStore = {
@@ -79,6 +79,6 @@ type ModelerStore = {
   elementRegistry: ElementRegistry | undefined;
   formJsonList: FormJsonList[];
   tableInfo: TableInfo | undefined;
-  widgetType: WidgetType | undefined;
+  widgetDataType: WidgetDataType | undefined;
   nodeColumns: NodelColumn[];
 };
