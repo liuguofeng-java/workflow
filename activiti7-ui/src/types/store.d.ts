@@ -58,6 +58,7 @@ type TableColumns = {
   columnName: string; // 行名称
   dataType: string; // 数据类型
   columnComment: string; // 备注
+  columnLength: number | -1; // 字段长度
   columnKey: "" | "PRI"; // 行键
 };
 

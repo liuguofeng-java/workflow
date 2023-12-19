@@ -3,6 +3,7 @@ package com.activiti.modules.service;
 import com.activiti.modules.entity.NodeColumnItem;
 import com.activiti.modules.entity.TableColumns;
 import com.activiti.modules.entity.TableInfo;
+import com.activiti.modules.entity.dto.workflow.TableInfoDto;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,13 @@ public interface TableService {
      */
     List<TableColumns> tableColumns(String tableName, String columnKey);
 
+    /**
+     * 创建表结构
+     *
+     * @param tableInfo 表信息
+     */
+    void createTable(TableInfoDto tableInfo);
+
 
     /**
      * 保存或更新数据
@@ -52,4 +60,5 @@ public interface TableService {
                           String tableName,
                           List<NodeColumnItem> columns,
                           Map<String, Object> variables);
+
 }

@@ -124,6 +124,7 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @Transactional
     @Override
     public void deployProcess(DeployProcessDto dto) {
+
         // 部署xml
         Deployment deploy = repositoryService.createDeployment().disableBpmnValidation()
                 .addString("index.bpmn", dto.getXml())
@@ -133,6 +134,10 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
         // 流程部署详情
         TableInfoDto tableInfo = dto.getTableInfo();
         if (tableInfo != null) {
+            // 创建表
+            tableService.createTable(tableInfo);
+
+            // 部署表信息
             SysDeployEntity sysDeploy = new SysDeployEntity();
             sysDeploy.setTableName(tableInfo.getTableName());
             sysDeploy.setTableComment(tableInfo.getTableComment());

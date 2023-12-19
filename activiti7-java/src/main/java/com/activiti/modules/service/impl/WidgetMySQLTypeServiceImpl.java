@@ -76,7 +76,7 @@ public class WidgetMySQLTypeServiceImpl implements WidgetDataTypeService {
         // 文本输入框
         result.put(WidgetTypes.WIDGET_TEXTAREA, new AbstractMap.SimpleEntry<>("text", -1));
         // 数字输入框
-        result.put(WidgetTypes.WIDGET_NUMBER, new AbstractMap.SimpleEntry<>("double", 11));
+        result.put(WidgetTypes.WIDGET_NUMBER, new AbstractMap.SimpleEntry<>("double", -1));
         // 单选框
         result.put(WidgetTypes.WIDGET_RADIO, new AbstractMap.SimpleEntry<>("tinyint", 5));
         // 多选框

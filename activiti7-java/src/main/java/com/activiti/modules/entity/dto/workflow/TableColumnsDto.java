@@ -22,6 +22,11 @@ public class TableColumnsDto {
      * 数据类型
      */
     private String dataType;
+
+    /**
+     * 字段长度
+     */
+    private Integer columnLength;
     /**
      * 行备注
      */

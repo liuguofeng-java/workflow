@@ -4,6 +4,7 @@ import com.activiti.modules.dao.TableDao;
 import com.activiti.modules.entity.NodeColumnItem;
 import com.activiti.modules.entity.TableColumns;
 import com.activiti.modules.entity.TableInfo;
+import com.activiti.modules.entity.dto.workflow.TableInfoDto;
 import com.activiti.modules.service.TableService;
 import com.activiti.modules.service.WidgetDataTypeService;
 import com.activiti.utils.constant.ColumnKeyType;
@@ -68,6 +69,26 @@ public class TableServiceImpl implements TableService {
     }
 
     /**
+     * 创建表结构
+     *
+     * @param tableInfo 表信息
+     */
+    @Override
+    public void createTable(TableInfoDto tableInfo) {
+        // 查询表是否存在
+        List<TableInfo> tableInfos = tableList(tableInfo.getTableName());
+        // 如果存在就返回
+        if (tableInfos.size() != 0) return;
+
+        tableDao.createTable(tableInfo.getTableName(),
+                tableInfo.getTableComment(),
+                tableInfo.getTableName() + "_id",
+                tableInfo.getColumns());
+
+
+    }
+
+    /**
      * 保存或更新数据
      *
      * @param id        主键id
@@ -88,7 +109,7 @@ public class TableServiceImpl implements TableService {
         for (NodeColumnItem column : columns) {
             String columnName = column.getColumnName();
             Object value = variables.get(columnName);
-            if(value == null) continue;
+            if (value == null) continue;
             // 如果是list类型,转成字符串保存到数据库
             if (value instanceof List) {
                 value = JSON.toJSONString(value);

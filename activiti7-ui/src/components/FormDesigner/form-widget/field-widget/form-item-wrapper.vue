@@ -229,6 +229,7 @@ export default {
         }
 
         this.$nextTick(() => {
+          // eslint-disable-next-line vue/no-mutating-props
           this.parentList.splice(this.indexOfParentList, 1);
           this.designer.setSelected(nextSelected);
 

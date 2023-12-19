@@ -72,14 +72,8 @@ const handleOpen = () => {
 const submit = () => {
   const formJson = vfdRef.value.getFormJson();
 
-  const a = modeler.getNodeColumn;
-  console.log("nodeColumns=-====>>>", a);
-
   // 更新组件表字段,查看字段是否被删除
   updateNodeTableColumns(formJson);
-
-  const nodeColumns = modeler.getNodeColumn;
-  console.log("nodeColumns=-====>>>", nodeColumns);
 
   // 如果是create,更新表字段，删除没有绑定的字段
   modeler.updateTableColumn();

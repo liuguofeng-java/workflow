@@ -214,12 +214,14 @@ export default {
         });
         // 如果是创建表要在结构添加
         if (modeler.getTableInfo?.type === "create") {
-          let datType = Reflect.ownKeys(modeler.getWidgetDataType.widgetDefaultDataType[this.selectedWidget.type]);
-          console.log(datType);
+          const widgetDefaultDataType = modeler.getWidgetDataType.widgetDefaultDataType;
+          let dataTypeValue = widgetDefaultDataType[this.selectedWidget.type];
+          let dataType = Reflect.ownKeys(dataTypeValue);
           modeler.setTableColumn({
             columnName: this.optionModel.name,
             columnComment: this.optionModel.label,
-            dataType: datType[0],
+            dataType: dataType[0],
+            columnLength: dataTypeValue[dataType[0]],
             columnKey: ""
           });
         }

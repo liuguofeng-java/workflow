@@ -100,11 +100,12 @@ export default defineStore("modeler", {
         const index = this.tableInfo.columns.findIndex(
           (t) => t.columnName === tableColumn.columnName
         );
-        if (index === -1) {
-          this.tableInfo.columns.push(tableColumn);
+        if (index !== -1) {
+          this.tableInfo.columns.splice(index, 1);
         }
+        this.tableInfo.columns.push(tableColumn);
+        console.log("this.tableInfo.columns--->>>>>>", this.tableInfo.columns);
       }
-      console.log("----xxx-columns--->", this.tableInfo?.columns);
     },
     /**
      * 更新表字段，删除没有绑定的字段
@@ -127,7 +128,6 @@ export default defineStore("modeler", {
             i++;
           }
         }
-        console.log("==columns====>>>>", JSON.parse(JSON.stringify(this.tableInfo.columns)));
       }
     },
     /**

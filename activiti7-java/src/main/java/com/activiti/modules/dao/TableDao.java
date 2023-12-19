@@ -2,6 +2,7 @@ package com.activiti.modules.dao;
 
 import com.activiti.modules.entity.TableColumns;
 import com.activiti.modules.entity.TableInfo;
+import com.activiti.modules.entity.dto.workflow.TableColumnsDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,6 +36,19 @@ public interface TableDao {
      */
     List<TableColumns> tableColumns(@Param("tableName") String tableName,
                                     @Param("columnKey") String columnKey);
+
+    /**
+     * 创建表
+     *
+     * @param tableName    表名
+     * @param tableComment 表备注
+     * @param idName       主键名
+     * @param columns      字段信息
+     */
+    void createTable(@Param("tableName") String tableName,
+                     @Param("tableComment") String tableComment,
+                     @Param("idName") String idName,
+                     @Param("columns") List<TableColumnsDto> columns);
 
 
     /**
@@ -72,4 +86,6 @@ public interface TableDao {
                            @Param("idValue") Object idValue,
                            @Param("tableName") String tableName,
                            @Param("listData") Map<String, Object> listData);
+
+
 }

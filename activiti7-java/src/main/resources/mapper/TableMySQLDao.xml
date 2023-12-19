@@ -24,6 +24,23 @@
         order by ordinal_position
     </select>
 
+    <insert id="createTable">
+        CREATE TABLE ${tableName} (
+            ${idName} varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '主键ID',
+            <foreach item="item" index="index" collection="columns">
+                ${item.columnName} ${item.dataType}
+                <if test="item.columnLength != -1">
+                    (#{item.columnLength})
+                </if>
+                <if test="item.dataType == 'varchar'">
+                    CHARACTER SET utf8mb4 COLLATE utf8mb4_bin
+                </if>
+                DEFAULT NULL COMMENT #{item.columnComment},
+            </foreach>
+            PRIMARY KEY (${idName}) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT=#{tableComment};
+    </insert>
+
     <select id="exist" resultType="long">
         select count(1) from ${tableName}
         where ${idName} = #{idValue}
