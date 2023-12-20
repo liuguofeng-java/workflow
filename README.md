@@ -48,25 +48,21 @@
   - [x] 整合流程变量
   - [x] 整合执行监听器
   
-- [x] 表单绑定数据库表(进行中)
+- [x] 表单绑定数据库表
   
 - [ ] 提交、驳回、撤销、等按钮
 
 - [ ] 会签、或签
 
-  
-
-
-
-
 
 ####  预览
 
-|                          |                           |
-| ------------------------ | ------------------------- |
-| ![](images/bpmnForm.png) | ![](images/condition.png) |
-| ![](images/start.png)    | ![](images/approve.png)   |
-| ![](images/log.png)      | ![](images/flow.png)      |
+| ![](images/dataTableSetting.png) | ![](images/bindTable.png)         |
+| -------------------------------- | --------------------------------- |
+| ![](images/form.png)             | ![](images/executionListener.png) |
+| ![](images/mainForm.png)         | ![](images/condition.png)         |
+| ![](images/start.png)            | ![](images/approve.png)           |
+| ![](images/log.png)              | ![](images/flow.png)              |
 
 
 

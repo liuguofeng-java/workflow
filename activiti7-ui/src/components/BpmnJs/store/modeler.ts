@@ -104,7 +104,6 @@ export default defineStore("modeler", {
           this.tableInfo.columns.splice(index, 1);
         }
         this.tableInfo.columns.push(tableColumn);
-        console.log("this.tableInfo.columns--->>>>>>", this.tableInfo.columns);
       }
     },
     /**
