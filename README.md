@@ -4,7 +4,7 @@
 
 兴趣使然，想开发一套自己认为的工作流
 
-项目使用 `vue3` + `elementui-plus`+ `ts` + `Activit7` + `SpringBoot` + `MySql` ，项目从零搭建 可移植性高，无依赖多余框架
+项目使用 `vue3` + `elementui-plus`+ `ts` + `Activit7` + `SpringBoot` ，项目从零搭建 可移植性高，无依赖多余框架
 
 #### Git 仓库地址 (欢迎 Star⭐)
 
@@ -18,6 +18,10 @@
 账户:admin
 
 密码:123
+
+#### 相关文档
+
+[本地部署文档](./document/deploy.md)
 
 #### 已完成功能
 

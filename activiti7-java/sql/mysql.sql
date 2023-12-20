@@ -1,17 +1,7 @@
 /*
- Navicat Premium Data Transfer
-
- Source Server         : 119.3.177.255-测试
  Source Server Type    : MySQL
  Source Server Version : 50743
- Source Host           : 119.3.177.255:3306
  Source Schema         : activiti
-
- Target Server Type    : MySQL
- Target Server Version : 50743
- File Encoding         : 65001
-
- Date: 30/11/2023 15:59:40
 */
 
 SET NAMES utf8mb4;
@@ -665,98 +655,26 @@ CREATE TABLE `ACT_RU_VARIABLE`  (
 -- Records of ACT_RU_VARIABLE
 -- ----------------------------
 
--- ----------------------------
--- Table structure for sys_dept
--- ----------------------------
-DROP TABLE IF EXISTS `sys_dept`;
-CREATE TABLE `sys_dept`  (
-  `dept_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门id',
-  `dept_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '部门名称',
-  `leader` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '负责人',
-  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
-  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sys_dept
--- ----------------------------
-INSERT INTO `sys_dept` VALUES ('0f45e0320d93832c90dd3ed323129dd6', '研发部', 'liu', '18888888888', '1396198931@qq.com', 0, '2023-10-22 12:18:00', '2023-10-27 17:56:12');
-INSERT INTO `sys_dept` VALUES ('db3760209b816f6d350278dd2f3b1351', '销售部', 'liu', '1888888888', '1396198931@qq.com', 0, '2023-10-22 12:39:42', '2023-10-22 12:39:42');
-
-CREATE TABLE `sys_deploy_node` (
- `node_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '节点id',
- `deploy_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
- `activity_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '流程定义节点唯一标识',
- `form_json` json NOT NULL COMMENT '表单详情',
- `columns` json DEFAULT NULL COMMENT '绑定的表字段',
- `is_main_from` bigint(20) NOT NULL DEFAULT '0' COMMENT '是否是主表单,1:是,2:否',
- `create_time` datetime DEFAULT NULL COMMENT '创建时间',
- PRIMARY KEY (`node_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程部署节点数据';
-
-CREATE TABLE `sys_deploy` (
-  `deploy_id` varchar(40) COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
-  `table_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '绑定数据库表的名称',
-  `table_comment` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '绑定数据库表的备注',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`deploy_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程部署详情';
-
-
-CREATE TABLE `sys_process_instance` (
-  `business_key` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '业务id',
-  `deploy_id` varchar(40) COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
-  PRIMARY KEY (`business_key`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程实例数据';
-
--- ----------------------------
--- Table structure for sys_listener
--- ----------------------------
-DROP TABLE IF EXISTS `sys_listener`;
-CREATE TABLE `sys_listener`  (
-   `listener_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '监听器id',
-   `listener_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '监听器名称',
-   `event` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '事件类型',
-   `java_class` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'java类',
-   `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
-   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
-   `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
-   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-   PRIMARY KEY (`listener_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '执行监听器' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_listener
--- ----------------------------
-INSERT INTO `sys_listener` VALUES ('504ee91cbde9b16192c69871a25acb08', '测试1', 'take', 'com.activiti.modules.listener.MyExecutionListener', 0, 'xxxxx', '2023-12-06 23:17:42', '2023-12-06 22:55:00');
-
-
--- ----------------------------
--- Table structure for sys_user
+-- 用户表
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
-  `user_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户id',
-  `dept_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '部门id',
-  `account` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户姓名',
-  `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
-  `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '登录用户名',
-  `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '邮箱',
-  `mobile` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '手机',
-  `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`user_id`) USING BTREE,
-  INDEX `idx_username`(`username`) USING BTREE
+                           `user_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户id',
+                           `dept_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '部门id',
+                           `account` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户姓名',
+                           `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
+                           `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '登录用户名',
+                           `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '邮箱',
+                           `mobile` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '手机',
+                           `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
+                           `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                           `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+                           PRIMARY KEY (`user_id`) USING BTREE,
+                           INDEX `idx_username`(`username`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of sys_user
--- ----------------------------
 INSERT INTO `sys_user` VALUES ('1', '0f45e0320d93832c90dd3ed323129dd6', '管理员', '123', 'admin', '1396198931@qq.com', '18888888888', 0, '2023-10-11 14:26:47', '2023-10-11 14:26:47');
 INSERT INTO `sys_user` VALUES ('10', 'db3760209b816f6d350278dd2f3b1351', '测试账号9', '123', 'test10', '1396198931@qq.com', '18888888888', 0, '2023-10-22 12:39:58', '2023-10-22 12:39:58');
 INSERT INTO `sys_user` VALUES ('11', 'db3760209b816f6d350278dd2f3b1351', '测试账号10', '123', 'test11', '1396198931@qq.com', '18888888888', 0, '2023-10-22 12:39:59', '2023-10-22 12:39:59');
@@ -775,5 +693,67 @@ INSERT INTO `sys_user` VALUES ('6', 'db3760209b816f6d350278dd2f3b1351', '测试�
 INSERT INTO `sys_user` VALUES ('7', 'db3760209b816f6d350278dd2f3b1351', '测试账号6', '123', 'test7', '1396198931@qq.com', '18888888888', 0, '2023-10-22 12:39:55', '2023-10-22 12:39:55');
 INSERT INTO `sys_user` VALUES ('8', 'db3760209b816f6d350278dd2f3b1351', '测试账号7', '123', 'test8', '1396198931@qq.com', '18888888888', 0, '2023-10-22 12:39:56', '2023-10-22 12:39:56');
 INSERT INTO `sys_user` VALUES ('9', 'db3760209b816f6d350278dd2f3b1351', '测试账号8', '123', 'test9', '1396198931@qq.com', '18888888888', 0, '2023-10-22 12:39:57', '2023-10-22 12:39:57');
+
+-- ----------------------------
+-- 部门表
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept`  (
+  `dept_id` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门id',
+  `dept_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '部门名称',
+  `leader` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`dept_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
+
+INSERT INTO `sys_dept` VALUES ('0f45e0320d93832c90dd3ed323129dd6', '研发部', 'liu', '18888888888', '1396198931@qq.com', 0, '2023-10-22 12:18:00', '2023-10-27 17:56:12');
+INSERT INTO `sys_dept` VALUES ('db3760209b816f6d350278dd2f3b1351', '销售部', 'liu', '1888888888', '1396198931@qq.com', 0, '2023-10-22 12:39:42', '2023-10-22 12:39:42');
+
+-- ----------------------------
+-- 流程部署节点数据
+-- ----------------------------
+CREATE TABLE `sys_deploy_node` (
+ `node_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '节点id',
+ `deploy_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
+ `activity_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '流程定义节点唯一标识',
+ `form_json` json NOT NULL COMMENT '表单详情',
+ `columns` json DEFAULT NULL COMMENT '绑定的表字段',
+ `is_main_from` bigint(20) NOT NULL DEFAULT '0' COMMENT '是否是主表单,1:是,2:否',
+ `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+ PRIMARY KEY (`node_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程部署节点数据';
+
+-- ----------------------------
+-- 流程部署详情
+-- ----------------------------
+CREATE TABLE `sys_deploy` (
+  `deploy_id` varchar(40) COLLATE utf8mb4_bin NOT NULL COMMENT '部署id',
+  `table_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '绑定数据库表的名称',
+  `table_comment` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '绑定数据库表的备注',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`deploy_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='流程部署详情';
+
+-- ----------------------------
+-- 执行监听器
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_listener`;
+CREATE TABLE `sys_listener`  (
+   `listener_id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '监听器id',
+   `listener_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '监听器名称',
+   `event` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '事件类型',
+   `java_class` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT 'java类',
+   `is_sys` tinyint(4) NULL DEFAULT 0 COMMENT '是否是系统内置,1:是,0:否',
+   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+   `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+   PRIMARY KEY (`listener_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '执行监听器' ROW_FORMAT = Dynamic;
+
+INSERT INTO `sys_listener` VALUES ('504ee91cbde9b16192c69871a25acb08', '测试1', 'take', 'com.activiti.modules.listener.MyExecutionListener', 0, 'xxxxx', '2023-12-06 23:17:42', '2023-12-06 22:55:00');
 
 SET FOREIGN_KEY_CHECKS = 1;
