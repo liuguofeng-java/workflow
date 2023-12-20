@@ -23,6 +23,8 @@
 
 [本地部署文档](./document/deploy.md)
 
+[关于流程定义表单和数据库表结构动态绑定(重要)](./document/bpmnDataTable.md)
+
 #### 已完成功能
 
 - [x] 假登录

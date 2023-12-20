@@ -51,13 +51,13 @@
 
 #### 2.环境部署
 
-1、前往`Gitee`(https://gitee.com/liu_guo_feng/spring-boot-activiti7)下载页面下载解压到工作目录
-2、把`activiti7-java`导入到`idea`,并设置maven和jdk安装所在目录
-3、创建数据库`activiti`并导入数据脚本`activiti7-java.sql.xxx.sql`
-4、打开项目运行`com.activiti.ActivitiApplication.java`,没有报错即启动成功
-5、在`activiti7-ui`使用`cmd`命令执行 `npm install`安装前端依赖
-6、在`activiti7-ui`使用`cmd`命令执行 `npm run dev` 启动前端项目
-5、打开浏览器，输入：(http://localhost:9092) （默认账户/密码 `admin/123`）
+1. 前往`Gitee`(https://gitee.com/liu_guo_feng/spring-boot-activiti7)下载页面下载解压到工作目录
+2. 把`activiti7-java`导入到`idea`,并设置maven和jdk安装所在目录
+3. 创建数据库`activiti`并导入数据脚本`activiti7-java.sql.xxx.sql`
+4. 打开项目运行`com.activiti.ActivitiApplication.java`,没有报错即启动成功
+5. 在`activiti7-ui`使用`cmd`命令执行 `npm install`安装前端依赖
+6. 在`activiti7-ui`使用`cmd`命令执行 `npm run dev` 启动前端项目
+5. 打开浏览器，输入：(http://localhost:9092) （默认账户/密码 `admin/123`）
 
 若能正确展示登录页面，并能成功登录，则表明环境搭建成功
 
