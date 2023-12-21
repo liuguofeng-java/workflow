@@ -1,10 +1,10 @@
-import ElementPlus from "element-plus";
 import "element-plus/theme-chalk/display.css";
 import "element-plus/theme-chalk/index.css";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
+import ElementPlus from "element-plus";
 import * as ElementPlusIcons from "@element-plus/icons-vue";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -40,7 +40,7 @@ public class AExceptionHandler {
      * 处理自定义异常
      */
     @ExceptionHandler(AException.class)
-    public R<String> handleRRException(AException e) {
+    public R<String> handleException(AException e) {
         return R.fail(e.getMessage());
     }
 
