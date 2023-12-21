@@ -7,6 +7,7 @@ import type ElementRegistry from "diagram-js/lib/core/ElementRegistry";
 import { toRaw } from "vue";
 
 const defaultState: ModelerStore = {
+  processEngine: "activiti",
   activeElement: undefined,
   activeElementId: undefined,
   modeler: undefined,
@@ -23,6 +24,7 @@ const defaultState: ModelerStore = {
 export default defineStore("modeler", {
   state: (): ModelerStore => defaultState,
   getters: {
+    getProcessEngine: (state) => toRaw(state.processEngine),
     getActive: (state) => toRaw(state.activeElement),
     getActiveId: (state) => state.activeElementId,
     getModeler: (state) => toRaw(state.modeler),
@@ -38,6 +40,17 @@ export default defineStore("modeler", {
       toRaw(state.nodeColumns.find((t) => t.activityId == state.activeElementId)?.columns)
   },
   actions: {
+    /**
+     * 设置流程引擎
+     * @param processEngine 流程引擎名称
+     */
+    setProcessEngine(processEngine: "activiti" | "flowable") {
+      this.processEngine = processEngine;
+    },
+    /**
+     * 设置设计器对象
+     * @param modeler bpmn设计器对象
+     */
     setModeler(modeler: Modeler | undefined) {
       this.modeler = modeler;
       if (modeler) {
@@ -49,6 +62,10 @@ export default defineStore("modeler", {
         this.modeling = this.moddle = this.canvas = this.elementRegistry = undefined;
       }
     },
+    /**
+     * 设置节点
+     * @param element 节点信息
+     */
     setElement(element: BpmnElement | undefined) {
       this.activeElement = element;
       this.activeElementId = element.id;

@@ -12,7 +12,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { getInitiatorValue, setInitiatorValue } from "@/components/BpmnJs/bo-utils/initiatorUtil";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 import { Element } from "bpmn-js/lib/model/Types";
 import EventBus from "@/utils/EventBus";
 
@@ -42,3 +42,4 @@ export default defineComponent({
   }
 });
 </script>
+@/store/modeler

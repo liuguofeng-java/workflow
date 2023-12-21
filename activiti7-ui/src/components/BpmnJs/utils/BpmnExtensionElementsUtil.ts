@@ -2,7 +2,7 @@ import { is } from "bpmn-js/lib/util/ModelUtil";
 import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { isArray } from "min-dash";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 
 /**
  * Get extension elements of business object. Optionally filter by type.

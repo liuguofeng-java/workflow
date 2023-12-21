@@ -1,4 +1,4 @@
-import editor from "@/components/BpmnJs/store/editor";
+import modeler from "@/store/modeler";
 import { find } from "min-dash";
 import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { Element } from "diagram-js/lib/model/Types";
@@ -6,7 +6,7 @@ import { ModdleElement } from "bpmn-moddle";
 import { getExtensionElementsList } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 
 function getProcessPrefix() {
-  return editor().getProcessEngine;
+  return modeler().getProcessEngine;
 }
 type ImplementationType =
   | "dmn"

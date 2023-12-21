@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import { Element } from "bpmn-js/lib/model/Types";
 import { getNameValue, setNameValue } from "@/components/BpmnJs/bo-utils/nameUtil";
 import { setIdValue } from "@/components/BpmnJs/bo-utils/idUtil";
@@ -67,3 +67,4 @@ export default defineComponent({
   }
 });
 </script>
+@/store/modeler

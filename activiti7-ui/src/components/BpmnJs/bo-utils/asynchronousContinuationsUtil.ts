@@ -1,16 +1,15 @@
 import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
-import editor from "@/components/BpmnJs/store/editor";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 import { is } from "bpmn-js/lib/util/ModelUtil";
 
 ////////// only in element extends bpmn:Task
 export function getACBefore(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return isAsyncBefore(element.businessObject, prefix);
 }
 export function setACBefore(element: Element, value: boolean) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const modeling = modeler().getModeling;
   // overwrite the legacy `async` property, we will use the more explicit `asyncBefore`
   modeling.updateModdleProperties(element, element.businessObject, {
@@ -20,11 +19,11 @@ export function setACBefore(element: Element, value: boolean) {
 }
 
 export function getACAfter(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return isAsyncAfter(element.businessObject, prefix);
 }
 export function setACAfter(element: Element, value: boolean) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const modeling = modeler().getModeling;
   modeling.updateModdleProperties(element, element.businessObject, {
     [`${prefix}:asyncAfter`]: value
@@ -32,11 +31,11 @@ export function setACAfter(element: Element, value: boolean) {
 }
 
 export function getACExclusive(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return isExclusive(element.businessObject, prefix);
 }
 export function setACExclusive(element: Element, value: boolean) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const modeling = modeler().getModeling;
   modeling.updateModdleProperties(element, element.businessObject, {
     [`${prefix}:exclusive`]: value
@@ -46,7 +45,7 @@ export function setACExclusive(element: Element, value: boolean) {
 //////////////////// helper
 // 是否支持异步属性
 export function isAsynchronous(element: BpmnElement): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return is(element, `${prefix}:AsyncCapable`);
 }
 

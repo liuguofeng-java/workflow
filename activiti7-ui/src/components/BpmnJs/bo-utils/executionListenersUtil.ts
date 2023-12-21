@@ -6,8 +6,7 @@ import {
   addExtensionElements,
   removeExtensionElements
 } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
-import editor from "@/components/BpmnJs/store/editor";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 const LISTENER_ALLOWED_TYPES = [
   "bpmn:Activity",
   "bpmn:Event",
@@ -19,14 +18,14 @@ const LISTENER_ALLOWED_TYPES = [
 
 // execution listener list
 export function getExecutionListeners(element: Element): ModdleElement[] {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const businessObject = getListenersContainer(element);
   return getExtensionElementsList(businessObject, `${prefix}:ExecutionListener`);
 }
 
 // create an empty execution listener and update element's businessObject
 export function addEmptyExtensionListener(element: Element) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const moddle = modeler().getModdle;
   const listener = moddle.create(`${prefix}:ExecutionListener`, {
     event: getDefaultEvent(element),
@@ -38,7 +37,7 @@ export function addEmptyExtensionListener(element: Element) {
 
 // create an execution listener with props
 export function addExecutionListener(element: Element, props: ExecutionListenerForm) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const moddle = modeler().getModdle;
   const businessObject = getListenersContainer(element);
   const listener = moddle!.create(`${prefix}:ExecutionListener`, {});
@@ -71,7 +70,7 @@ export function isExecutable(element: BpmnElement): boolean {
 }
 
 export function getExecutionListenerType(listener: ModdleElement): string {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   if (isAny(listener, [`${prefix}:ExecutionListener`])) {
     if (listener.get(`${prefix}:class`)) return "class";
     if (listener.get(`${prefix}:expression`)) return "expression";
@@ -122,7 +121,7 @@ function updateListenerProperty(
   props: ExecutionListenerForm
 ) {
   const modeling = modeler().getModeling;
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const { name, event, class: listenerClass, expression, delegateExpression, fields } = props;
 
   const updateProperty = (key, value) =>

@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import SelectForm from "./sub/SelectForm.vue";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
@@ -250,3 +250,4 @@ EventBus.on("element-init", function () {
   }
 }
 </style>
+@/store/modeler

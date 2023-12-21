@@ -35,7 +35,7 @@
 <script>
 import i18n from "@/components/FormDesigner/utils/i18n";
 import { isEmptyStr } from "@/components/FormDesigner/utils/util";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import { generateId } from "@/components/FormDesigner/utils/util";
 
 export default {
@@ -261,3 +261,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+@/store/modeler

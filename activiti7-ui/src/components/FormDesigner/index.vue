@@ -47,14 +47,12 @@ import { addWindowResizeHandler, deepClone, getQueryParam, getAllContainerWidget
 import { MOCK_CASE_URL, VARIANT_FORM_VERSION } from "@/components/FormDesigner/utils/config";
 import i18n, { changeLocale } from "@/components/FormDesigner/utils/i18n";
 import axios from "axios";
-import SvgIcon from "@/components/FormDesigner/svg-icon/index";
 
 export default {
   name: "VFormDesigner",
   componentName: "VFormDesigner",
   mixins: [i18n],
   components: {
-    SvgIcon,
     WidgetPanel,
     ToolbarPanel,
     SettingPanel,

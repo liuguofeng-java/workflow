@@ -1,4 +1,4 @@
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";

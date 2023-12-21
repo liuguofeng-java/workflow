@@ -14,7 +14,7 @@ import { ref } from "vue";
 import VFormDesigner from "@/components/FormDesigner/index.vue";
 import { nextTick } from "vue";
 import { Edit } from "@element-plus/icons-vue";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import { buildTreeToList } from "@/components/BpmnJs/bo-utils/variableUtil";
 
 const modeler = modelerStore();
@@ -135,3 +135,4 @@ const emit = defineEmits<{
   }
 }
 </style>
+@/store/modeler

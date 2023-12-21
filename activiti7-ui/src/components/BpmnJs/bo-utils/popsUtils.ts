@@ -1,6 +1,5 @@
 import { type ModdleElement, type Element } from "bpmn-js/lib/util/ModelUtil";
-import editor from "../store/editor";
-import modeler from "../store/modeler";
+import modeler from "../../../store/modeler";
 
 /**
  * 获取设置的值
@@ -9,7 +8,7 @@ import modeler from "../store/modeler";
  * @returns 属性值
  */
 export function getExPropValue<T>(element: any, propKey: string): T {
-  const exPropKey = `${editor().getProcessEngine}:${propKey}`;
+  const exPropKey = `${modeler().getProcessEngine}:${propKey}`;
   return element && element.get ? element.get(exPropKey) : element ? element[exPropKey] : element;
 }
 
@@ -27,7 +26,7 @@ export const updateExModdleProp = function (
   propValue: unknown
 ) {
   const modeling = modeler().getModeling;
-  const exPropKey = `${editor().getProcessEngine}:${propKey}`;
+  const exPropKey = `${modeler().getProcessEngine}:${propKey}`;
   modeling?.updateModdleProperties(element, moddleElement, {
     [exPropKey]: propValue === "" ? undefined : propValue
   });

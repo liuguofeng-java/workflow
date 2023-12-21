@@ -1,5 +1,5 @@
 import { Element } from "bpmn-js/lib/model/Types";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import BpmnFactory from "bpmn-js/lib/features/modeling/BpmnFactory";
 import { without } from "min-dash";
 

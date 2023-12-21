@@ -5,8 +5,7 @@ import {
   createModdleElement,
   getExtensionElementsList
 } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
-import modelerStore from "@/components/BpmnJs/store/modeler";
-import editorStore from "@/components/BpmnJs/store/editor";
+import modelerStore from "@/store/modeler";
 import { without } from "min-dash";
 
 /////// 功能函数
@@ -20,10 +19,9 @@ export function getExtensionProperties(element: Element): ModdleElement[] {
 export function addExtensionProperty(element: Element, property) {
   try {
     const store = modelerStore();
-    const editor = editorStore();
 
     const modeling = store.getModeling;
-    const prefix = editor.getProcessEngine;
+    const prefix = store.getProcessEngine;
 
     const businessObject = getRelevantBusinessObject(element);
 

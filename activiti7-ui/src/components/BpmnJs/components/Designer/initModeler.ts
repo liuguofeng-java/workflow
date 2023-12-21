@@ -2,7 +2,7 @@ import { markRaw, Ref } from "vue";
 import Modeler from "bpmn-js/lib/Modeler";
 import EventBus from "@/utils/EventBus";
 
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 
 import type { BaseViewerOptions } from "bpmn-js/lib/BaseViewer";
 import type { ModulesAndModdles } from "@/components/BpmnJs/components/Designer/modulesAndModdle";

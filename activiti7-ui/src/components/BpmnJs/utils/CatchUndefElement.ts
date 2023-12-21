@@ -1,4 +1,4 @@
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 
 export default function (fn: (element: any) => unknown) {
   try {

@@ -1,17 +1,24 @@
 <template>
   <el-drawer v-model="drawer" size="100%" destroy-on-close>
-    <DesignerDetails :xml="xml" style="height: 100%"></DesignerDetails>
+    <Designer :xml="xml" :settings="settings" style="height: 100%"></Designer>
   </el-drawer>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
+import Designer from "@/components/BpmnJs/components/Designer";
 import baseService from "@/service/baseService";
 
 // 是否加载抽屉
 let drawer = ref<boolean>(false);
 let xml = ref<string>();
+
+// bpmn配置
+const settings = {
+  processEngine: "activiti",
+  paletteMode: "custom",
+  contextPadMode: "custom"
+};
 
 /**
  * 初始化表单

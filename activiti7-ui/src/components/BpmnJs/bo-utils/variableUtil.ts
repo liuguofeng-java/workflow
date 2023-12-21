@@ -1,4 +1,4 @@
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 
 const modeler = modelerStore();
 

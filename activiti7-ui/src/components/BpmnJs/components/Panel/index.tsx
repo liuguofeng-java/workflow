@@ -2,14 +2,14 @@ import { defineComponent, Component, markRaw, onMounted, onBeforeUnmount, ref } 
 import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
 import EventBus from "@/utils/EventBus";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 
 import getBpmnIconType from "@/components/BpmnJs/bpmn-icons/getIconType";
 import bpmnIcons from "@/components/BpmnJs/bpmn-icons";
 import BpmnIcon from "./components/sub/BpmnIcon.vue";
 
 import { isCanbeConditional, isExtendStartEvent } from "@/components/BpmnJs/bo-utils/conditionUtil";
-import { customTranslate } from "@/components/BpmnJs/additional-modules/Translate";
+import { customTranslate } from "@/components/BpmnJs/overwrite-modules/Translate";
 import { isAsynchronous } from "@/components/BpmnJs/bo-utils/asynchronousContinuationsUtil";
 import { isExecutable } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import { isJobExecutable } from "@/components/BpmnJs/bo-utils/jobExecutionUtil";

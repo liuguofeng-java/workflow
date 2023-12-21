@@ -1,6 +1,7 @@
 import { type Ref } from "vue";
 import type { ModuleDeclaration } from "didi";
 import type { EditorSettings } from "@/components/BpmnJs/types/editor/settings";
+import modeler from "@/store/modeler";
 
 // 官方网格背景
 import GridLineModule from "diagram-js-grid-bg";
@@ -9,17 +10,18 @@ import GridLineModule from "diagram-js-grid-bg";
 import TokenSimulationModule from "bpmn-js-token-simulation";
 
 // moddle 定义文件
-import activitiModdleDescriptors from "@/components/BpmnJs/moddle-extensions/activiti.json";
+import activitiModdleDescriptors from "@/components/BpmnJs/config/activiti.json";
+import flowableModdleDescriptors from "@/components/BpmnJs/config/flowable.json";
 
 // 自定义 modules 扩展模块
-import translate from "@/components/BpmnJs/additional-modules/Translate";
-import ElementFactory from "@/components/BpmnJs/additional-modules/ElementFactory";
-import RewritePalette from "@/components/BpmnJs/additional-modules/Palette";
-import RewriteContextPad from "@/components/BpmnJs/additional-modules/ContextPad";
+import translate from "@/components/BpmnJs/overwrite-modules/Translate";
+import ElementFactory from "@/components/BpmnJs/overwrite-modules/ElementFactory";
+import RewritePalette from "@/components/BpmnJs/overwrite-modules/Palette";
+import RewriteContextPad from "@/components/BpmnJs/overwrite-modules/ContextPad";
 
 // 流程图校验部分
 import lintModule from "bpmn-js-bpmnlint";
-import bpmnlint from "@/components/BpmnJs/additional-modules/Lint/bpmnlint";
+import bpmnlint from "@/components/BpmnJs/overwrite-modules/Lint/bpmnlint";
 
 export type ModulesAndModdles = [
   ModuleDeclaration[],
@@ -114,7 +116,9 @@ export default function (settings: Ref<EditorSettings>): ModulesAndModdles {
   modules.push(translate);
 
   // 设置对应的 moddle 解析配置文件
-  moddle["activiti"] = activitiModdleDescriptors;
+  if (settings.value.processEngine === "activiti") moddle["activiti"] = activitiModdleDescriptors;
+  if (settings.value.processEngine === "flowable") moddle["flowable"] = flowableModdleDescriptors;
+  modeler().setProcessEngine(settings.value.processEngine);
 
   return [modules, moddle, options];
 }

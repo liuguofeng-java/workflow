@@ -1,5 +1,5 @@
 import { defineComponent, ref } from "vue";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 
 const Imports = defineComponent({
   name: "Imports",

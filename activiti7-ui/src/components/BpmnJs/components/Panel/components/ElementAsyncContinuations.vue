@@ -19,7 +19,7 @@
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { Element } from "bpmn-js/lib/model/Types";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import { getACAfter, getACBefore, getACExclusive, setACAfter, setACBefore, setACExclusive } from "@/components/BpmnJs/bo-utils/asynchronousContinuationsUtil";
 import EventBus from "@/utils/EventBus";
 
@@ -63,3 +63,4 @@ export default defineComponent({
   }
 });
 </script>
+@/store/modeler

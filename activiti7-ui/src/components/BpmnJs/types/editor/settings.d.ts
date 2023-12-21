@@ -2,23 +2,12 @@ import { ViewerOptions } from "diagram-js/lib/model/Types";
 import { ModuleDeclaration } from "didi";
 
 export interface EditorSettings {
-  language: string;
   processName: string;
   processId: string;
-  processEngine: "flowable" | "activiti" | "camunda";
-  paletteMode: "default" | "custom" | "rewrite" | "enhancement";
-  penalMode: "default" | "custom" | "rewrite";
-  contextPadMode: "default" | "rewrite" | "enhancement" | "custom";
-  rendererMode: "default" | "rewrite" | "enhancement";
-  bg: string;
-  toolbar: boolean;
-  miniMap: boolean;
-  contextmenu: boolean;
-  customContextmenu: boolean;
-  otherModule: boolean;
-  templateChooser: boolean;
+  processEngine: "flowable" | "activiti";
+  paletteMode: "custom" | "rewrite";
+  contextPadMode: "rewrite" | "custom";
   useLint: boolean;
-  customTheme: Record<string, string | number>;
   isLabelEditingProvider: boolean;
   isMove: boolean;
 }

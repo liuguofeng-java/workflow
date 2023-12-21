@@ -1,6 +1,6 @@
 import { defineComponent, nextTick, ref } from "vue";
 
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 import { ElMessage } from "element-plus";
 
 import hljs from "highlight.js";

@@ -1,6 +1,6 @@
 <template>
   <div v-if="Object.keys(highlightNode).length !== 0" class="root">
-    <DesignerDetails :xml="highlightNode.xml" id="highlightNode" />
+    <DesignerDetails :xml="highlightNode.xml" :settings="settings" id="highlightNode" />
     <el-card class="box-card" id="nodeInfo" v-show="open">
       <div v-for="(item, index) in nodeInfoItem" :key="index">
         <HistoryNodeInfo :nodeItem="item" />
@@ -10,7 +10,7 @@
 </template>
 <script setup lang="ts">
 import { ref, watch, onBeforeUnmount } from "vue";
-import DesignerDetails from "@/components/BpmnJs/components/Designer/details";
+import DesignerDetails from "@/components/BpmnJs/components/Designer";
 import EventBus from "@/utils/EventBus";
 import Popper from "popper.js";
 import HistoryNodeInfo from "./HistoryNodeInfo.vue";
@@ -26,6 +26,13 @@ let popper: Popper;
 let open = ref<boolean>(false);
 // 选择的历史审批记录
 const nodeInfoItem = ref<any[]>([]);
+
+// bpmn配置
+const settings = {
+  processEngine: "activiti",
+  paletteMode: "custom",
+  contextPadMode: "custom"
+};
 
 const pops = defineProps({
   // 流程图高亮信息

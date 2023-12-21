@@ -2,7 +2,7 @@ import { Element, Connection } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is, isAny } from "bpmn-js/lib/util/ModelUtil";
 import { getEventDefinition } from "@/components/BpmnJs/utils/BpmnImplementationType";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 import { createModdleElement } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 
 ///////////////////////////////// 配置项可见性

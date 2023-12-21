@@ -71,6 +71,7 @@ type WidgetDataType = {
 };
 
 type ModelerStore = {
+  processEngine: "flowable" | "activiti";
   activeElement: BpmnElement | undefined;
   activeElementId: string | undefined;
   modeler: Modeler | undefined;

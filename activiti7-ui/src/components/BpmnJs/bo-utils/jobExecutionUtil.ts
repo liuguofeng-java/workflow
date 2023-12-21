@@ -1,8 +1,7 @@
 import { Element } from "bpmn-js/lib/model/Types";
 import { ModdleElement } from "bpmn-moddle";
 import { getBusinessObject, is } from "bpmn-js/lib/util/ModelUtil";
-import editor from "@/components/BpmnJs/store/editor";
-import modeler from "@/components/BpmnJs/store/modeler";
+import modeler from "@/store/modeler";
 import { getServiceTaskLikeBusinessObject } from "@/components/BpmnJs/utils/BpmnImplementationType";
 import { getTimerEventDefinition } from "@/components/BpmnJs/utils/BpmnEventDefinitionUtil";
 import { isAsync } from "@/components/BpmnJs/utils/BpmnAsyncElement";
@@ -13,14 +12,14 @@ import {
 
 //
 export function retryTimeCycleVisible(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const businessObject = getBusinessObject(element);
   return (
     (is(element, `${prefix}:AsyncCapable`) && isAsync(businessObject)) || !!isTimerEvent(element)
   );
 }
 export function taskPriorityVisible(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const businessObject = getBusinessObject(element);
   return (
     (is(element, `${prefix}:JobPriorized`) && isAsync(businessObject)) ||
@@ -35,12 +34,12 @@ export function isJobExecutable(element: BpmnElement): boolean {
 
 // 任务优先级
 export function getExternalTaskValue(element: Element): string | undefined {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const businessObject = getRelativeBusinessObject(element);
   return businessObject.get(`${prefix}:taskPriority`);
 }
 export function setExternalTaskValue(element: Element, value: string | undefined) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const modeling = modeler().getModeling;
   const businessObject = getRelativeBusinessObject(element);
   modeling.updateModdleProperties(element, businessObject, {
@@ -50,7 +49,7 @@ export function setExternalTaskValue(element: Element, value: string | undefined
 
 // 重试周期
 export function getRetryTimeCycleValue(element: Element): string | undefined {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const businessObject = getBusinessObject(element);
   const failedJobRetryTimeCycle = getExtensionElementsList(
     businessObject,
@@ -59,7 +58,7 @@ export function getRetryTimeCycleValue(element: Element): string | undefined {
   return failedJobRetryTimeCycle && failedJobRetryTimeCycle.body;
 }
 export function setRetryTimeCycleValue(element: Element, value: string | undefined) {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const modeling = modeler().getModeling;
   const businessObject = getBusinessObject(element);
 
@@ -93,7 +92,7 @@ export function setRetryTimeCycleValue(element: Element, value: string | undefin
 
 /////////// helpers
 function isExternalTaskLike(element: Element): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   const bo = getServiceTaskLikeBusinessObject(element),
     type = bo && bo.get(`${prefix}:type`);
   return bo && is(bo, `${prefix}:ServiceTaskLike`) && type && type === "external";

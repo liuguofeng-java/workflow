@@ -64,7 +64,7 @@
 <script>
 import i18n from "@/components/FormDesigner/utils/i18n";
 import SvgIcon from "@/components/FormDesigner/svg-icon";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 
 export default {
   name: "form-item-wrapper",
@@ -385,3 +385,4 @@ export default {
   justify-content: flex-end !important;
 }
 </style>
+@/store/modeler

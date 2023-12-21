@@ -1,13 +1,13 @@
 import { ModdleElement } from "bpmn-moddle";
-import editor from "@/components/BpmnJs/store/editor";
+import modeler from "@/store/modeler";
 
 export function isAsyncBefore(bo: ModdleElement): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return !!(bo.get(`${prefix}:asyncBefore`) || bo.get(`${prefix}:async`));
 }
 
 export function isAsyncAfter(bo: ModdleElement): boolean {
-  const prefix = editor().getProcessEngine;
+  const prefix = modeler().getProcessEngine;
   return !!bo.get(`${prefix}:asyncAfter`);
 }
 

@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="main-content">
-        <Designer :xml="xml" />
+        <Designer :xml="xml" :settings="settings" />
         <Panel></Panel>
       </div>
     </div>
@@ -26,12 +26,24 @@ import Scales from "@/components/BpmnJs/components/Toolbar/components/Scales";
 import Commands from "@/components/BpmnJs/components/Toolbar/components/Commands";
 import Designer from "@/components/BpmnJs/components/Designer";
 import Panel from "@/components/BpmnJs/components/Panel";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox, ElLoading } from "element-plus";
 import { nextTick } from "vue";
 
 const modeler = modelerStore();
+
+// bpmn配置
+const settings = {
+  processId: `Process_${new Date().getTime()}`,
+  processName: `新建流程`,
+  processEngine: "activiti",
+  paletteMode: "rewrite",
+  contextPadMode: "rewrite",
+  useLint: false,
+  isLabelEditingProvider: true,
+  isMove: true
+};
 
 // 是否加载抽屉
 let drawer = ref<boolean>(false);
@@ -140,3 +152,4 @@ const emit = defineEmits<{
   }
 }
 </style>
+@/store/modeler

@@ -90,7 +90,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from "vue";
-import modelerStore from "@/components/BpmnJs/store/modeler";
+import modelerStore from "@/store/modeler";
 import EventBus from "@/utils/EventBus";
 import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import baseService from "@/service/baseService";
@@ -323,3 +323,4 @@ getList();
   margin-bottom: 5px;
 }
 </style>
+@/store/modeler
