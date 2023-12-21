@@ -8,7 +8,14 @@ import {
 } from "@/components/BpmnJs/utils/BpmnExtensionElementsUtil";
 import editor from "@/components/BpmnJs/store/editor";
 import modeler from "@/components/BpmnJs/store/modeler";
-import { LISTENER_ALLOWED_TYPES } from "@/components/BpmnJs/config/bpmnEnums";
+const LISTENER_ALLOWED_TYPES = [
+  "bpmn:Activity",
+  "bpmn:Event",
+  "bpmn:Gateway",
+  "bpmn:SequenceFlow",
+  "bpmn:Process",
+  "bpmn:Participant"
+];
 
 // execution listener list
 export function getExecutionListeners(element: Element): ModdleElement[] {
@@ -21,7 +28,7 @@ export function getExecutionListeners(element: Element): ModdleElement[] {
 export function addEmptyExtensionListener(element: Element) {
   const prefix = editor().getProcessEngine;
   const moddle = modeler().getModdle;
-  const listener = moddle!.create(`${prefix}:ExecutionListener`, {
+  const listener = moddle.create(`${prefix}:ExecutionListener`, {
     event: getDefaultEvent(element),
     class: ""
   });
@@ -144,5 +151,5 @@ export function createFieldObject(option: BpmnField, prefix: string): ModdleElem
   const { name, type, string, expression } = option;
   const fieldConfig = type === "string" ? { name, string } : { name, expression };
   const moddle = modeler().getModdle;
-  return moddle!.create(`${prefix}:Field`, fieldConfig);
+  return moddle.create(`${prefix}:Field`, fieldConfig);
 }

@@ -16,8 +16,7 @@ const Previews = defineComponent({
 
     const openXMLPreviewModel = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const modeler = modelerStore.getModeler!;
+        const modeler = modelerStore.getModeler;
         if (!modeler) {
           return ElMessage.warning("模型加载失败，请刷新重试");
         }

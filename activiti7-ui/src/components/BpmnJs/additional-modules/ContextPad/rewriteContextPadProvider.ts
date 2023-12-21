@@ -384,7 +384,7 @@ function isEventType(eventBo, type, definition) {
   let isDefinition = false;
 
   const definitions = eventBo.eventDefinitions || [];
-  forEach(definitions, function (def) {
+  forEach(definitions, function (def: any) {
     if (def.$type === definition) {
       isDefinition = true;
     }

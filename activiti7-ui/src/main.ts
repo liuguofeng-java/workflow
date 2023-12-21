@@ -45,8 +45,6 @@ loadExtension(app);
 
 // bpmn.js 相关-------------------------------------------------
 import "@/components/BpmnJs/styles/index.scss";
-import i18n from "@/components/BpmnJs/i18n";
-app.use(i18n);
 // bpmn.js 相关-------------------------------------------------
 
 app.use(createPinia()).use(router).mount("#app");

@@ -1,7 +1,7 @@
 import PaletteProvider from "bpmn-js/lib/features/palette/PaletteProvider";
 import ElementFactory from "bpmn-js/lib/features/modeling/ElementFactory.js";
 import { assign } from "min-dash";
-import { createAction } from "../utils";
+import { createAction } from "./utils";
 
 class RewritePaletteProvider extends PaletteProvider {
   private readonly _palette: PaletteProvider;

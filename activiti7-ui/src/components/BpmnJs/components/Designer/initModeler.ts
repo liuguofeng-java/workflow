@@ -3,7 +3,6 @@ import Modeler from "bpmn-js/lib/Modeler";
 import EventBus from "@/utils/EventBus";
 
 import modelerStore from "@/components/BpmnJs/store/modeler";
-import EnhancementContextmenu from "@/components/BpmnJs/additional-functions/EnhancementContextmenu";
 
 import type { BaseViewerOptions } from "bpmn-js/lib/BaseViewer";
 import type { ModulesAndModdles } from "@/components/BpmnJs/components/Designer/modulesAndModdle";
@@ -27,14 +26,10 @@ export default async function (
     store.getModeler.destroy();
     await store.setModeler(undefined);
   }
-
   const modeler: Modeler = new Modeler(options);
-
   await store.setModeler(markRaw(modeler));
 
   EventBus.emit("modeler-init", modeler);
-
-  EnhancementContextmenu(modeler);
 
   modeler.on("commandStack.changed", async (event) => {
     try {

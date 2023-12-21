@@ -18,7 +18,7 @@ const Imports = defineComponent({
         reader.readAsText(file);
         reader.onload = function () {
           const xmlStr = this.result;
-          modelerStore.getModeler!.importXML(xmlStr as string);
+          modelerStore.getModeler.importXML(xmlStr as string);
         };
         importRef.value.value = "";
         importRef.value.files = null;

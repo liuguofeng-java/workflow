@@ -11,7 +11,7 @@ export const createNewDiagram = async function (newXml?: string, settings?: Edit
     const newName: string = processName || `新建流程_${timestamp}`;
     const xmlString = newXml || EmptyXML(newId, newName, processEngine);
     const modeler = store.getModeler;
-    const { warnings } = await modeler!.importXML(xmlString);
+    const { warnings } = await modeler.importXML(xmlString);
     console.log("bpmb warnings->", warnings);
   } catch (e) {
     console.error(`[Process Designer Warn]: ${typeof e === "string" ? e : (e as Error)?.message}`);

@@ -1,8 +1,8 @@
 import { EditorSettings } from "@/components/BpmnJs/types/editor/settings";
-import { defaultLang } from "@/components/BpmnJs/i18n";
+// import { defaultLang } from "@/components/BpmnJs/i18n";
 
 export const defaultSettings: EditorSettings = {
-  language: defaultLang,
+  language: "",
   processId: `Process_${new Date().getTime()}`,
   processName: `新建流程`,
   processEngine: "activiti",
