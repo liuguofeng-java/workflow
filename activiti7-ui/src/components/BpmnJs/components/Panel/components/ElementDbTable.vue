@@ -92,7 +92,6 @@
 import { ref, watch } from "vue";
 import modelerStore from "@/store/modeler";
 import EventBus from "@/utils/EventBus";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import baseService from "@/service/baseService";
 import { ElMessageBox, ElMessage } from "element-plus";
 import i18n from "@/components/FormDesigner/utils/i18n";
@@ -294,9 +293,7 @@ const getElementData = () => {
 EventBus.on("element-init", function (_modeler) {
   _elements = _modeler.get("elementRegistry")._elements;
   getNodeColumns();
-  catchUndefElement((element) => {
-    getElementData();
-  });
+  getElementData();
 });
 getList();
 </script>

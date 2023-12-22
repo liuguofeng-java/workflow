@@ -117,15 +117,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, markRaw } from "vue";
+import { ref, markRaw, nextTick } from "vue";
 import { ModdleElement } from "bpmn-moddle";
 import { Element } from "bpmn-js/lib/model/Types";
 import { getExecutionListeners, getExecutionListenerTypes, addExecutionListener, updateExecutionListener, removeExecutionListener } from "@/components/BpmnJs/bo-utils/executionListenersUtil";
 import EventBus from "@/utils/EventBus";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import { Search } from "@element-plus/icons-vue";
 import SelectListener from "./sub/SelectListener.vue";
-import { nextTick } from "vue";
+import modelerStore from "@/store/modeler";
+
+const modeler = modelerStore();
 
 // element The element.
 let scopedElement: Element;
@@ -279,15 +280,13 @@ const removeField = (index: number) => {
  * 获取数据
  */
 const getElementData = () => {
-  list.value = markRaw(getExecutionListeners(scopedElement as Element));
+  list.value = markRaw(getExecutionListeners(scopedElement));
 };
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
-  catchUndefElement((element) => {
-    scopedElement = element;
-    events.value = getExecutionListenerTypes(element);
-    getElementData();
-  });
+  scopedElement = modeler.getActive;
+  events.value = getExecutionListenerTypes(scopedElement);
+  getElementData();
 });
 </script>

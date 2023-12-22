@@ -80,11 +80,13 @@ import { ref, computed } from "vue";
 import { Element } from "bpmn-js/lib/model/Types";
 import * as CU from "@/components/BpmnJs/bo-utils/conditionUtil";
 import EventBus from "@/utils/EventBus";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import { type NodeWidget, getWidgetTree } from "@/components/BpmnJs/bo-utils/variableUtil";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
 import { ElMessage } from "element-plus";
 import debounce from "lodash.debounce";
+import modelerStore from "@/store/modeler";
+
+const modeler = modelerStore();
 
 // element The element.
 let scopedElement: Element;
@@ -271,13 +273,11 @@ const getExpression = () => {
  * 初始化
  */
 EventBus.on("element-init", function () {
-  catchUndefElement((element) => {
-    scopedElement = element;
-    // 获取表单数据
-    getElementData();
-    nodeWidgets.value = getWidgetTree();
-    // 获取表达式数据
-    getExpression();
-  });
+  scopedElement = modeler.getActive;
+  // 获取表单数据
+  getElementData();
+  nodeWidgets.value = getWidgetTree();
+  // 获取表达式数据
+  getExpression();
 });
 </script>

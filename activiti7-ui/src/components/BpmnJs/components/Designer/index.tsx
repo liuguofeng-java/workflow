@@ -1,4 +1,4 @@
-// 详情专业
+// bpmn.js 设计器
 import { defineComponent, ref, toRefs, nextTick, watch } from "vue";
 import type { PropType } from "vue";
 
@@ -25,7 +25,7 @@ const Designer = defineComponent({
     watch(
       () => xml.value,
       async (value) => {
-        if (!value) return;
+        if (value === undefined) return;
         const settings = ref(props.settings as EditorSettings);
         const modelerModules = modulesAndModdle(settings);
         await nextTick();

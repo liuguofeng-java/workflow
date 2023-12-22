@@ -1,4 +1,4 @@
-export default (key: string, name: string, type?: string): string => {
+export default (key: string, name: string): string => {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

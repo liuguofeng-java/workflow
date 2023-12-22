@@ -27,7 +27,6 @@ import { ref } from "vue";
 import modelerStore from "@/store/modeler";
 import SelectForm from "./sub/SelectForm.vue";
 import EventBus from "@/utils/EventBus";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import { type Element } from "bpmn-js/lib/util/ModelUtil";
 import i18n from "@/components/FormDesigner/utils/i18n";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
@@ -163,10 +162,8 @@ const buildTreeNodeOfWidget = (widget, treeNode) => {
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
-  catchUndefElement((element) => {
-    scopedElement = element;
-    getElementData();
-  });
+  scopedElement = modeler.getActive;
+  getElementData();
 });
 </script>
 

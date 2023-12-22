@@ -42,12 +42,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { getBusinessObject, type ModdleElement } from "bpmn-js/lib/util/ModelUtil";
-import catchUndefElement from "@/components/BpmnJs/utils/CatchUndefElement";
 import SingleUser from "./sub/SingleUser.vue";
 import MultipleUser from "./sub/MultipleUser.vue";
 import MultipleDept from "./sub/MultipleDept.vue";
 import EventBus from "@/utils/EventBus";
 import { getExPropValue, updateExModdleProp } from "@/components/BpmnJs/bo-utils/popsUtils";
+import modelerStore from "@/store/modeler";
+
+const modeler = modelerStore();
 
 // element The element.
 let scopedElement: Element;
@@ -172,51 +174,49 @@ const multipleDeptOk = (list: any[]) => {
 
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
-  catchUndefElement((element) => {
-    scopedElement = element;
-    moddleElement = getBusinessObject(element);
-    getElementData();
+  scopedElement = modeler.getActive;
+  moddleElement = getBusinessObject(scopedElement);
+  getElementData();
 
-    // 重置变量
-    singleUser.value = {};
-    multipleUserList.value = [];
-    multipleDeptList.value = [];
+  // 重置变量
+  singleUser.value = {};
+  multipleUserList.value = [];
+  multipleDeptList.value = [];
 
-    // 还原代理人选择项
-    if (UAForm.value.userType === "assignee" && UAForm.value.assignee !== "") {
-      singleUser.value.assignee = UAForm.value.assignee;
-      singleUser.value.username = UAForm.value.identityLinkNames;
+  // 还原代理人选择项
+  if (UAForm.value.userType === "assignee" && UAForm.value.assignee !== "") {
+    singleUser.value.assignee = UAForm.value.assignee;
+    singleUser.value.username = UAForm.value.identityLinkNames;
+  }
+  // 还原候选人选择项
+  if (UAForm.value.userType === "candidateUsers" && UAForm.value.candidateUsers !== "") {
+    const candidateUsers = UAForm.value.candidateUsers.split(",");
+    const userNames = UAForm.value.identityLinkNames.split(",");
+    for (let i = 0; i < candidateUsers.length; i++) {
+      multipleUserList.value.push({
+        userId: candidateUsers[i],
+        username: userNames[i]
+      });
     }
-    // 还原候选人选择项
-    if (UAForm.value.userType === "candidateUsers" && UAForm.value.candidateUsers !== "") {
-      const candidateUsers = UAForm.value.candidateUsers.split(",");
-      const userNames = UAForm.value.identityLinkNames.split(",");
-      for (let i = 0; i < candidateUsers.length; i++) {
-        multipleUserList.value.push({
-          userId: candidateUsers[i],
-          username: userNames[i]
-        });
-      }
+  }
+  // 还原候选组选择项
+  if (UAForm.value.userType === "candidateGroups" && UAForm.value.candidateGroups !== "") {
+    const candidateGroups = UAForm.value.candidateGroups.split(",");
+    const deptNames = UAForm.value.identityLinkNames.split(",");
+    for (let i = 0; i < candidateGroups.length; i++) {
+      multipleDeptList.value.push({
+        deptId: candidateGroups[i],
+        deptName: deptNames[i]
+      });
     }
-    // 还原候选组选择项
-    if (UAForm.value.userType === "candidateGroups" && UAForm.value.candidateGroups !== "") {
-      const candidateGroups = UAForm.value.candidateGroups.split(",");
-      const deptNames = UAForm.value.identityLinkNames.split(",");
-      for (let i = 0; i < candidateGroups.length; i++) {
-        multipleDeptList.value.push({
-          deptId: candidateGroups[i],
-          deptName: deptNames[i]
-        });
-      }
-    }
+  }
 
-    // 如果一个都没有选择
-    if (UAForm.value.userType === "") {
-      UAForm.value.userType = "initiator";
-      updateUserAssignProp("userType", "initiator");
-      updateUserAssignProp("assignee", "${initiator}");
-    }
-  });
+  // 如果一个都没有选择
+  if (UAForm.value.userType === "") {
+    UAForm.value.userType = "initiator";
+    updateUserAssignProp("userType", "initiator");
+    updateUserAssignProp("assignee", "${initiator}");
+  }
 });
 </script>
 
