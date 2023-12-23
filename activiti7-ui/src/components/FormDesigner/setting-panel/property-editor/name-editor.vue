@@ -14,7 +14,7 @@
 
   <!-- 绑定新创建表字段 -->
   <el-form-item prop="name" :rules="nameRequiredRule" label="表字段" v-if="isShowCreate">
-    <el-input type="text" v-model="optionModel.name" @change="updateWidgetNameAndRef" maxlength="15"></el-input>
+    <el-input type="text" v-model="optionModel.name" @change="updateWidgetNameAndRef" maxlength="30"></el-input>
   </el-form-item>
 
   <!-- 是否显示绑定已有的表字段 -->
@@ -37,6 +37,7 @@ import i18n from "@/components/FormDesigner/utils/i18n";
 import { isEmptyStr } from "@/components/FormDesigner/utils/util";
 import modelerStore from "@/store/modeler";
 import { generateId } from "@/components/FormDesigner/utils/util";
+import { excludeWidget } from "@/utils/Widget";
 
 export default {
   name: "name-editor",
@@ -46,12 +47,10 @@ export default {
     selectedWidget: Object,
     optionModel: Object
   },
-  inject: ["serverFieldList", "getDesignerConfig"],
   data() {
     return {
       nameRequiredRule: [
         { required: true, message: "必填项" },
-        { min: 3, max: 15, message: "长度应为 3 到 15" },
         {
           type: "string",
           required: true,
@@ -83,7 +82,6 @@ export default {
      * 如果取消勾选要重新分配组件唯一名称
      */
     checkField: {
-      immediate: true,
       handler(value) {
         const modeler = modelerStore();
         if (!value) {
@@ -100,20 +98,22 @@ export default {
      * 如果label名称改变也要更新数据
      */
     "selectedWidget.options.label": {
-      immediate: true,
       handler() {
-        this.setTableColumn();
+        setTimeout(() => {
+          this.setTableColumn();
+        }, 50);
       }
     },
     /**
      * 如果name名称改变,并且是create和选中状态
      */
     "selectedWidget.options.name": {
-      immediate: true,
       handler() {
         const modeler = modelerStore();
         if (modeler.getTableInfo?.type === "create" && this.checkField) {
-          this.setTableColumn();
+          setTimeout(() => {
+            this.setTableColumn();
+          }, 50);
         }
       }
     }
@@ -135,18 +135,23 @@ export default {
      * 是否显示绑定表字段
      */
     isShowCheckField() {
-      if (this.tableInfo.type === "create") {
+      // 如果是排除组件
+      const typeIndex = excludeWidget.findIndex((t) => t === this.selectedWidget.type);
+      if (typeIndex !== -1) {
+        return false;
+      } else if (this.tableInfo.type === "create") {
         return true;
       } else if (this.tableInfo.type === "ready" && this.fieldList.length !== 0 && this.widgetType) {
         return true;
       }
       return false;
-    },
-    widgetNameReadonly() {
-      return !!this.getDesignerConfig().widgetNameReadonly;
     }
   },
   methods: {
+    /**
+     * 更新值
+     * @param {*} newName 新值
+     */
     updateWidgetNameAndRef(newName) {
       // 把-全部替换_
       newName = newName.replace(/-/g, "_");
@@ -182,20 +187,10 @@ export default {
         let widgetInDesign = this.designer.formWidget.getWidgetRef(oldName);
         if (!!widgetInDesign && !!widgetInDesign.registerToRefList) {
           widgetInDesign.registerToRefList(oldName); //注册组件新的ref名称并删除老的ref！！
-          let newLabel = this.getLabelByFieldName(newName);
-          this.designer.updateSelectedWidgetNameAndLabel(this.selectedWidget, newName, newLabel);
+          this.designer.updateSelectedWidgetNameAndLabel(this.selectedWidget, newName, null);
         }
         this.setTableColumn();
       }
-    },
-
-    getLabelByFieldName(fieldName) {
-      for (let i = 0; i < this.serverFieldList.length; i++) {
-        if (this.serverFieldList[i].name === fieldName) {
-          return this.serverFieldList[i].label;
-        }
-      }
-      return null;
     },
     /**
      * 设置节点字段
@@ -233,12 +228,17 @@ export default {
      * 获取表信息
      */
     geTableInfo() {
+      // 初始化值
       this.checkField = false;
       const modeler = modelerStore();
       const fieldList = [];
       this.tableInfo = modeler.getTableInfo || {};
-      console.log("getWidgetDataType", modeler.getWidgetDataType);
+      // 如果出现排除的组件就返回
+      const typeIndex = excludeWidget.findIndex((t) => t === this.selectedWidget.type);
+      if (typeIndex !== -1) return;
+
       this.widgetType = modeler.getWidgetDataType.widgetDataType[this.selectedWidget.type];
+      // 如果是选择已有表
       if (modeler.getTableInfo?.type === "ready") {
         // 没有找到对应组件的控件
         if (!this.widgetType) return;
@@ -252,9 +252,7 @@ export default {
       }
       // 回显
       const column = modeler.getNodeColumn?.find((t) => t.columnName == this.optionModel.name);
-      if (column) {
-        this.checkField = true;
-      }
+      if (column) this.checkField = true;
     }
   }
 };

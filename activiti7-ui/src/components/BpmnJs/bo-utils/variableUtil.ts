@@ -1,4 +1,5 @@
 import modelerStore from "@/store/modeler";
+import { excludeWidget } from "@/utils/Widget";
 
 const modeler = modelerStore();
 
@@ -33,19 +34,9 @@ export const getWidgetTree = (): NodeWidget[] => {
   });
 
   // 过滤一些组件
-  const exclude: string[] = [
-    "divider",
-    "button",
-    "html-text",
-    "static-text",
-    "grid-col",
-    "grid",
-    "table-cell",
-    "table"
-  ];
   nodeWidgets.forEach((item) => {
     item.widgetList = item.widgetList.filter((t1) => {
-      return exclude.every((t2) => {
+      return excludeWidget.every((t2) => {
         return t1.type !== t2;
       });
     });

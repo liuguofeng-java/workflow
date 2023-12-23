@@ -59,6 +59,8 @@ public class WidgetMySQLTypeServiceImpl implements WidgetDataTypeService {
         widgetType.put(WidgetTypes.WIDGET_FILE_UPLOAD, new String[]{"json"});
         // 富文本
         widgetType.put(WidgetTypes.WIDGET_RICH_EDITOR, new String[]{"varchar", "tinytext", "text", "mediumtext", "longtext"});
+        // 级联选择
+        widgetType.put(WidgetTypes.WIDGET_CASCADER, new String[]{"json"});
         return widgetType;
     }
 
@@ -105,6 +107,8 @@ public class WidgetMySQLTypeServiceImpl implements WidgetDataTypeService {
         result.put(WidgetTypes.WIDGET_FILE_UPLOAD, new AbstractMap.SimpleEntry<>("json", -1));
         // 富文本
         result.put(WidgetTypes.WIDGET_RICH_EDITOR, new AbstractMap.SimpleEntry<>("text", -1));
+        // 级联选择
+        result.put(WidgetTypes.WIDGET_CASCADER, new AbstractMap.SimpleEntry<>("json", -1));
         return result;
     }
 }

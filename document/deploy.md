@@ -1,6 +1,6 @@
 # 介绍
 
-> 工作流项目基于技术组合（SpringBoot、MyBatis、Vue3、TypeScript）主要目: 但愿人长久，搬砖不再有
+> 工作流项目基于技术组合（SpringBoot、MyBatis、Vue3、TypeScript）主要目地: 但愿人长久，搬砖不再有
 
 #### 1.系统需求
 
@@ -16,7 +16,7 @@
 ```
 ├── activiti7-java																	后端项目
 │   ├── sql
-│   │   └── mysql.sql																mysql脚本文件
+│   │   └── xxx.sql																sql脚本文件
 │   └── src
 │       ├── main
 │       │   ├── java

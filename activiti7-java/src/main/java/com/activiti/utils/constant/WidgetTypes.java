@@ -66,13 +66,17 @@ public class WidgetTypes {
     /**
      * 图片上传
      */
-    public static final String WIDGET_PICTURE_UPLOAD ="picture-upload";
+    public static final String WIDGET_PICTURE_UPLOAD = "picture-upload";
     /**
      * 文件上传
      */
-    public static final String WIDGET_FILE_UPLOAD ="file-upload";
+    public static final String WIDGET_FILE_UPLOAD = "file-upload";
     /**
      * 富文本
      */
-    public static final String WIDGET_RICH_EDITOR ="rich-editor";
+    public static final String WIDGET_RICH_EDITOR = "rich-editor";
+    /**
+     * 级联选择
+     */
+    public static final String WIDGET_CASCADER = "cascader";
 }
