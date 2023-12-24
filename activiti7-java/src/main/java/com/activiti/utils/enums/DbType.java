@@ -13,10 +13,15 @@ public enum DbType {
     /**
      * MySql数据库
      */
-    MY_SQL,
+    MY_SQL("MySQL"),
     /**
      * PostgreSql数据库
      */
-    POSTGRE_SQL
+    POSTGRE_SQL("PostgreSQl");
+
+    private final String key;
+    DbType(String key) {
+        this.key = key;
+    }
 }
 

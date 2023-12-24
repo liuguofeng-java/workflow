@@ -3,16 +3,16 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # MySQL
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/activiti?serverTimezone=Asia/Shanghai&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: lbf123
+      #driver-class-name: com.mysql.cj.jdbc.Driver
+      #url: jdbc:mysql://127.0.0.1:3306/activiti?serverTimezone=Asia/Shanghai&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+      #username: root
+      #password: lbf123
 
       # Postgre_SQL
-      #driver-class-name: org.postgresql.Driver
-      #url: jdbc:postgresql://127.0.0.1:5432/activiti?useUnicode=true&characterEncoding=utf-8&stringtype=unspecified
-      #username: postgres
-      #password: lbf123
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://127.0.0.1:5432/activiti?useUnicode=true&characterEncoding=utf-8&stringtype=unspecified
+      username: postgres
+      password: lbf123
 
       initial-size: 10
       max-active: 100
@@ -42,4 +42,4 @@ system:
   # 文件路径 示例（ Windows配置D:/xxx，Linux配置 /home/xxxxx）
   uploadPath: D:/uploadPath
   #指定数据库,参考类: DbType
-  database: MY_SQL
+  database: POSTGRE_SQL
