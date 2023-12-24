@@ -25,10 +25,10 @@
     </select>
 
     <insert id="createTable">
-        CREATE TABLE ${tableName} (
-            ${idName} varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '主键ID',
+        CREATE TABLE `${tableName}` (
+            `${idName}` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '主键ID',
             <foreach item="item" index="index" collection="columns">
-                ${item.columnName} ${item.dataType}
+                `${item.columnName}` ${item.dataType}
                 <if test="item.columnLength != -1">
                     (#{item.columnLength})
                 </if>
@@ -37,7 +37,7 @@
                 </if>
                 DEFAULT NULL COMMENT #{item.columnComment},
             </foreach>
-            PRIMARY KEY (${idName}) USING BTREE
+            PRIMARY KEY (`${idName}`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT=#{tableComment};
     </insert>
 
@@ -47,9 +47,9 @@
     </select>
 
     <insert id="insertData">
-        insert into ${tableName}
+        insert into `${tableName}`
         <foreach collection="listData.keys" item="name" open="(" close=")" separator=",">
-            ${name}
+            `${name}`
         </foreach>
         values
         <foreach collection="listData.values" item="value" open="(" close=")" separator=",">
@@ -58,10 +58,10 @@
     </insert>
 
     <update id="updateDataById">
-        update ${tableName} set
+        update `${tableName}` set
         <foreach collection="listData" index="key" item="value" separator=",">
-            ${key} = #{value}
+            `${key}` = #{value}
         </foreach>
-        where ${idName} = #{idValue}
+        where `${idName}` = #{idValue}
     </update>
 </mapper>
