@@ -98,6 +98,7 @@ const open = async (deploymentId: string | undefined) => {
  */
 const submit = async () => {
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
+  modeler.updateData();
   // 动态表单数据
   const formJsonList = modeler.getFormJsonList;
   // 节点绑定字段信息

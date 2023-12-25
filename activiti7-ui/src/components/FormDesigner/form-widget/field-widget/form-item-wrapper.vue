@@ -102,6 +102,7 @@ export default {
   inject: ["getFormConfig"],
   data() {
     return {
+      modeler: modelerStore(),
       columnName: ""
     };
   },
@@ -112,8 +113,7 @@ export default {
     "field.options.checkField": {
       immediate: true,
       handler() {
-        const modeler = modelerStore();
-        let nodeColumn = modeler.getNodeColumn;
+        let nodeColumn = this.modeler.getNodeColumn;
         this.columnName = nodeColumn?.find((t) => t.columnName === this.field.options.name)?.columnName;
       }
     },
@@ -122,12 +122,12 @@ export default {
      */
     "field.options.name": {
       immediate: true,
-      handler() {
+      handler(value) {
         setTimeout(() => {
           const modeler = modelerStore();
           let nodeColumn = modeler.getNodeColumn;
-          this.columnName = nodeColumn?.find((t) => t.columnName === this.field.options.name)?.columnName;
-        }, 50);
+          this.columnName = nodeColumn?.find((t) => t.columnName === value)?.columnName;
+        }, 150);
       }
     }
   },

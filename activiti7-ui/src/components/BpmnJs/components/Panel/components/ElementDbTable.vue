@@ -262,7 +262,8 @@ const submitForm = () => {
       if (!(modeler.getTableInfo?.type === "create" && form.value.type === "create")) {
         modeler.setNodeColumns([]);
       }
-      modeler.setTableInfo(form.value);
+
+      modeler.setTableInfo(form.value.type === "" ? undefined : form.value);
       ElMessage.success("更新成功!");
       open.value = false;
       getElementData();
@@ -283,10 +284,14 @@ const cancel = () => {
  * 取消更新
  */
 const getElementData = () => {
-  if (modeler.getTableInfo) {
-    form.value = JSON.parse(JSON.stringify(modeler.getTableInfo));
-    detail.value = JSON.parse(JSON.stringify(modeler.getTableInfo));
-  }
+  const from = {
+    tableName: "",
+    type: "",
+    tableComment: "",
+    columns: []
+  };
+  form.value = JSON.parse(JSON.stringify(modeler.getTableInfo || from));
+  detail.value = JSON.parse(JSON.stringify(modeler.getTableInfo || from));
 };
 
 // 点击用户节点，初始化用

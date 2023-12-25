@@ -55,7 +55,7 @@
             <span><svg-icon icon-class="el-form-template" /> {{ i18nt("designer.formLib") }}</span>
           </template>
 
-          <template v-for="(ft, idx) in formTemplates">
+          <template v-for="(ft, idx) in formTemplates" :key="idx">
             <el-card :bord-style="{ padding: '0' }" shadow="hover" class="ft-card">
               <el-popover placement="right" trigger="hover">
                 <template #reference>
@@ -82,15 +82,6 @@ import { addWindowResizeHandler, generateId } from "@/components/FormDesigner/ut
 import i18n from "@/components/FormDesigner/utils/i18n";
 import axios from "axios";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index";
-
-// import ftImg1 from '@/assets/ft-images/t1.png'
-// import ftImg2 from '@/assets/ft-images/t2.png'
-// import ftImg3 from '@/assets/ft-images/t3.png'
-// import ftImg4 from '@/assets/ft-images/t4.png'
-// import ftImg5 from '@/assets/ft-images/t5.png'
-// import ftImg6 from '@/assets/ft-images/t6.png'
-// import ftImg7 from '@/assets/ft-images/t7.png'
-// import ftImg8 from '@/assets/ft-images/t8.png'
 
 export default {
   name: "FieldPanel",

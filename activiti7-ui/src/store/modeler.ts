@@ -4,6 +4,7 @@ import type Modeler from "bpmn-js/lib/Modeler";
 import type Modeling from "bpmn-js/lib/features/modeling/Modeling";
 import type Canvas from "diagram-js/lib/core/Canvas";
 import type ElementRegistry from "diagram-js/lib/core/ElementRegistry";
+import { buildTreeToList } from "@/components/BpmnJs/bo-utils/variableUtil";
 import { toRaw } from "vue";
 
 const defaultState: ModelerStore = {
@@ -85,18 +86,20 @@ export default defineStore("modeler", {
      */
     setFormJson(formJson: FormJsonList) {
       const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
-      if (index !== -1) {
-        this.formJsonList.splice(index, 1);
-      }
+      if (index !== -1) this.formJsonList.splice(index, 1);
       this.formJsonList.push(formJson);
+      if (formJson.formJson.widgetList.length === 0) {
+        const index = this.formJsonList.findIndex((t) => t.activityId === formJson.activityId);
+        if (index !== -1) this.formJsonList.splice(index, 1);
+      }
     },
     /**
      * 设置表结构
      * @param tableInfo 表结构
      */
-    setTableInfo(tableInfo: TableInfo) {
+    setTableInfo(tableInfo: TableInfo | undefined) {
       // 过滤主键
-      tableInfo.columns = tableInfo.columns.filter((t) => t.columnKey !== "PRI");
+      if (tableInfo) tableInfo.columns = tableInfo.columns.filter((t) => t.columnKey !== "PRI");
       this.tableInfo = tableInfo;
     },
     /**
@@ -104,9 +107,7 @@ export default defineStore("modeler", {
      * @param tableColumns 表字段
      */
     setTableColumns(tableColumns: TableColumns[]) {
-      if (this.tableInfo) {
-        this.tableInfo.columns = tableColumns;
-      }
+      if (this.tableInfo) this.tableInfo.columns = tableColumns;
     },
     /**
      * 设置表字段
@@ -121,6 +122,56 @@ export default defineStore("modeler", {
           this.tableInfo.columns.splice(index, 1);
         }
         this.tableInfo.columns.push(tableColumn);
+      }
+    },
+    /**
+     * 数据提交时去除无用的数据,如不存在节点的表单数据和绑定字段的数据
+     */
+    updateData() {
+      let i = 0;
+      while (i < this.getFormJsonList.length) {
+        const formJsonList = this.getFormJsonList[i];
+        const elements = this.elementRegistry._elements;
+        if (!elements[formJsonList.activityId]) {
+          this.getFormJsonList.splice(i, 1);
+        } else {
+          i++;
+        }
+      }
+      i = 0;
+      while (i < this.getNodeColumns.length) {
+        const nodeColumns = this.getNodeColumns[i];
+        const elements = this.elementRegistry._elements;
+        if (!elements[nodeColumns.activityId]) {
+          this.getNodeColumns.splice(i, 1);
+        } else {
+          i++;
+        }
+      }
+    },
+    /**
+     * 更新组件表字段,查看字段是否被删除
+     */
+    // eslint-disable-next-line no-undef
+    updateNodeTableColumns(formJson: FormJson) {
+      const widgetTree = formJson?.widgetList;
+      // 把树形结构转成列表
+      const widgetList: any[] = [];
+      widgetTree.forEach((widget) => {
+        buildTreeToList(widget, widgetList);
+      });
+      const nodeColumns = this.getNodeColumn;
+      if (nodeColumns) {
+        let i = 0;
+        while (i < nodeColumns.length) {
+          const element = nodeColumns[i];
+          const index = widgetList.findIndex((t) => t.options.name === element.columnName);
+          if (index === -1) {
+            this.removeNodeColumn(element);
+          } else {
+            i++;
+          }
+        }
       }
     },
     /**
@@ -168,6 +219,10 @@ export default defineStore("modeler", {
       );
       if (columnIndex == -1) return;
       tableItem.columns.splice(columnIndex, 1);
+      if (tableItem.columns.length === 0) {
+        const tableIndex = this.nodeColumns.findIndex((t) => t.activityId === activityId);
+        this.nodeColumns.splice(tableIndex, 1);
+      }
     },
     /**
      * 设置绑定的表字段

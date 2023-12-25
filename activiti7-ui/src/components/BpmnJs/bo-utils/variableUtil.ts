@@ -1,7 +1,5 @@
-import modelerStore from "@/store/modeler";
+import modeler from "@/store/modeler";
 import { excludeWidget } from "@/utils/Widget";
-
-const modeler = modelerStore();
 
 export type NodeWidget = {
   activityId: string;
@@ -16,10 +14,10 @@ export type NodeWidget = {
 export const getWidgetTree = (): NodeWidget[] => {
   const nodeWidgets: NodeWidget[] = [];
 
-  const elementRegistry: any = modeler.getModeler?.get("elementRegistry");
+  const elementRegistry: any = modeler().getModeler?.get("elementRegistry");
   const elements: any[] = elementRegistry._elements;
 
-  modeler.getFormJsonList.forEach((item) => {
+  modeler().getFormJsonList.forEach((item) => {
     const widgetList: any[] = [];
     item.formJson.widgetList.forEach((widget) => {
       buildTreeToList(widget, widgetList);
