@@ -295,8 +295,8 @@ const getElementData = () => {
 };
 
 // 点击用户节点，初始化用
-EventBus.on("element-init", function (_modeler) {
-  _elements = _modeler.get("elementRegistry")._elements;
+EventBus.on("element-init", function () {
+  _elements = modeler.getElRegistry._elements;
   getNodeColumns();
   getElementData();
 });

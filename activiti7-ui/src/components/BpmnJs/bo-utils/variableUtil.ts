@@ -13,9 +13,7 @@ export type NodeWidget = {
  */
 export const getWidgetTree = (): NodeWidget[] => {
   const nodeWidgets: NodeWidget[] = [];
-
-  const elementRegistry: any = modeler().getModeler?.get("elementRegistry");
-  const elements: any[] = elementRegistry._elements;
+  const elements: any[] = modeler().getElRegistry._elements;
 
   modeler().getFormJsonList.forEach((item) => {
     const widgetList: any[] = [];

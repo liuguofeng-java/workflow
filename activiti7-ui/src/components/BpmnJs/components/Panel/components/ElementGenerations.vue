@@ -90,7 +90,10 @@ const updateElementDoc = (value: string) => {
 const initElementName = () => {
   if (elementName.value) return;
   const item = list.find((t) => t.elementType === modeler.getActive.type);
-  if (item) updateElementName(item.defaultName);
+  const elements: any[] = modeler.getElRegistry._elements;
+  if (item && elements[elementId.value]) {
+    updateElementName(item.defaultName);
+  }
 };
 
 // 点击用户节点，初始化用
