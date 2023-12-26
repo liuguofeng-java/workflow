@@ -1,5 +1,5 @@
 import { type ModdleElement, type Element } from "bpmn-js/lib/util/ModelUtil";
-import modeler from "../../../store/modeler";
+import modeler from "@/store/modeler";
 
 /**
  * 获取设置的值

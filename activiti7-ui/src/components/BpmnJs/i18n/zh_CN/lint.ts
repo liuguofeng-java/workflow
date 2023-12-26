@@ -2,7 +2,7 @@ export default {
   "{errors} Errors, {warnings} Warnings": "{errors} 错误, {warnings} 警告",
   "Process is missing end event": "流程缺少结束节点",
   "Sub process is missing end event": "子流程缺少结束节点",
-  "Process is missing start event": "流程缺少结束节点",
+  "Process is missing start event": "流程缺少开始节点",
   "Sub process is missing start event": "子流程缺少开始节点",
   "Sequence flow is missing condition": "顺序流缺少条件",
   "Start event is missing event definition": "开始节点缺少事件定义",

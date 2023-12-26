@@ -22,7 +22,7 @@ export const getWidgetTree = (): NodeWidget[] => {
     item.formJson.widgetList.forEach((widget) => {
       buildTreeToList(widget, widgetList);
     });
-    if (widgetList.length !== 0) {
+    if (widgetList.length !== 0 && elements[item.activityId]) {
       nodeWidgets.push({
         activityId: item.activityId,
         activityName: elements[item.activityId].element.businessObject.name,

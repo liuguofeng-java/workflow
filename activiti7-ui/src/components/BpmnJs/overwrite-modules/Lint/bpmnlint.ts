@@ -55,7 +55,7 @@ const rules = {
   "conditional-flows": "error",
   "end-event-required": "error",
   "event-sub-process-typed-start-event": "error",
-  "fake-join": "warn",
+  // "fake-join": "warn",
   "label-required": "error",
   "no-bpmndi": "error",
   "no-complex-gateway": "error",
@@ -82,7 +82,7 @@ const bundle = {
 cache["bpmnlint/conditional-flows"] = rule_0;
 cache["bpmnlint/end-event-required"] = rule_1;
 cache["bpmnlint/event-sub-process-typed-start-event"] = rule_2;
-cache["bpmnlint/fake-join"] = rule_3;
+// cache["bpmnlint/fake-join"] = rule_3;
 cache["bpmnlint/label-required"] = rule_4;
 cache["bpmnlint/no-bpmndi"] = rule_5;
 cache["bpmnlint/no-complex-gateway"] = rule_6;
@@ -103,7 +103,7 @@ cache["bpmnlint/superfluous-gateway"] = rule_16;
  */
 export function checkd() {
   const lintModule = modelerStore().getModeler.get("linting");
-  return Object.keys(lintModule._issues).length === 0;
+  return lintModule._button.className.indexOf("error") === -1;
 }
 
 export default bundle;
