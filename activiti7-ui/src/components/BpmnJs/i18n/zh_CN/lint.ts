@@ -1,4 +1,24 @@
 export default {
-  Errors: "错误",
-  Warnings: "警告"
+  "{errors} Errors, {warnings} Warnings": "{errors} 错误, {warnings} 警告",
+  "Process is missing end event": "流程缺少结束节点",
+  "Sub process is missing end event": "子流程缺少结束节点",
+  "Process is missing start event": "流程缺少结束节点",
+  "Sub process is missing start event": "子流程缺少开始节点",
+  "Sequence flow is missing condition": "顺序流缺少条件",
+  "Start event is missing event definition": "开始节点缺少事件定义",
+  "Incoming flows do not join": "传入流不能连接",
+  "Element has disallowed type <{type}>": "元素存在不允许类型<{type}>",
+  "Element is missing label/name": "元素缺少标签或者名称",
+  "Element is missing bpmndi": "元素缺少bpmni",
+  "Element is not connected": "元素缺少连接",
+  "SequenceFlow is a duplicate": "流入流出存在重复",
+  "Duplicate outgoing sequence flows": "存在重复的流出",
+  "Duplicate incoming sequence flows": "存在重复的流入",
+  "Gateway forks and joins": "网关同时存在分叉和连接",
+  "Flow splits implicitly": "流程隐性分割",
+  "Process has multiple blank start events": "流程存在多个空的开始节点",
+  "Sub process has multiple blank start events": "子流程存在多个空的开始节点",
+  "Event has multiple event definitions": "事件节点存在多个事件定义",
+  "Start event must be blank": "不需要开始节点",
+  "Gateway is superfluous. It only has one source and target.": "网关是多余的。它只有一个源和目标。"
 };

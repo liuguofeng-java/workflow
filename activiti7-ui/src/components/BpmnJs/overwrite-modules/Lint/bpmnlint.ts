@@ -3,6 +3,8 @@
  * @author felix.mueller
  */
 
+import modelerStore from "@/store/modeler";
+
 import rule_0 from "bpmnlint/rules/conditional-flows";
 import rule_1 from "bpmnlint/rules/end-event-required";
 import rule_2 from "bpmnlint/rules/event-sub-process-typed-start-event";
@@ -54,7 +56,7 @@ const rules = {
   "end-event-required": "error",
   "event-sub-process-typed-start-event": "error",
   "fake-join": "warn",
-  "label-required": "off",
+  "label-required": "error",
   "no-bpmndi": "error",
   "no-complex-gateway": "error",
   "no-disconnected": "error",
@@ -94,6 +96,15 @@ cache["bpmnlint/single-event-definition"] = rule_13;
 cache["bpmnlint/start-event-required"] = rule_14;
 cache["bpmnlint/sub-process-blank-start-event"] = rule_15;
 cache["bpmnlint/superfluous-gateway"] = rule_16;
+
+/**
+ * 返回npmn.js验证结果: true 验证成功
+ * @returns 是否验证通过
+ */
+export function checkd() {
+  const lintModule = modelerStore().getModeler.get("linting");
+  return Object.keys(lintModule._issues).length === 0;
+}
 
 export default bundle;
 

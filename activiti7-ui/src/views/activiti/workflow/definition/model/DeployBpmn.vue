@@ -29,6 +29,7 @@ import Panel from "@/components/BpmnJs/components/Panel";
 import modelerStore from "@/store/modeler";
 import baseService from "@/service/baseService";
 import { ElMessage, ElMessageBox, ElLoading } from "element-plus";
+import { checkd } from "@/components/BpmnJs/overwrite-modules/Lint/bpmnlint";
 import { nextTick } from "vue";
 
 const modeler = modelerStore();
@@ -40,7 +41,7 @@ const settings = {
   processEngine: "activiti",
   paletteMode: "rewrite",
   contextPadMode: "rewrite",
-  useLint: false,
+  useLint: true,
   isLabelEditingProvider: true,
   isMove: true
 };
@@ -97,6 +98,11 @@ const open = async (deploymentId: string | undefined) => {
  * 保存
  */
 const submit = async () => {
+  // 判断bpmn验证结果
+  if (!checkd()) {
+    ElMessage.error("流程存在错误,不能保存!");
+    return;
+  }
   await ElMessageBox.confirm("确定要部署当前流程吗?", "提示");
   modeler.updateData();
   // 动态表单数据
