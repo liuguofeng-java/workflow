@@ -36,6 +36,7 @@ import baseService from "@/service/baseService";
 const queryForm = reactive({
   definitionName: "",
   definitionKey: "",
+  active: true,
   pageNo: 1,
   pageSize: 10
 });

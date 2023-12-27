@@ -1,6 +1,5 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.dao.TableDao;
 import com.activiti.modules.entity.SysDeployEntity;
 import com.activiti.modules.entity.SysDeployNodeEntity;
 import com.activiti.modules.entity.TableColumns;
@@ -70,19 +69,22 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                 .orderByProcessDefinitionVersion().desc();
         query.processDefinitionNameLike("%" + dto.getDefinitionName() + "%");
         query.processDefinitionKeyLike("%" + dto.getDefinitionKey() + "%");
+        if (dto.isActive()) query.active();
         List<ProcessDefinition> list =
                 query.listPage(params.getPageNo() - 1, params.getPageSize());
         List<DefinitionListVo> resultList = new ArrayList<>();
         for (ProcessDefinition item : list) {
             DefinitionListVo vo = new DefinitionListVo();
+            Deployment deployment = repositoryService.createDeploymentQuery()
+                    .deploymentId(item.getDeploymentId())
+                    .singleResult();
+            vo.setDeploymentTime(deployment.getDeploymentTime());
             BeanUtils.copyProperties(item, vo);
             // 获取主表单
             SysDeployNodeEntity mainForm = deployNodeService.getOne(new LambdaQueryWrapper<SysDeployNodeEntity>()
                     .eq(SysDeployNodeEntity::getDeployId, item.getDeploymentId())
                     .eq(SysDeployNodeEntity::getIsMainFrom, 1));
-            if (mainForm != null) {
-                vo.setFormJson(mainForm.getFormJson());
-            }
+            if (mainForm != null) vo.setFormJson(mainForm.getFormJson());
             resultList.add(vo);
         }
         return PageUtils.getDataTable(resultList, query.count());
@@ -124,7 +126,6 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     @Transactional
     @Override
     public void deployProcess(DeployProcessDto dto) {
-
         // 部署xml
         Deployment deploy = repositoryService.createDeployment().disableBpmnValidation()
                 .addString("index.bpmn", dto.getXml())
@@ -221,9 +222,27 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
                 nodeColumnsVos.add(nodeColumnsVo);
             }
             result.put("nodeColumns", nodeColumnsVos);
-
         }
         return result;
+    }
+
+    /**
+     * 更新流程定义状态 激活或者挂起
+     *
+     * @param deploymentId 部署id
+     */
+    @Override
+    public void updateState(String deploymentId) {
+        ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
+                .deploymentId(deploymentId)
+                .singleResult();
+        if (definition == null) throw new AException("未知流程");
+        boolean isSuspended = repositoryService.isProcessDefinitionSuspended(definition.getId());
+        if (isSuspended) {
+            repositoryService.activateProcessDefinitionById(definition.getId());
+        } else {
+            repositoryService.suspendProcessDefinitionById(definition.getId());
+        }
     }
 
     /**

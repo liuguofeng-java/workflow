@@ -4,7 +4,6 @@ import com.activiti.modules.entity.dto.workflow.DefinitionListDto;
 import com.activiti.modules.entity.dto.workflow.DeployProcessDto;
 import com.activiti.utils.page.TableDataInfo;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -25,6 +24,7 @@ public interface ProcessDefinitionService {
 
     /**
      * 获取流程定义xml
+     *
      * @param deploymentId 部署id
      * @return 流程xml字符串
      */
@@ -36,17 +36,25 @@ public interface ProcessDefinitionService {
      * @param deploymentId 部署id
      * @return 流程xml字符串和流程表单
      */
-    Map<String,Object> getDefinitionInfo(String deploymentId);
+    Map<String, Object> getDefinitionInfo(String deploymentId);
 
+    /**
+     * 更新流程定义状态 激活或者挂起
+     *
+     * @param deploymentId 部署id
+     */
+    void updateState(String deploymentId);
 
     /**
      * 部署流程
+     *
      * @param dto 参数
      */
     void deployProcess(DeployProcessDto dto);
 
     /**
      * 删除流程
+     *
      * @param deploymentId 部署id
      */
     void delete(String deploymentId);

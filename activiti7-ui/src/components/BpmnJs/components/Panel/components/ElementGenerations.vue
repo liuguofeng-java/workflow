@@ -88,6 +88,7 @@ const updateElementDoc = (value: string) => {
  * 初始化节点名称,如果节点名称等于空预赋值
  */
 const initElementName = () => {
+  elementName.value = getNameValue(scopedElement) || "";
   if (elementName.value) return;
   const item = list.find((t) => t.elementType === modeler.getActive.type);
   const elements: any[] = modeler.getElRegistry._elements;
@@ -99,7 +100,7 @@ const initElementName = () => {
 // 点击用户节点，初始化用
 EventBus.on("element-init", function () {
   scopedElement = modeler.getActive;
-  getElementData();
   initElementName();
+  getElementData();
 });
 </script>

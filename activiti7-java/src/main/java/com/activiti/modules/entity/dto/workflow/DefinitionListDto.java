@@ -10,9 +10,18 @@ import lombok.Data;
  **/
 @Data
 public class DefinitionListDto {
-    // 流程定义名称
+    /**
+     * 流程定义名称
+     */
     private String definitionName;
 
-    // 流程定义key
+    /**
+     * 流程定义key
+     */
     private String definitionKey;
+
+    /**
+     * 是否激活
+     */
+    private boolean isActive;
 }

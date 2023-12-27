@@ -38,11 +38,9 @@
 
 #### 三.关于表单字段和数据库对应关系扩展
 
-> `getWidgetDataType` 是组件和数据库类型对应关系，如: 绑定已有的表后，输入框可以选择数据库中的类型配置
->
-> `getDefaultWidgetDataType` 是默认组件对应数据库的类型，如: 绑定创建数据库表后，输入框绑定字段后生成的数据库类型以字段长度
+> 需要扩展字段或者数据库需要修改或新增 类 `DbConfig` 和 文件`resources` 下的 `widgetDataType`
 
 ![](images/bdt_9.png)
 
-
+![](images/bdt_10.png)
 

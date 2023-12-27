@@ -22,16 +22,25 @@
       <el-table-column label="流程id" align="center" prop="id" />
       <el-table-column label="流程名称" align="center" prop="name" />
       <el-table-column label="流程key" align="center" prop="key" />
-      <el-table-column label="版本" align="center" prop="version" />
-      <el-table-column label="主表单" align="center" prop="version">
+      <el-table-column label="版本" align="center" prop="version" width="100" />
+      <el-table-column label="主表单" align="center" width="100">
         <template #default="scoped">
           <MainForm :form-json="scoped.row.formJson" />
           <h5 v-if="!scoped.row.formJson">暂无信息</h5>
         </template>
       </el-table-column>
+      <el-table-column label="状态" align="center">
+        <template #default="scoped">
+          <el-tag v-if="scoped.row.suspended" type="danger">挂起</el-tag>
+          <el-tag v-else>激活</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="部署时间" align="center" prop="deploymentTime" />
       <el-table-column>
         <template #default="scope">
           <el-button link type="primary" icon="Crop" @click="handleDesign(scope.row.deploymentId)">设计</el-button>
+          <el-button link type="primary" icon="VideoPlay" @click="updateState(scope.row.deploymentId)" v-if="scope.row.suspended">激活</el-button>
+          <el-button link type="primary" icon="VideoPause" @click="updateState(scope.row.deploymentId)" v-else>挂起</el-button>
           <el-button link type="primary" icon="Pointer" @click="handleDetails(scope.row.deploymentId)">查看</el-button>
           <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row.deploymentId)">删除</el-button>
         </template>
@@ -123,6 +132,23 @@ function handleAdd() {
  */
 function handleDesign(deploymentId: string) {
   deployBpmn.value.open(deploymentId);
+}
+
+/**
+ * 更新流程定义状态 激活或者挂起
+ * @param deploymentId 流程部署id
+ */
+function updateState(deploymentId: any) {
+  ElMessageBox.confirm("确认要删除当前项吗? 流程实例启动的也将被删除,谨慎删除", "提示").then(() => {
+    baseService.get(`/processDefinition/updateState?deploymentId=${deploymentId}`).then((res) => {
+      if (res.code === 200) {
+        ElMessage.success(res.msg);
+        getList();
+      } else {
+        ElMessage.error(res.msg);
+      }
+    });
+  });
 }
 
 /**

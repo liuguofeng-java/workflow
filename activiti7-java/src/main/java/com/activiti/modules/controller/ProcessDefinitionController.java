@@ -56,6 +56,17 @@ public class ProcessDefinitionController {
     }
 
     /**
+     * 更新流程定义状态 激活或者挂起
+     *
+     * @param deploymentId 部署id
+     */
+    @GetMapping("updateState")
+    public R<String> updateState(String deploymentId) {
+        processDefinitionService.updateState(deploymentId);
+        return R.ok();
+    }
+
+    /**
      * 部署流程
      *
      * @param dto 参数

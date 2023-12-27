@@ -249,7 +249,6 @@ export default defineStore("modeler", {
         this.removeNodeColumn(tableColumn);
         tableItem.columns.push(tableColumn);
       }
-      console.log("nodeColumns->>>/", this.nodeColumns);
     }
   }
 });

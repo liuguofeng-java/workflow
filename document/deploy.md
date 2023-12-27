@@ -78,6 +78,14 @@ spring:
       password: 数据库密码
 ```
 
+- 修改数据库对应的类型类型，编辑`resources`目录下的`application-dev.yml`
+
+```yml
+system:
+  #指定数据库,参考类: DbType
+  database: POSTGRE_SQL
+```
+
 - 修改服务器配置，`编辑resources目录下的application.yml`
 
 ```yml
