@@ -139,15 +139,13 @@ function handleDesign(deploymentId: string) {
  * @param deploymentId 流程部署id
  */
 function updateState(deploymentId: any) {
-  ElMessageBox.confirm("确认要删除当前项吗? 流程实例启动的也将被删除,谨慎删除", "提示").then(() => {
-    baseService.get(`/processDefinition/updateState?deploymentId=${deploymentId}`).then((res) => {
-      if (res.code === 200) {
-        ElMessage.success(res.msg);
-        getList();
-      } else {
-        ElMessage.error(res.msg);
-      }
-    });
+  baseService.get(`/processDefinition/updateState?deploymentId=${deploymentId}`).then((res) => {
+    if (res.code === 200) {
+      ElMessage.success(res.msg);
+      getList();
+    } else {
+      ElMessage.error(res.msg);
+    }
   });
 }
 

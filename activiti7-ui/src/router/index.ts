@@ -29,22 +29,22 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "workflow/definition",
         name: "definition", // 流程定义
-        component: () => import("@/views/activiti/workflow/definition/index.vue")
+        component: () => import("@/views/activiti/definition/index.vue")
       },
       {
         path: "workflow/listener",
         name: "listener", // 执行监听器
-        component: () => import("@/views/activiti/workflow/listener/index.vue")
+        component: () => import("@/views/activiti/listener/index.vue")
       },
       {
         path: "my/start",
         name: "start", // 我发起的
-        component: () => import("@/views/activiti/my/start/index.vue")
+        component: () => import("@/views/activiti/start/index.vue")
       },
       {
         path: "my/todo",
         name: "todo", // 我的代办
-        component: () => import("@/views/activiti/my/todo/index.vue")
+        component: () => import("@/views/activiti/todo/index.vue")
       }
     ]
   },

@@ -7,6 +7,7 @@ import com.activiti.modules.service.ProcessStartService;
 import com.activiti.modules.service.SysDeployService;
 import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.Constants;
+import com.activiti.utils.exception.AException;
 import com.activiti.utils.page.PageDomain;
 import com.activiti.utils.page.PageUtils;
 import com.activiti.utils.page.TableDataInfo;
@@ -132,6 +133,11 @@ public class ProcessStartServiceImpl implements ProcessStartService {
     @Transactional
     @Override
     public void startProcess(StartProcessDto dto, String userId) {
+        // 获取相关数据
+        ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(dto.getDefinitionId()).singleResult();
+        if(definition.isSuspended()) throw new AException("流程已挂起,不能启动!");
+
         // 设置流程发起人用户Id
         Authentication.setAuthenticatedUserId(userId);
         Map<String, Object> variables = dto.getVariables();
@@ -140,10 +146,7 @@ public class ProcessStartServiceImpl implements ProcessStartService {
         variables.put(Constants.PROCESS_INITIATOR, userId);
         ProcessInstance instance = runtimeService.startProcessInstanceById(dto.getDefinitionId(), dto.getBusinessKey(), variables);
 
-        // 获取相关数据
-        ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionId(dto.getDefinitionId()).singleResult();
-
+        // 获取开始事件
         HistoricActivityInstance activityInstance = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(instance.getId()).list()
                 .stream().filter(t -> t.getActivityType().equals(ActivityType.START_EVENT))
