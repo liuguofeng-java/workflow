@@ -9,7 +9,7 @@
     而数据库表中没有符合类型,所以不能绑定表字段`"
     type="warning"
     :closable="false"
-    v-if="tableInfo.type === 'ready' && fieldList.length === 0 && widgetType"
+    v-if="tableInfo.type === 'ready' && fieldList.length === 0 && widgetType.length !== 0"
   />
 
   <!-- 绑定新创建表字段 -->
@@ -27,6 +27,7 @@
     </el-select>
   </el-form-item>
 
+  <!-- 无 -->
   <el-form-item prop="name" :rules="nameRequiredRule" label="唯一名称" v-else>
     <el-input type="text" v-model="optionModel.name" disabled @change="updateWidgetNameAndRef"></el-input>
   </el-form-item>
@@ -56,6 +57,9 @@ export default {
           required: true,
           message: "表不符合规则！",
           validator: (rule, value) => {
+            if (!this.checkField) {
+              return true;
+            }
             const regex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
             var pattern = new RegExp(regex);
             return pattern.test(value);
@@ -155,6 +159,8 @@ export default {
     updateWidgetNameAndRef(newName) {
       // 把-全部替换_
       newName = newName.replace(/-/g, "_");
+      // eslint-disable-next-line vue/no-mutating-props
+      this.optionModel.name = newName;
       // 空验证
       let oldName = this.designer.selectedWidgetName;
       if (isEmptyStr(newName)) {

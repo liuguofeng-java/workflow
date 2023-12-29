@@ -99,24 +99,22 @@ public class ProcessStartServiceImpl implements ProcessStartService {
             vo.setDefinitionVersion(definition.getVersion());
 
             // 获取任务处理节点
-            List<Task> taskList = taskService.createTaskQuery()
+            Task task = taskService.createTaskQuery()
                     .processInstanceId(item.getId())
-                    .list();
-            if (taskList.size() != 0) {
-                Task task = taskList.get(0);
+                    .singleResult();
+            if (task != null) {
                 vo.setTaskId(task.getId());
                 vo.setTaskName(task.getName());
                 vo.setStatus(1);
             } else {
                 // 任务处理完成在history获取
-                List<HistoricTaskInstance> historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
+                HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
                         .processInstanceId(item.getId())
                         .orderByHistoricTaskInstanceEndTime()
                         .desc()
-                        .list();
-                HistoricTaskInstance task = historicTaskInstance.get(0);
-                vo.setTaskId(task.getId());
-                vo.setTaskName(task.getName());
+                        .singleResult();
+                vo.setTaskId(historicTaskInstance.getId());
+                vo.setTaskName(historicTaskInstance.getName());
                 vo.setStatus(2);
             }
             resultList.add(vo);

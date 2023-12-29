@@ -1,5 +1,4 @@
 import { defineComponent, Component, markRaw, onMounted, onBeforeUnmount, ref } from "vue";
-import { Element, Connection, Label, Shape } from "diagram-js/lib/model/Types";
 import debounce from "lodash.debounce";
 import EventBus from "@/utils/EventBus";
 import modelerStore from "@/store/modeler";
@@ -63,8 +62,7 @@ const Panel = defineComponent({
     /**
      * 设置选中元素，更新 store
      */
-    const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
-      let activatedElement: BpmnElement | undefined = element;
+    const setCurrentElement = debounce((activatedElement: BpmnElement | undefined) => {
       let activatedElementTypeName = "";
 
       if (!activatedElement) {
@@ -79,7 +77,6 @@ const Panel = defineComponent({
       if (activatedElement.type === "label") {
         return;
       }
-
       activatedElementTypeName = getBpmnIconType(activatedElement);
 
       modeler.setElement(markRaw(activatedElement));
@@ -105,7 +102,7 @@ const Panel = defineComponent({
       modeler.on("selection.changed", ({ newSelection }) => {
         setCurrentElement(newSelection[0] || null);
         setTimeout(() => {
-          EventBus.emit("element-init", modeler);
+          EventBus.emit("element-init");
         }, 200);
       });
       // 节点表单修改时触发

@@ -134,6 +134,13 @@ function getConditionExpression(element: Element | ModdleElement): ModdleElement
 //
 function updateCondition(element: Element, condition?: string | ModdleElement) {
   const modeling = modeler().getModeling;
+
+  const elements: any[] = modeler().getElRegistry._elements;
+  const activeId = modeler().getActiveId;
+  if (activeId) {
+    if (!elements[activeId]) return;
+  }
+  
   if (is(element, "bpmn:SequenceFlow")) {
     modeling.updateProperties(element, { conditionExpression: condition });
   } else {
@@ -143,8 +150,6 @@ function updateCondition(element: Element, condition?: string | ModdleElement) {
 //
 function setDefaultCondition(element: Connection, isDefault: boolean) {
   const modeling = modeler().getModeling;
-  console.log(modeling);
-  console.log(element, element.source);
 
   modeling.updateProperties(element.source as Element, {
     default: isDefault ? element : undefined
