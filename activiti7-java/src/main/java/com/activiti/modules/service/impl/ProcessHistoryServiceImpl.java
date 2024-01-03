@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 /**
@@ -153,15 +152,13 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
 
         // 高亮节点信息
         List<HighlightNodeInfoVo> nodeInfo = new ArrayList<>();
-        // 已审批审批节点
-        List<HistoricActivityInstance> executedList = historyService
+        // 全部审批节点
+        List<HistoricActivityInstance> finishedList = historyService
                 .createHistoricActivityInstanceQuery()
-                .processInstanceId(instanceId)
-                .finished()
-                .orderByHistoricActivityInstanceStartTime().asc()
-                .orderByHistoricActivityInstanceEndTime().asc()
+                .processInstanceId(instanceId).finished()
+                .orderByHistoricActivityInstanceId().asc()
                 .list();
-        executedList.forEach(item -> {
+        finishedList.forEach(item -> {
             // 节点详情
             List<HistoryRecordVo> nodeHistory = historyList.stream()
                     .filter(t -> t.getActivityId().equals(item.getActivityId()))
@@ -193,7 +190,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         // 获取流程图图像字符流
         BpmnModel bpmnModel = repositoryService.getBpmnModel(historicInstance.getProcessDefinitionId());
         // 添加已经流转和活动待审批的线
-        nodeInfo.addAll(getFlowsStatus(bpmnModel, executedList, unfinishedList));
+        nodeInfo.addAll(getHighLightedFlows(bpmnModel, finishedList));
 
         result.put("nodeInfo", nodeInfo);
         return result;
@@ -287,111 +284,42 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         return vo;
     }
 
+
     /**
-     * 获取已经流转和活动待审批的线
+     * 获取高亮线
      *
-     * @param bpmnModel      bpmn模型
-     * @param executedList   已审批审批节点
-     * @param unfinishedList 活动待审批节点
+     * @param bpmnModel    bpmn模型
+     * @param finishedList 已审批审批记录
+     * @return 结果
      */
-    private List<HighlightNodeInfoVo> getFlowsStatus(BpmnModel bpmnModel,
-                                                     List<HistoricActivityInstance> executedList,
-                                                     List<HistoricActivityInstance> unfinishedList) {
-        List<HighlightNodeInfoVo> resultList = new ArrayList<>();
-
-        //todo 流程图显示还有些问题
-        // 假设只有开始和结束和三条线，每一条线上有流程变量 a=1，a<1, a>1,如果满足其中a=1,程序则在流程图高亮显示，三条线都高亮
-        // 已解决待验证
-
-        // -------------                           ------------
-        // |绿色已审批节点| ------绿色已审批线------>  |绿色已审批节点|
-        // -------------                           ------------
-        // 获取'绿色已审批线'-------------
-        // 先找到流入到 ‘已审批审批节点’ 的线
-        for (HistoricActivityInstance item : executedList) {
-            List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
-            sequenceFlows.forEach(flow -> {
-                // 排除sourceRef,如果 sourceRef 不包含 ‘活动待审批节点’ 中则排除
-                String sourceRef = flow.getSourceRef();
-                long count = executedList.stream().filter(t -> t.getActivityId().equals(sourceRef)).count();
-                if (count != 0) {
-                    resultList.add(new HighlightNodeInfoVo() {{
-                        setActivityId(flow.getId());
-                        setStatus(NodeStatus.EXECUTED);
-                    }});
-                }
-            });
-        }
-
-        // 获取历史节点的互斥网关
-        List<HistoricActivityInstance> exclusiveGateways = executedList.stream()
-                .filter(t -> t.getActivityType().equals(ActivityType.EXCLUSIVE_GATEWAY))
-                .collect(Collectors.toList());
-        // 互斥网关去除没有不正确的连线
-        for (HistoricActivityInstance exclusiveGateway : exclusiveGateways) {
-            // 获取到当前节点
-            FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess()
-                    .getFlowElement(exclusiveGateway.getActivityId(), true);
-            // 获取输出的线
-            List<SequenceFlow> outFlows = flowNode.getOutgoingFlows();
-            for (SequenceFlow outFlow : outFlows) {
-                String sourceRef = outFlow.getSourceRef();
-                String targetRef = outFlow.getTargetRef();
-                // 获取互斥网关下标
-                int gatewayIndex = IntStream.range(0, executedList.size())
-                        .filter(i -> sourceRef.equals(executedList.get(i).getActivityId()))
-                        .findFirst()
-                        .orElse(-1);
-                if (gatewayIndex == -1 || executedList.size() <= gatewayIndex + 1) continue;
-                HistoricActivityInstance next = executedList.get(gatewayIndex + 1);
-                // 因为executedList历史记录是按照正序排序的,互斥网关下一个节点只能有一个
-                // 如果这条线的targetRef不是查到的activityId,那么这条线应该被删除
-                if (next != null && !targetRef.equals(next.getActivityId())) {
-                    int targetIndex = IntStream.range(0, resultList.size())
-                            .filter(i -> outFlow.getId().equals(resultList.get(i).getActivityId()))
-                            .findFirst().orElse(-1);
-                    if (targetIndex == -1) continue;
-                    resultList.remove(targetIndex);
+    private List<HighlightNodeInfoVo> getHighLightedFlows(BpmnModel bpmnModel,
+                                                          List<HistoricActivityInstance> finishedList) {
+        FlowNode currentFlowNode;
+        FlowNode targetFlowNode;
+        // 高亮流程已发生流转的线id集合
+        List<HighlightNodeInfoVo> highLightedFlowIds = new ArrayList<>();
+        // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
+        for (int i = 0; i < finishedList.size(); i++) {
+            HistoricActivityInstance historicActivityInstance = finishedList.get(i);
+            // 获得当前活动对应的节点信息及outgoingFlows信息
+            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance.getActivityId(), true);
+            List<SequenceFlow> sequenceFlowList = currentFlowNode.getOutgoingFlows();
+            // 如果当前节点不是最后一个节点，则取出下一个节点，取出的同时判断是否满足连线条件
+            if (i != finishedList.size() - 1) {
+                targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(finishedList.get(i + 1).getActivityId(), true);
+                // 遍历outgoingFlows并找到匹配线路，保存高亮显示
+                for (SequenceFlow sequenceFlow : sequenceFlowList) {
+                    String ref = sequenceFlow.getTargetRef();
+                    if (ref.equals(targetFlowNode.getId())) {
+                        highLightedFlowIds.add(new HighlightNodeInfoVo() {{
+                            setActivityId(sequenceFlow.getId());
+                            setStatus(NodeStatus.EXECUTED);
+                        }});
+                    }
                 }
             }
         }
-        // 获取'绿色已审批线'-------------
-
-        // -------------                           ------------
-        // |绿色已审批节点| ------黄色待审批线------>  |黄色待审批节点|
-        // -------------                           ------------
-        // 获取'黄色待审批线'-------------
-        for (HistoricActivityInstance item : unfinishedList) {
-            List<SequenceFlow> sequenceFlows = getSequenceFlowsByActivityId(bpmnModel, item.getActivityId());
-            sequenceFlows.forEach(flow -> {
-                // 排除sourceRef,如果 sourceRef 不包含 ‘活动待审批节点’ 中则排除
-                String sourceRef = flow.getSourceRef();
-                long count = executedList.stream().filter(t -> t.getActivityId().equals(sourceRef)).count();
-                if (count != 0) {
-                    resultList.add(new HighlightNodeInfoVo() {{
-                        setActivityId(flow.getId());
-                        setStatus(NodeStatus.UNFINISHED);
-                    }});
-                }
-            });
-        }
-        // 获取'黄色待审批线'-------------
-        return resultList;
-    }
-
-    /**
-     * 获取节点输入的线
-     *
-     * @param bpmnModel  bpmn模型
-     * @param activityId 节点id
-     * @return 线list
-     */
-    private List<SequenceFlow> getSequenceFlowsByActivityId(BpmnModel bpmnModel, String activityId) {
-        // 获取到当前节点
-        FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess()
-                .getFlowElement(activityId, true);
-        // 获取到流入的线
-        return flowNode.getIncomingFlows();
+        return highLightedFlowIds;
     }
 
 }
