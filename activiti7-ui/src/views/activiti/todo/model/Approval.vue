@@ -83,7 +83,7 @@ async function submit() {
     variables[`${activityId}_formData`] = JSON.parse(JSON.stringify(formData));
     form.value.variables = variables;
 
-    baseService.post(`/processTodo/approval`, form.value).then((res) => {
+    baseService.post(`/processTodo/complete`, form.value).then((res) => {
       if (res.code === 200) {
         ElMessage.success(res.msg);
         open.value = false;

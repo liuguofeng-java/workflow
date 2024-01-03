@@ -54,12 +54,12 @@ public class ProcessTodoController {
      *
      * @param dto 参数
      */
-    @PostMapping("approval")
-    public R<String> approval(@RequestBody TodoApprovalDto dto) {
+    @PostMapping("complete")
+    public R<String> complete(@RequestBody TodoApprovalDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         dto.setDeptId(user.getDeptId());
-        processTodoService.approval(dto);
+        processTodoService.complete(dto);
         return R.ok();
     }
 

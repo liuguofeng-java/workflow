@@ -209,6 +209,7 @@ export default {
     },
 
     updateFieldModelAndEmitDataChangeForUpload(fileList, customResult, defaultResult) {
+      if (!this.fieldModel) this.fieldModel = [];
       let oldValue = deepClone(this.fieldModel);
       if (!!customResult && !!customResult.name && !!customResult.url) {
         this.fieldModel.push({
@@ -243,6 +244,8 @@ export default {
     },
 
     updateFieldModelAndEmitDataChangeForRemove(file) {
+      console.log(`this.fieldModel1${this.fieldModel}1`);
+
       let oldValue = deepClone(this.fieldModel);
       let foundFileIdx = -1;
       this.fileListBeforeRemove.map((fi, idx) => {

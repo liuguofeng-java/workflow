@@ -108,13 +108,14 @@ public class ProcessStartServiceImpl implements ProcessStartService {
                 vo.setStatus(1);
             } else {
                 // 任务处理完成在history获取
-                HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery()
+                List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
                         .processInstanceId(item.getId())
                         .orderByHistoricTaskInstanceEndTime()
                         .desc()
-                        .singleResult();
-                vo.setTaskId(historicTaskInstance.getId());
-                vo.setTaskName(historicTaskInstance.getName());
+                        .list();
+                HistoricTaskInstance historicTask = historicTaskInstances.get(0);
+                vo.setTaskId(historicTask.getId());
+                vo.setTaskName(historicTask.getName());
                 vo.setStatus(2);
             }
             resultList.add(vo);

@@ -140,7 +140,7 @@ function updateCondition(element: Element, condition?: string | ModdleElement) {
   if (activeId) {
     if (!elements[activeId]) return;
   }
-  
+
   if (is(element, "bpmn:SequenceFlow")) {
     modeling.updateProperties(element, { conditionExpression: condition });
   } else {
