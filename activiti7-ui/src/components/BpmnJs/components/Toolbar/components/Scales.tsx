@@ -1,7 +1,6 @@
 import { defineComponent, ref } from "vue";
 import type Modeler from "bpmn-js/lib/Modeler";
 import type Canvas from "diagram-js/lib/core/Canvas";
-import { CanvasEvent } from "diagram-js/lib/core/EventBus";
 import EventBus from "@/utils/EventBus";
 
 const Scales = defineComponent({
@@ -15,13 +14,13 @@ const Scales = defineComponent({
         canvas = modeler.get<Canvas>("canvas");
         currentScale.value = canvas.zoom();
       } finally {
-        modeler.on("canvas.viewbox.changed", ({ viewbox }: CanvasEvent<any>) => {
+        modeler.on("canvas.viewbox.changed", ({ viewbox }: any) => {
           currentScale.value = viewbox.scale;
         });
       }
     });
 
-    const zoomReset = (newScale: number | string) => {
+    const zoomReset = (newScale: number | "fit-viewport") => {
       canvas && canvas.zoom(newScale, newScale === "fit-viewport" ? undefined : { x: 0, y: 0 });
     };
 

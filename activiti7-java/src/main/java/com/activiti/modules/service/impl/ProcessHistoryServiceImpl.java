@@ -72,13 +72,13 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 .list();
 
         // 已审批审批节点
-        List<HistoricActivityInstance> executedList = historyService
+        List<HistoricActivityInstance> finishedList = historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId)
                 .finished()
                 .orderByHistoricActivityInstanceStartTime().asc()
                 .list();
-        for (HistoricActivityInstance item : executedList) {
+        for (HistoricActivityInstance item : finishedList) {
             // 除了用户节点以外的节点都过滤掉
             if (!ActivityType.USER_TASK.equals(item.getActivityType())) continue;
             HistoryRecordVo vo = new HistoryRecordVo();
@@ -153,8 +153,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         // 高亮节点信息
         List<HighlightNodeInfoVo> nodeInfo = new ArrayList<>();
         // 全部审批节点
-        List<HistoricActivityInstance> finishedList = historyService
-                .createHistoricActivityInstanceQuery()
+        List<HistoricActivityInstance> finishedList = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(instanceId).finished()
                 .orderByHistoricActivityInstanceId().asc()
                 .list();
@@ -172,8 +171,8 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
 
         // 获取未审批节点(活动的待审批(下一个待审批节点))
         List<HistoricActivityInstance> unfinishedList = historyService.createHistoricActivityInstanceQuery()
-                .processInstanceId(instanceId)
-                .unfinished()
+                .processInstanceId(instanceId).unfinished()
+                .orderByHistoricActivityInstanceId().asc()
                 .list();
         unfinishedList.forEach(item -> {
             // 节点详情
@@ -190,7 +189,7 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
         // 获取流程图图像字符流
         BpmnModel bpmnModel = repositoryService.getBpmnModel(historicInstance.getProcessDefinitionId());
         // 添加已经流转和活动待审批的线
-        nodeInfo.addAll(getHighLightedFlows(bpmnModel, finishedList));
+        nodeInfo.addAll(getHighLightedFlows(bpmnModel, finishedList, unfinishedList));
 
         result.put("nodeInfo", nodeInfo);
         return result;
@@ -288,25 +287,25 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
     /**
      * 获取高亮线
      *
-     * @param bpmnModel    bpmn模型
-     * @param finishedList 已审批审批记录
+     * @param bpmnModel      bpmn模型
+     * @param finishedList   已审批记录
+     * @param unfinishedList 待审批记录
      * @return 结果
      */
     private List<HighlightNodeInfoVo> getHighLightedFlows(BpmnModel bpmnModel,
-                                                          List<HistoricActivityInstance> finishedList) {
-        FlowNode currentFlowNode;
-        FlowNode targetFlowNode;
+                                                          List<HistoricActivityInstance> finishedList,
+                                                          List<HistoricActivityInstance> unfinishedList) {
         // 高亮流程已发生流转的线id集合
         List<HighlightNodeInfoVo> highLightedFlowIds = new ArrayList<>();
         // 遍历已完成的活动实例，从每个实例的outgoingFlows中找到已执行的
         for (int i = 0; i < finishedList.size(); i++) {
-            HistoricActivityInstance historicActivityInstance = finishedList.get(i);
+            HistoricActivityInstance hai = finishedList.get(i);
             // 获得当前活动对应的节点信息及outgoingFlows信息
-            currentFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance.getActivityId(), true);
+            FlowNode currentFlowNode = (FlowNode) bpmnModel.getFlowElement(hai.getActivityId());
             List<SequenceFlow> sequenceFlowList = currentFlowNode.getOutgoingFlows();
             // 如果当前节点不是最后一个节点，则取出下一个节点，取出的同时判断是否满足连线条件
             if (i != finishedList.size() - 1) {
-                targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(finishedList.get(i + 1).getActivityId(), true);
+                FlowNode targetFlowNode = (FlowNode) bpmnModel.getFlowElement(finishedList.get(i + 1).getActivityId());
                 // 遍历outgoingFlows并找到匹配线路，保存高亮显示
                 for (SequenceFlow sequenceFlow : sequenceFlowList) {
                     String ref = sequenceFlow.getTargetRef();
@@ -319,7 +318,23 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
                 }
             }
         }
+        // 高亮待审批的线
+        for (int i = 0; i < unfinishedList.size(); i++) {
+            HistoricActivityInstance hai = unfinishedList.get(i);
+            // 获得当前活动对应的节点信息及outgoingFlows信息
+            FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(hai.getActivityId());
+            List<SequenceFlow> incomingFlows = flowNode.getIncomingFlows();
+            HistoricActivityInstance finishedHai = finishedList.get(finishedList.size() - 1);
+            incomingFlows.stream()
+                    .filter(t -> t.getSourceRef().equals(finishedHai.getActivityId()))
+                    .findAny()
+                    .ifPresent(sequenceFlow -> {
+                        highLightedFlowIds.add(new HighlightNodeInfoVo() {{
+                            setActivityId(sequenceFlow.getId());
+                            setStatus(NodeStatus.UNFINISHED);
+                        }});
+                    });
+        }
         return highLightedFlowIds;
     }
-
 }
