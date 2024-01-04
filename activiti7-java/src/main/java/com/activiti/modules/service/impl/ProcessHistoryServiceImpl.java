@@ -45,9 +45,6 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
     private HistoryService historyService;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private ProcessDefinitionService processDefinitionService;
 
     @Autowired
@@ -86,11 +83,6 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             vo.setActivityId(item.getActivityId());
             vo.setStartTime(item.getStartTime());
             vo.setEndTime(item.getEndTime());
-            // 审批意见
-            taskService.getTaskComments(item.getTaskId())
-                    .stream()
-                    .findAny()
-                    .ifPresent(t -> vo.setComment(t.getFullMessage()));
             // 获取获选人 或 候选组信息
             vo.setIdentity(getCandidateInfo(item.getTaskId()));
             vo.setStatus(NodeStatus.EXECUTED);
@@ -304,24 +296,23 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             FlowNode currentFlowNode = (FlowNode) bpmnModel.getFlowElement(hai.getActivityId());
             List<SequenceFlow> sequenceFlowList = currentFlowNode.getOutgoingFlows();
             // 如果当前节点不是最后一个节点，则取出下一个节点，取出的同时判断是否满足连线条件
-            if (i != finishedList.size() - 1) {
-                FlowNode targetFlowNode = (FlowNode) bpmnModel.getFlowElement(finishedList.get(i + 1).getActivityId());
-                // 遍历outgoingFlows并找到匹配线路，保存高亮显示
-                for (SequenceFlow sequenceFlow : sequenceFlowList) {
-                    String ref = sequenceFlow.getTargetRef();
-                    if (ref.equals(targetFlowNode.getId())) {
-                        highLightedFlowIds.add(new HighlightNodeInfoVo() {{
-                            setActivityId(sequenceFlow.getId());
-                            setStatus(NodeStatus.EXECUTED);
-                        }});
-                    }
+            if (i == finishedList.size() - 1) continue;
+            FlowNode targetFlowNode = (FlowNode) bpmnModel.getFlowElement(finishedList.get(i + 1).getActivityId());
+            // 遍历outgoingFlows并找到匹配线路，保存高亮显示
+            for (SequenceFlow sequenceFlow : sequenceFlowList) {
+                String ref = sequenceFlow.getTargetRef();
+                if (ref.equals(targetFlowNode.getId())) {
+                    highLightedFlowIds.add(new HighlightNodeInfoVo() {{
+                        setActivityId(sequenceFlow.getId());
+                        setStatus(NodeStatus.EXECUTED);
+                    }});
                 }
             }
         }
         // 高亮待审批的线
         for (int i = 0; i < unfinishedList.size(); i++) {
+            // 判断下一个活动的节点和最后一个历史节点的线是否连接
             HistoricActivityInstance hai = unfinishedList.get(i);
-            // 获得当前活动对应的节点信息及outgoingFlows信息
             FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(hai.getActivityId());
             List<SequenceFlow> incomingFlows = flowNode.getIncomingFlows();
             HistoricActivityInstance finishedHai = finishedList.get(finishedList.size() - 1);

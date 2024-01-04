@@ -4,16 +4,12 @@
       <!-- 节点动态表单 -->
       <VFormRender ref="preForm" :form-json="formJson" :preview-state="true" />
 
-      <!-- 审批意见 -->
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="处理意见">
-          <el-input v-model="form.comment" type="textarea" />
-        </el-form-item>
-        <el-form-item>
+      <template #footer>
+        <span class="dialog-footer">
           <el-button type="primary" @click="submit">审批</el-button>
           <el-button @click="open = false">取消</el-button>
-        </el-form-item>
-      </el-form>
+        </span>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -29,7 +25,6 @@ const open = ref(false);
 let form = toRef(
   reactive({
     processInstanceId: "",
-    comment: "",
     variables: {}
   })
 );
@@ -61,7 +56,6 @@ const handleOpen = (instanceId: string, taskId: string, taskDefinitionKey: strin
           preForm.value?.resetForm();
           preForm.value?.setFormJson(res.data);
         }
-        form.value.comment = "";
       });
     }
   });

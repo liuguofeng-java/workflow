@@ -42,11 +42,6 @@ public class HistoryRecordVo {
     private Integer status;
 
     /**
-     * 审批意见
-     */
-    private String comment;
-
-    /**
      * 流程记录身份信息
      */
     private IdentityVo identity;

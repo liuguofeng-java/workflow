@@ -11,7 +11,7 @@ import java.util.Map;
  * @date 2023/11/05 09:00
  **/
 @Data
-public class TodoApprovalDto {
+public class TodoCompleteDto {
     /**
      * 用户id
      */
@@ -26,11 +26,6 @@ public class TodoApprovalDto {
      * 流程实例id
      */
     private String processInstanceId;
-
-    /**
-     * 处理意见
-     */
-    private String comment;
 
     /**
      * 流程变量

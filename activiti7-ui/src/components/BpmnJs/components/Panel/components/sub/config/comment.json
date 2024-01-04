@@ -1,0 +1,62 @@
+{
+  "widgetList": [
+    {
+      "key": 62068,
+      "type": "textarea",
+      "icon": "textarea-field",
+      "formItemFlag": true,
+      "options": {
+        "name": "comment",
+        "label": "审批意见",
+        "labelAlign": "",
+        "rows": 3,
+        "defaultValue": "",
+        "placeholder": "",
+        "columnWidth": "200px",
+        "size": "",
+        "labelWidth": null,
+        "labelHidden": false,
+        "readonly": false,
+        "disabled": false,
+        "hidden": false,
+        "required": false,
+        "requiredHint": "",
+        "validation": "",
+        "validationHint": "",
+        "labelIconClass": null,
+        "labelIconPosition": "rear",
+        "labelTooltip": null,
+        "minLength": null,
+        "maxLength": null,
+        "showWordLimit": false,
+        "onCreated": "",
+        "onMounted": "",
+        "onInput": "",
+        "onChange": "",
+        "onFocus": "",
+        "onBlur": "",
+        "onValidate": ""
+      },
+      "id": "textarea108737"
+    }
+  ],
+  "formConfig": {
+    "modelName": "formData",
+    "refName": "vForm",
+    "rulesName": "rules",
+    "labelWidth": 80,
+    "labelPosition": "left",
+    "size": "",
+    "labelAlign": "label-left-align",
+    "cssCode": "",
+    "customClass": [
+      
+    ],
+    "functions": "",
+    "layoutType": "PC",
+    "jsonVersion": 3,
+    "onFormCreated": "",
+    "onFormMounted": "",
+    "onFormDataChange": ""
+  }
+}

@@ -1,7 +1,7 @@
 package com.activiti.modules.controller;
 
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
+import com.activiti.modules.entity.dto.workflow.TodoCompleteDto;
 import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.modules.service.ProcessTodoService;
 import com.activiti.utils.R;
@@ -55,7 +55,7 @@ public class ProcessTodoController {
      * @param dto 参数
      */
     @PostMapping("complete")
-    public R<String> complete(@RequestBody TodoApprovalDto dto) {
+    public R<String> complete(@RequestBody TodoCompleteDto dto) {
         SysUserEntity user = TokenUtils.getUser();
         dto.setUserId(user.getUserId());
         dto.setDeptId(user.getDeptId());

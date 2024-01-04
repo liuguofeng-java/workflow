@@ -30,6 +30,7 @@ import EventBus from "@/utils/EventBus";
 import { type Element } from "bpmn-js/lib/util/ModelUtil";
 import i18n from "@/components/FormDesigner/utils/i18n";
 import SvgIcon from "@/components/FormDesigner/svg-icon/index.vue";
+import Comment from "./sub/config/comment.json";
 
 const modeler = modelerStore();
 
@@ -47,12 +48,7 @@ let formJson = ref<any>({});
 
 // 编辑表单成功
 const selectFormOk = (data: any) => {
-  modeler.setFormJson({
-    activityId: scopedElement.id,
-    formJson: data,
-    isMainFrom: scopedElement.type === "bpmn:StartEvent" ? 1 : 0
-  });
-  getElementData();
+  setElementData(data);
 };
 
 /**
@@ -64,6 +60,15 @@ const getElementData = () => {
   formJson.value.widgetList?.forEach((wItem) => {
     buildTreeNodeOfWidget(wItem, nodeTreeData.value);
   });
+};
+
+const setElementData = (data: any) => {
+  modeler.setFormJson({
+    activityId: scopedElement.id,
+    formJson: data,
+    isMainFrom: scopedElement.type === "bpmn:StartEvent" ? 1 : 0
+  });
+  getElementData();
 };
 
 /**
@@ -164,6 +169,9 @@ const buildTreeNodeOfWidget = (widget, treeNode) => {
 EventBus.on("element-init", function () {
   scopedElement = modeler.getActive;
   getElementData();
+  if (Object.keys(formJson.value).length === 0 && scopedElement.type === "bpmn:UserTask") {
+    setElementData(Comment);
+  }
 });
 </script>
 

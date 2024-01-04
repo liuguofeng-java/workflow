@@ -17,7 +17,6 @@
         <span>{{ nodeItem.endTime }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="节点名称">{{ nodeItem.nodeName }}</el-descriptions-item>
-      <el-descriptions-item v-if="nodeItem.comment" label="审批意见">{{ nodeItem.comment }}</el-descriptions-item>
     </el-descriptions>
     <!-- 用户节点填写的表单 -->
     <NodeForm :form-json="nodeItem.formJson" :form-data="nodeItem.formData" />

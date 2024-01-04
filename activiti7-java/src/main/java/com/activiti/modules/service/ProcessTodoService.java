@@ -1,7 +1,7 @@
 package com.activiti.modules.service;
 
 
-import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
+import com.activiti.modules.entity.dto.workflow.TodoCompleteDto;
 import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.utils.page.TableDataInfo;
 
@@ -34,6 +34,6 @@ public interface ProcessTodoService {
      *
      * @param dto 参数
      */
-    void complete(TodoApprovalDto dto);
+    void complete(TodoCompleteDto dto);
 
 }

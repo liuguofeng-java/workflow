@@ -21,7 +21,7 @@ type WidgetList = {
  * 动态表单数据
  */
 type FormJson = {
-  formConfig: [];
+  formConfig: any;
   widgetList: WidgetList[];
 };
 /**

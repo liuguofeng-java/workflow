@@ -1,9 +1,8 @@
 package com.activiti.modules.service.impl;
 
-import com.activiti.modules.entity.SysDeployEntity;
 import com.activiti.modules.entity.SysDeployNodeEntity;
 import com.activiti.modules.entity.SysUserEntity;
-import com.activiti.modules.entity.dto.workflow.TodoApprovalDto;
+import com.activiti.modules.entity.dto.workflow.TodoCompleteDto;
 import com.activiti.modules.entity.dto.workflow.TodoListDto;
 import com.activiti.modules.entity.vo.workflow.TodoListVo;
 import com.activiti.modules.service.*;
@@ -21,7 +20,6 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -145,7 +143,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
      */
     @Transactional
     @Override
-    public void complete(TodoApprovalDto dto) {
+    public void complete(TodoCompleteDto dto) {
         try {
             List<String> usersGroups = new ArrayList<>();
             usersGroups.add(dto.getDeptId());
@@ -163,7 +161,6 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
 
             Map<String, Object> variables = dto.getVariables();
             taskService.setVariables(task.getId(), variables);
-            taskService.addComment(task.getId(), task.getProcessInstanceId(), dto.getComment());
             taskService.complete(task.getId());
 
             // 获取相关数据
