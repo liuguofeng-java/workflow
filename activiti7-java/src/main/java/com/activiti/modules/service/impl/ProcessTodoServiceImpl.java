@@ -161,6 +161,7 @@ public class ProcessTodoServiceImpl implements ProcessTodoService {
 
             Map<String, Object> variables = dto.getVariables();
             taskService.setVariables(task.getId(), variables);
+            taskService.setVariablesLocal(task.getId(), variables);
             taskService.complete(task.getId());
 
             // 获取相关数据

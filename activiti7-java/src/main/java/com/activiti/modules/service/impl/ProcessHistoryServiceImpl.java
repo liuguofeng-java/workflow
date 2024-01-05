@@ -91,12 +91,14 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
             // variables[`${activityId}_formJson`] = formJson;
             // variables[`${activityId}_formData`] = JSON.parse(JSON.stringify(formData));
             historicVariables.stream()
-                    .filter(t -> t.getVariableName().equals(String.format("%s_formJson", item.getActivityId())))
+                    .filter(t -> t.getVariableName().equals(String.format("%s_formJson", item.getActivityId()))
+                            && item.getTaskId().equals(t.getTaskId()))
                     .findAny()
                     .ifPresent(t -> vo.setFormJson(t.getValue()));
 
             historicVariables.stream()
-                    .filter(t -> t.getVariableName().equals(String.format("%s_formData", item.getActivityId())))
+                    .filter(t -> t.getVariableName().equals(String.format("%s_formData", item.getActivityId()))
+                            && item.getTaskId().equals(t.getTaskId()))
                     .findAny()
                     .ifPresent(t -> vo.setFormData(t.getValue()));
 
