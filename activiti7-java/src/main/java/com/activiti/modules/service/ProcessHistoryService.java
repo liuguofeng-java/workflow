@@ -1,7 +1,9 @@
 package com.activiti.modules.service;
 
 
+import com.activiti.modules.entity.dto.workflow.FinishedListDto;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
+import com.activiti.utils.page.TableDataInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,15 @@ import java.util.Map;
  * @date 2023/11/24 09:31
  **/
 public interface ProcessHistoryService {
+
+    /**
+     * 已办任务列表
+     *
+     * @param dto 参数
+     * @return 结果
+     */
+    TableDataInfo queryPage(FinishedListDto dto);
+
     /**
      * 查询审批进度
      *

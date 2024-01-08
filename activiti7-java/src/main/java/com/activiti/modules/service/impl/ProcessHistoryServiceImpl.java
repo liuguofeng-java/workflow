@@ -2,6 +2,8 @@ package com.activiti.modules.service.impl;
 
 import com.activiti.modules.entity.SysDeptEntity;
 import com.activiti.modules.entity.SysUserEntity;
+import com.activiti.modules.entity.dto.workflow.FinishedListDto;
+import com.activiti.modules.entity.vo.workflow.FinishedListVo;
 import com.activiti.modules.entity.vo.workflow.HighlightNodeInfoVo;
 import com.activiti.modules.entity.vo.workflow.IdentityVo;
 import com.activiti.modules.entity.vo.workflow.HistoryRecordVo;
@@ -9,6 +11,9 @@ import com.activiti.modules.service.*;
 import com.activiti.utils.constant.ActivityType;
 import com.activiti.utils.constant.NodeStatus;
 import com.activiti.utils.exception.AException;
+import com.activiti.utils.page.PageDomain;
+import com.activiti.utils.page.PageUtils;
+import com.activiti.utils.page.TableDataInfo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
@@ -16,10 +21,8 @@ import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricIdentityLink;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.history.*;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.IdentityLinkType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,64 @@ public class ProcessHistoryServiceImpl implements ProcessHistoryService {
 
     @Autowired
     private SysUserService userService;
+
+    /**
+     * 已办任务列表
+     *
+     * @param dto 参数
+     * @return 结果
+     */
+    @Override
+    public TableDataInfo queryPage(FinishedListDto dto) {
+        PageDomain params = PageUtils.getPageParams();
+
+        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
+                .includeProcessVariables()
+                .finished()
+                .taskAssignee(dto.getUserId())
+                .orderByHistoricTaskInstanceEndTime()
+                .desc();
+
+        // 根据流程名称查询 注意是等于不是模糊查询
+        if (StringUtils.isNoneEmpty(dto.getDefinitionName())) {
+            query.processDefinitionName(dto.getDefinitionName());
+        }
+        // 根据流程key查询 注意是等于不是模糊查询
+        if (StringUtils.isNoneEmpty(dto.getDefinitionKey())) {
+            query.processDefinitionKey(dto.getDefinitionKey());
+        }
+        List<HistoricTaskInstance> historicTasks =
+                query.listPage(params.getPageNo() - 1, params.getPageSize());
+        List<FinishedListVo> list = new ArrayList<>();
+        for (HistoricTaskInstance historicTask : historicTasks) {
+            FinishedListVo vo = new FinishedListVo();
+            // 当前流程
+            vo.setTaskId(historicTask.getId());
+            vo.setTaskName(historicTask.getName());
+            vo.setTaskDefinitionKey(historicTask.getTaskDefinitionKey());
+            vo.setProcessInstanceId(historicTask.getProcessInstanceId());
+            vo.setCreateTime(historicTask.getCreateTime());
+            vo.setProcessDefinitionId(historicTask.getProcessDefinitionId());
+
+            // 流程定义
+            ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(historicTask.getProcessDefinitionId())
+                    .singleResult();
+            vo.setDefinitionName(definition.getName());
+            vo.setDefinitionKey(definition.getKey());
+            vo.setDefinitionVersion(definition.getVersion());
+
+            // 流程发起人
+            HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(historicTask.getProcessInstanceId())
+                    .singleResult();
+            SysUserEntity user = userService.getById((instance.getStartUserId()));
+            vo.setStartUserId(user.getUserId());
+            vo.setStartUserName(user.getUsername());
+            list.add(vo);
+        }
+        return PageUtils.getDataTable(list, query.count());
+    }
 
     /**
      * 查询审批进度

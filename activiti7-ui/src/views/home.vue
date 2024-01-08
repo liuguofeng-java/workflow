@@ -46,6 +46,12 @@
             </el-icon>
             <span>我的代办</span>
           </el-menu-item>
+          <el-menu-item index="/my/finished">
+            <el-icon>
+              <Refresh />
+            </el-icon>
+            <span>已办任务</span>
+          </el-menu-item>
         </el-sub-menu>
 
         <el-sub-menu index="/sys">

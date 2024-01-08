@@ -45,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "my/todo",
         name: "todo", // 我的代办
         component: () => import("@/views/activiti/todo/index.vue")
+      },
+      {
+        path: "my/finished",
+        name: "finished", // 已办
+        component: () => import("@/views/activiti/finished/index.vue")
       }
     ]
   },
